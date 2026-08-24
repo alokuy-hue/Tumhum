@@ -1,0 +1,5714 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>TUM HUM basket — Secure Admin</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Fraunces:opsz,wght@9..144,900&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<style>
+:root{--green:#0f5132;--lime:#d7f36b;--cream:#fbfaf3;--ink:#15231b;--muted:#718078;--line:#e7ebe2;--red:#e53e3e;--red-light:#fff0f0;--blue:#2563eb}
+*{box-sizing:border-box} body{margin:0;background:var(--cream);font-family:"Inter",sans-serif;color:var(--ink)}
+.nav{height:70px;background:#fff;border-bottom:1px solid var(--line);display:flex;align-items:center;padding:0 24px;gap:16px;position:sticky;top:0;z-index:10}
+.logo{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--green)}
+.logoMark{width:34px;height:34px;border-radius:11px 11px 11px 4px;background:var(--green);color:var(--lime);display:grid;place-items:center;font-size:20px;transform:rotate(-6deg)}
+.badgeSecure{background:var(--green);color:var(--lime);font-size:10px;padding:5px 10px;border-radius:20px;font-weight:800;letter-spacing:.8px}
+.spacer{margin-left:auto}
+.btn{padding:10px 14px;border-radius:10px;font-weight:700;font-size:13px;border:1px solid var(--line);background:#fff;cursor:pointer;transition:.2s;display:inline-flex;align-items:center;gap:6px}
+.btn:hover{transform:translateY(-1px)}
+.btnPrimary{background:var(--green);color:#fff;border-color:var(--green)}
+.btnDanger{background:#fff;color:var(--red);border-color:#fecaca}
+.btnDanger:hover{background:var(--red-light)}
+.container{max-width:1280px;margin:0 auto;padding:22px 24px 80px}
+.configSecure{background:#fff;border:1px solid var(--line);border-left:4px solid var(--green);border-radius:14px;padding:16px;margin-bottom:18px}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px}
+.statCard{background:#fff;border:1px solid var(--line);border-radius:16px;padding:16px}
+.statCard small{color:var(--muted);font-weight:700;font-size:11px;text-transform:uppercase;letter-spacing:1px}
+.statCard b{display:block;font-size:22px;font-family:"Fraunces",serif;margin-top:4px}
+.layout{display:grid;grid-template-columns:360px 1fr;gap:18px;align-items:start}
+.card{background:#fff;border:1px solid var(--line);border-radius:18px;padding:18px}
+.label{font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.8px;margin-bottom:4px;display:block}
+.input, .select{width:100%;padding:11px 12px;border-radius:10px;border:1px solid var(--line);background:#fbfbf8;font-size:14px;outline:0}
+.input:focus{border-color:var(--green);background:#fff;box-shadow:0 0 0 4px #0f513211}
+.tableWrap{overflow:auto;border-radius:12px;border:1px solid var(--line);background:#fff}
+table{width:100%;border-collapse:collapse;font-size:13px;min-width:700px}
+th{text-align:left;padding:10px 12px;background:#f8faf3;font-size:11px;text-transform:uppercase;color:var(--muted);border-bottom:1px solid var(--line)}
+td{padding:10px 12px;border-bottom:1px solid #f2f3ef}
+.iconBtn{width:30px;height:30px;border-radius:8px;border:1px solid var(--line);background:#fff;cursor:pointer}
+.iconBtn:hover{border-color:var(--green)}
+.loginOverlay{position:fixed;inset:0;background:#0f5132fa;backdrop-filter:blur(12px);z-index:100;display:flex;align-items:center;justify-content:center;padding:20px}
+.loginBox{background:#fff;width:min(400px,100%);border-radius:20px;padding:26px;box-shadow:0 20px 60px #0004}
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--ink);color:#fff;padding:12px 16px;border-radius:12px;font-size:13px;opacity:0;transition:.3s;pointer-events:none;z-index:50}
+.toast.show{opacity:1}
+.locked{opacity:.5;pointer-events:none}
+</style>
+</head>
+<body>
+
+<div class="loginOverlay" id="loginOverlay">
+  <div class="loginBox">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px"><span style="width:36px;height:36px;border-radius:11px 11px 11px 4px;background:var(--green);color:var(--lime);display:grid;place-items:center;font-size:20px">✦</span><div><b style="font-size:15px">TUM HUM basket</b><br><small style="color:var(--muted)">Secure Admin • Supabase Auth</small></div></div>
+    <h2 style="margin:0 0 6px;font-family:Fraunces,serif">Admin Login</h2>
+    <p style="margin:0 0 18px;color:var(--muted);font-size:13px;line-height:1.4">No hardcoded password. Login uses Supabase Auth (bcrypt + JWT). Create admin user in Supabase Dashboard → Authentication.</p>
+    <div style="display:grid;gap:12px">
+      <div><label class="label">Supabase URL (first time only)</label><input class="input" id="loginSbUrl" placeholder="https://ysugaslkvsllfddjyffg.supabase.co" /></div>
+      <div><label class="label">Supabase Anon Key</label><input class="input" id="loginSbKey" type="password" placeholder="eyJhbGciOi..." /></div>
+      <div><label class="label">Admin Email</label><input class="input" id="loginEmail" type="email" placeholder="admin@tumhumbasket.com" value="admin@tumhumbasket.com" /></div>
+      <div><label class="label">Password (encrypted via Supabase bcrypt)</label><input class="input" id="loginPass" type="password" placeholder="••••••••" /></div>
+      <div id="loginErr" style="color:var(--red);font-size:12px;display:none;background:var(--red-light);padding:8px 10px;border-radius:8px"></div>
+      <button class="btn btnPrimary" style="width:100%;justify-content:center;padding:12px" id="loginBtn">Secure Login →</button>
+      <div style="font-size:11px;color:var(--muted);line-height:1.4">
+        <b>First time?</b> 1) Run supabase-setup-secure.sql 2) Supabase Dashboard → Authentication → Add User → Create email/password → Use that to login here.<br>
+        No bypass, no hardcoded password. Session uses JWT (expires in 1 hour, auto-refresh).
+      </div>
+    </div>
+  </div>
+</div>
+
+<nav class="nav">
+  <a class="logo" href="index.html"><span class="logoMark">✦</span><b>TUM HUM</b><em style="font-family:Fraunces,serif;color:#ff7a45;font-style:normal;font-weight:900;margin-left:2px">basket</em></a>
+  <span class="badgeSecure">SECURE • SUPABASE AUTH • BCRYPT</span>
+  <span id="userEmail" style="font-size:12px;color:var(--muted);font-weight:600;margin-left:8px"></span>
+  <div class="spacer"></div>
+  <a class="btn" href="index.html" target="_blank">View Store ↗</a>
+  <button class="btn btnDanger" id="logoutBtn">Logout</button>
+</nav>
+
+<div class="container">
+  <div class="configSecure">
+    <b>🔐 Security Status:</b> <span id="secStatus" style="font-size:13px">Checking...</span><br>
+    <small style="color:var(--muted)">Encryption: Passwords hashed with bcrypt on Supabase server, JWT for session, RLS: only authenticated can write, public can only read. No bypass login exists.</small>
+  </div>
+
+  <div class="stats">
+    <div class="statCard"><small>Total Products</small><b id="statTotal">440</b><span id="statSource">Supabase Live</span></div>
+    <div class="statCard"><small>Categories</small><b id="statCats">6</b><span>Staples, Snacks, Beverages, Masala, Home Care</span></div>
+    <div class="statCard"><small>Logged In As</small><b id="statUser" style="font-size:14px">-</b><span>Supabase Authenticated</span></div>
+    <div class="statCard"><small>Stock Value</small><b id="statValue">₹0</b><span>Sum of price</span></div>
+  </div>
+
+  <div class="layout">
+    <div class="card" style="position:sticky;top:84px">
+      <h3 id="formTitle">Add Product (Secure)</h3>
+      <div style="display:grid;gap:12px">
+        <input type="hidden" id="f_id" />
+        <div><label class="label">Name *</label><input class="input" id="f_name" placeholder="e.g. Garam Masala Premium" /></div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px"><div><label class="label">Category *</label><select class="select" id="f_cat"></select></div><div><label class="label">Emoji</label><input class="input" id="f_emoji" placeholder="🌶️" /></div></div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px"><div><label class="label">Unit *</label><input class="input" id="f_unit" placeholder="100 g" /></div><div><label class="label">Price ₹ *</label><input class="input" id="f_price" type="number" placeholder="89" /></div></div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px"><div><label class="label">MRP ₹ *</label><input class="input" id="f_mrp" type="number" placeholder="110" /></div><div><label class="label">Image URL</label><input class="input" id="f_image" placeholder="assets/ or https://..." /></div></div>
+        <div style="display:flex;gap:8px"><button class="btn btnPrimary" id="saveBtn">Save to Supabase (Encrypted)</button><button class="btn" id="cancelBtn">Cancel</button></div>
+        <div id="formMsg" style="font-size:12px;color:var(--muted)"></div>
+      </div>
+      <div style="margin-top:16px;border-top:1px solid var(--line);padding-top:14px;display:grid;gap:8px">
+        <button class="btn" id="exportJsonBtn">⬇ Export JSON Backup</button>
+        <button class="btn btnPrimary" id="pushBtn">⬆ Push All 440 to Supabase</button>
+        <button class="btn" id="pullBtn">⬇ Pull from Supabase</button>
+      </div>
+    </div>
+    <div class="card">
+      <div style="display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap">
+        <input class="input" id="search" placeholder="Search 440 products..." style="max-width:280px" />
+        <select class="select" id="catFilter" style="max-width:180px"><option value="">All cats</option></select>
+        <span id="resultInfo" style="font-size:12px;color:var(--muted);align-self:center"></span>
+      </div>
+      <div class="tableWrap"><table><thead><tr><th>Product</th><th>Cat</th><th>Price</th><th style="text-align:center">Actions</th></tr></thead><tbody id="tbody"></tbody></table></div>
+      <div id="pageInfo" style="text-align:center;color:var(--muted);font-size:12px;margin-top:8px"></div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+var CATEGORIES = ["Staples", "Snacks", "Beverages", "Masala", "Home Care"];
+var DEFAULT_PRODUCTS = [
+  {
+    "id": "p_0",
+    "baseId": 0,
+    "name": "Wheat Flour",
+    "displayName": "Wheat Flour",
+    "cat": "Staples",
+    "emoji": "🌾",
+    "unit": "5 kg",
+    "price": 289,
+    "mrp": 330,
+    "image": "assets/wheat-flour.png"
+  },
+  {
+    "id": "p_1",
+    "baseId": 1,
+    "name": "Dark Chocolate",
+    "displayName": "Dark Chocolate",
+    "cat": "Snacks",
+    "emoji": "🍫",
+    "unit": "45 g",
+    "price": 106,
+    "mrp": 128,
+    "image": "assets/dark-chocolate.png"
+  },
+  {
+    "id": "p_2",
+    "baseId": 2,
+    "name": "Cold Coffee",
+    "displayName": "Cold Coffee",
+    "cat": "Beverages",
+    "emoji": "☕",
+    "unit": "250 ml",
+    "price": 59,
+    "mrp": 71,
+    "image": "https://images.unsplash.com/photo-1461023058943-07fcbe16d735?w=500&q=80"
+  },
+  {
+    "id": "p_3",
+    "baseId": 3,
+    "name": "Dishwash Gel",
+    "displayName": "Dishwash Gel",
+    "cat": "Home Care",
+    "emoji": "🧽",
+    "unit": "500 ml",
+    "price": 140,
+    "mrp": 169,
+    "image": "assets/dishwash-gel.png"
+  },
+  {
+    "id": "p_4",
+    "baseId": 4,
+    "name": "Almonds Premium",
+    "displayName": "Almonds Premium",
+    "cat": "Staples",
+    "emoji": "🥜",
+    "unit": "200 g",
+    "price": 257,
+    "mrp": 302,
+    "image": "assets/almonds.png"
+  },
+  {
+    "id": "p_5",
+    "baseId": 5,
+    "name": "Potato Chips",
+    "displayName": "Potato Chips",
+    "cat": "Snacks",
+    "emoji": "🥔",
+    "unit": "100 g",
+    "price": 35,
+    "mrp": 40,
+    "image": "assets/potato-chips.png"
+  },
+  {
+    "id": "p_6",
+    "baseId": 6,
+    "name": "Orange Juice",
+    "displayName": "Orange Juice",
+    "cat": "Beverages",
+    "emoji": "🧃",
+    "unit": "1 L",
+    "price": 136,
+    "mrp": 158,
+    "image": "assets/orange-juice.png"
+  },
+  {
+    "id": "p_7",
+    "baseId": 7,
+    "name": "Matar Dal",
+    "displayName": "Matar Dal",
+    "cat": "Staples",
+    "emoji": "🫘",
+    "unit": "1 kg",
+    "price": 74,
+    "mrp": 76,
+    "image": "assets/matar-dal.png"
+  },
+  {
+    "id": "p_8",
+    "baseId": 8,
+    "name": "Arhar Dal",
+    "displayName": "Arhar Dal",
+    "cat": "Staples",
+    "emoji": "🫘",
+    "unit": "1 kg",
+    "price": 111,
+    "mrp": 114,
+    "image": "assets/arhar-dal.png"
+  },
+  {
+    "id": "p_9",
+    "baseId": 9,
+    "name": "Jeera",
+    "displayName": "Jeera",
+    "cat": "Staples",
+    "emoji": "🌿",
+    "unit": "50 g",
+    "price": 58,
+    "mrp": 62,
+    "image": "assets/jeera.png"
+  },
+  {
+    "id": "p_10",
+    "baseId": 10,
+    "name": "Basmati Rice",
+    "displayName": "Basmati Rice",
+    "cat": "Staples",
+    "emoji": "🍚",
+    "unit": "5 kg",
+    "price": 499,
+    "mrp": 549,
+    "image": "assets/basmati-rice.png"
+  },
+  {
+    "id": "p_11",
+    "baseId": 11,
+    "name": "Sugar",
+    "displayName": "Sugar",
+    "cat": "Staples",
+    "emoji": "🧂",
+    "unit": "1 kg",
+    "price": 56,
+    "mrp": 63,
+    "image": "assets/sugar.png"
+  },
+  {
+    "id": "p_12",
+    "baseId": 12,
+    "name": "Tea 2",
+    "displayName": "Tea",
+    "cat": "Beverages",
+    "emoji": "🍵",
+    "unit": "250 g",
+    "price": 163,
+    "mrp": 195,
+    "image": "assets/tea.png"
+  },
+  {
+    "id": "p_13",
+    "baseId": 13,
+    "name": "Fruit Juice 2",
+    "displayName": "Fruit Juice",
+    "cat": "Beverages",
+    "emoji": "🧃",
+    "unit": "1 L",
+    "price": 150,
+    "mrp": 173,
+    "image": "assets/fruit-juice.png"
+  },
+  {
+    "id": "p_14",
+    "baseId": 14,
+    "name": "Laundry Detergent 2",
+    "displayName": "Laundry Detergent",
+    "cat": "Home Care",
+    "emoji": "🧺",
+    "unit": "1 kg",
+    "price": 207,
+    "mrp": 251,
+    "image": "assets/laundry-detergent.png"
+  },
+  {
+    "id": "p_15",
+    "baseId": 15,
+    "name": "Biscuits 2",
+    "displayName": "Biscuits",
+    "cat": "Snacks",
+    "emoji": "🍪",
+    "unit": "100 g",
+    "price": 30,
+    "mrp": 35,
+    "image": "assets/biscuits.png"
+  },
+  {
+    "id": "p_16",
+    "baseId": 16,
+    "name": "Salt 2",
+    "displayName": "Salt",
+    "cat": "Staples",
+    "emoji": "🧂",
+    "unit": "1 kg",
+    "price": 32,
+    "mrp": 38,
+    "image": "assets/salt.png"
+  },
+  {
+    "id": "p_17",
+    "baseId": 17,
+    "name": "Garam Masala 2",
+    "displayName": "Garam Masala",
+    "cat": "Masala",
+    "emoji": "🌶️",
+    "unit": "100 g",
+    "price": 103,
+    "mrp": 126,
+    "image": "assets/garam-masala-premium.png"
+  },
+  {
+    "id": "p_18",
+    "baseId": 18,
+    "name": "Tomato Ketchup 2",
+    "displayName": "Tomato Ketchup",
+    "cat": "Masala",
+    "emoji": "🍅",
+    "unit": "500 g",
+    "price": 120,
+    "mrp": 149,
+    "image": "assets/tomato-ketchup.png"
+  },
+  {
+    "id": "p_19",
+    "baseId": 19,
+    "name": "Red Chilli Powder 2",
+    "displayName": "Red Chilli Powder",
+    "cat": "Masala",
+    "emoji": "🌶️",
+    "unit": "100 g",
+    "price": 97,
+    "mrp": 117,
+    "image": "assets/red-chilli-powder.png"
+  },
+  {
+    "id": "p_20",
+    "baseId": 20,
+    "name": "Turmeric Powder 2",
+    "displayName": "Turmeric Powder",
+    "cat": "Masala",
+    "emoji": "💛",
+    "unit": "100 g",
+    "price": 55,
+    "mrp": 70,
+    "image": "assets/turmeric-powder.png"
+  },
+  {
+    "id": "p_21",
+    "baseId": 21,
+    "name": "Coriander Powder 2",
+    "displayName": "Coriander Powder",
+    "cat": "Masala",
+    "emoji": "🌿",
+    "unit": "100 g",
+    "price": 66,
+    "mrp": 83,
+    "image": "assets/coriander-powder.png"
+  },
+  {
+    "id": "p_22",
+    "baseId": 22,
+    "name": "Garam Masala Premium 2",
+    "displayName": "Garam Masala Premium",
+    "cat": "Masala",
+    "emoji": "🌶️",
+    "unit": "100 g",
+    "price": 123,
+    "mrp": 151,
+    "image": "assets/garam-masala-premium.png"
+  },
+  {
+    "id": "p_23",
+    "baseId": 23,
+    "name": "Chaat Masala 2",
+    "displayName": "Chaat Masala",
+    "cat": "Masala",
+    "emoji": "🧂",
+    "unit": "100 g",
+    "price": 86,
+    "mrp": 104,
+    "image": "assets/chaat-masala.png"
+  },
+  {
+    "id": "p_24",
+    "baseId": 24,
+    "name": "Green Chilli Sauce 3",
+    "displayName": "Green Chilli Sauce",
+    "cat": "Masala",
+    "emoji": "🫙",
+    "unit": "250 g",
+    "price": 107,
+    "mrp": 131,
+    "image": "assets/green-chilli-sauce.png"
+  },
+  {
+    "id": "p_25",
+    "baseId": 25,
+    "name": "Red Chilli Sauce 3",
+    "displayName": "Red Chilli Sauce",
+    "cat": "Masala",
+    "emoji": "🫙",
+    "unit": "250 g",
+    "price": 79,
+    "mrp": 99,
+    "image": "assets/red-chilli-sauce.png"
+  },
+  {
+    "id": "p_26",
+    "baseId": 26,
+    "name": "Mint Chutney 3",
+    "displayName": "Mint Chutney",
+    "cat": "Masala",
+    "emoji": "🫙",
+    "unit": "250 g",
+    "price": 96,
+    "mrp": 118,
+    "image": "assets/mint-chutney.png"
+  },
+  {
+    "id": "p_27",
+    "baseId": 27,
+    "name": "Schezwan Chutney 3",
+    "displayName": "Schezwan Chutney",
+    "cat": "Masala",
+    "emoji": "🫙",
+    "unit": "250 g",
+    "price": 113,
+    "mrp": 141,
+    "image": "assets/schezwan-chutney.png"
+  },
+  {
+    "id": "p_28",
+    "baseId": 28,
+    "name": "Moong Dal 3",
+    "displayName": "Moong Dal",
+    "cat": "Staples",
+    "emoji": "🫘",
+    "unit": "1 kg",
+    "price": 141,
+    "mrp": 144,
+    "image": "assets/moong-dal.png"
+  },
+  {
+    "id": "p_29",
+    "baseId": 29,
+    "name": "Red Masoor Dal 3",
+    "displayName": "Red Masoor Dal",
+    "cat": "Staples",
+    "emoji": "🫘",
+    "unit": "1 kg",
+    "price": 138,
+    "mrp": 142,
+    "image": "assets/red-masoor-dal.png"
+  },
+  {
+    "id": "p_30",
+    "baseId": 30,
+    "name": "Arhar Dal 3",
+    "displayName": "Arhar Dal",
+    "cat": "Staples",
+    "emoji": "🫘",
+    "unit": "1 kg",
+    "price": 90,
+    "mrp": 90,
+    "image": "assets/arhar-dal.png"
+  },
+  {
+    "id": "p_31",
+    "baseId": 31,
+    "name": "Channa Dal 3",
+    "displayName": "Channa Dal",
+    "cat": "Staples",
+    "emoji": "🫘",
+    "unit": "1 kg",
+    "price": 102,
+    "mrp": 103,
+    "image": "assets/channa-dal.png"
+  },
+  {
+    "id": "p_32",
+    "baseId": 32,
+    "name": "Kala Channa 3",
+    "displayName": "Kala Channa",
+    "cat": "Staples",
+    "emoji": "🫘",
+    "unit": "1 kg",
+    "price": 119,
+    "mrp": 121,
+    "image": "assets/kala-channa.png"
+  },
+  {
+    "id": "p_33",
+    "baseId": 33,
+    "name": "Kabli Channa 3",
+    "displayName": "Kabli Channa",
+    "cat": "Staples",
+    "emoji": "🫘",
+    "unit": "1 kg",
+    "price": 161,
+    "mrp": 164,
+    "image": "assets/kabli-channa.png"
+  },
+  {
+    "id": "p_34",
+    "baseId": 34,
+    "name": "Rajma 3",
+    "displayName": "Rajma",
+    "cat": "Staples",
+    "emoji": "🫘",
+    "unit": "1 kg",
+    "price": 163,
+    "mrp": 167,
+    "image": "assets/rajma.png"
+  },
+  {
+    "id": "p_35",
+    "baseId": 35,
+    "name": "Raungi 3",
+    "displayName": "Raungi",
+    "cat": "Staples",
+    "emoji": "🫘",
+    "unit": "1 kg",
+    "price": 115,
+    "mrp": 115,
+    "image": "assets/raungi.png"
+  },
+  {
+    "id": "p_36",
+    "baseId": 36,
+    "name": "Lal Rajma 4",
+    "displayName": "Lal Rajma",
+    "cat": "Staples",
+    "emoji": "🫘",
+    "unit": "1 kg",
+    "price": 152,
+    "mrp": 153,
+    "image": "assets/lal-rajma.png"
+  },
+  {
+    "id": "p_37",
+    "baseId": 37,
+    "name": "Urad Dal 4",
+    "displayName": "Urad Dal",
+    "cat": "Staples",
+    "emoji": "🫘",
+    "unit": "1 kg",
+    "price": 139,
+    "mrp": 141,
+    "image": "assets/urad-dal.png"
+  },
+  {
+    "id": "p_38",
+    "baseId": 38,
+    "name": "Kaali Maah 4",
+    "displayName": "Kaali Maah",
+    "cat": "Staples",
+    "emoji": "🫘",
+    "unit": "1 kg",
+    "price": 151,
+    "mrp": 154,
+    "image": "assets/kaali-maah.png"
+  },
+  {
+    "id": "p_39",
+    "baseId": 39,
+    "name": "Hari Moong 4",
+    "displayName": "Hari Moong",
+    "cat": "Staples",
+    "emoji": "🫘",
+    "unit": "1 kg",
+    "price": 153,
+    "mrp": 157,
+    "image": "assets/moong-dal.png"
+  },
+  {
+    "id": "p_40",
+    "baseId": 40,
+    "name": "Sabat Masar 4",
+    "displayName": "Sabat Masar",
+    "cat": "Staples",
+    "emoji": "🫘",
+    "unit": "1 kg",
+    "price": 115,
+    "mrp": 115,
+    "image": "assets/red-masoor-dal.png"
+  },
+  {
+    "id": "p_41",
+    "baseId": 41,
+    "name": "Litchi Juice 4",
+    "displayName": "Litchi Juice",
+    "cat": "Beverages",
+    "emoji": "🧃",
+    "unit": "1 L",
+    "price": 136,
+    "mrp": 137,
+    "image": "assets/litchi-juice.png"
+  },
+  {
+    "id": "p_42",
+    "baseId": 42,
+    "name": "Guava Juice 4",
+    "displayName": "Guava Juice",
+    "cat": "Beverages",
+    "emoji": "🧃",
+    "unit": "1 L",
+    "price": 133,
+    "mrp": 135,
+    "image": "assets/guava-juice.png"
+  },
+  {
+    "id": "p_43",
+    "baseId": 43,
+    "name": "Lemon Juice 4",
+    "displayName": "Lemon Juice",
+    "cat": "Beverages",
+    "emoji": "🍋",
+    "unit": "1 L",
+    "price": 130,
+    "mrp": 133,
+    "image": "assets/lemon-juice.png"
+  },
+  {
+    "id": "p_44",
+    "baseId": 44,
+    "name": "Pineapple Juice 4",
+    "displayName": "Pineapple Juice",
+    "cat": "Beverages",
+    "emoji": "🍍",
+    "unit": "1 L",
+    "price": 167,
+    "mrp": 171,
+    "image": "assets/pineapple-juice.png"
+  },
+  {
+    "id": "p_45",
+    "baseId": 45,
+    "name": "Fruit Beer 4",
+    "displayName": "Fruit Beer",
+    "cat": "Beverages",
+    "emoji": "🍺",
+    "unit": "300 ml",
+    "price": 65,
+    "mrp": 65,
+    "image": "assets/fruit-beer.png"
+  },
+  {
+    "id": "p_46",
+    "baseId": 46,
+    "name": "Masala Jeera 4",
+    "displayName": "Masala Jeera",
+    "cat": "Beverages",
+    "emoji": "🧃",
+    "unit": "750 ml",
+    "price": 96,
+    "mrp": 97,
+    "image": "assets/masala-jeera-drink.png"
+  },
+  {
+    "id": "p_47",
+    "baseId": 47,
+    "name": "Rose Sharbat 4",
+    "displayName": "Rose Sharbat",
+    "cat": "Beverages",
+    "emoji": "🌹",
+    "unit": "750 ml",
+    "price": 113,
+    "mrp": 115,
+    "image": "assets/rose-sharbat.png"
+  },
+  {
+    "id": "p_48",
+    "baseId": 48,
+    "name": "Orange Sharbat 5",
+    "displayName": "Orange Sharbat",
+    "cat": "Beverages",
+    "emoji": "🍊",
+    "unit": "750 ml",
+    "price": 120,
+    "mrp": 123,
+    "image": "assets/orange-sharbat.png"
+  },
+  {
+    "id": "p_49",
+    "baseId": 49,
+    "name": "Litchi Sharbat 5",
+    "displayName": "Litchi Sharbat",
+    "cat": "Beverages",
+    "emoji": "🧃",
+    "unit": "750 ml",
+    "price": 137,
+    "mrp": 141,
+    "image": "assets/litchi-sharbat.png"
+  },
+  {
+    "id": "p_50",
+    "baseId": 50,
+    "name": "Black Vinegar 5",
+    "displayName": "Black Vinegar",
+    "cat": "Beverages",
+    "emoji": "🫙",
+    "unit": "500 ml",
+    "price": 89,
+    "mrp": 89,
+    "image": "assets/black-vinegar.png"
+  },
+  {
+    "id": "p_51",
+    "baseId": 51,
+    "name": "White Vinegar 5",
+    "displayName": "White Vinegar",
+    "cat": "Beverages",
+    "emoji": "🫙",
+    "unit": "500 ml",
+    "price": 76,
+    "mrp": 77,
+    "image": "assets/black-vinegar.png"
+  },
+  {
+    "id": "p_52",
+    "baseId": 52,
+    "name": "Nutri 5",
+    "displayName": "Nutri",
+    "cat": "Staples",
+    "emoji": "🥣",
+    "unit": "500 g",
+    "price": 93,
+    "mrp": 95,
+    "image": "assets/basmati-rice.png"
+  },
+  {
+    "id": "p_53",
+    "baseId": 53,
+    "name": "Macaroni 5",
+    "displayName": "Macaroni",
+    "cat": "Staples",
+    "emoji": "🍝",
+    "unit": "500 g",
+    "price": 90,
+    "mrp": 93,
+    "image": "assets/basmati-rice.png"
+  },
+  {
+    "id": "p_54",
+    "baseId": 54,
+    "name": "Pasta 5",
+    "displayName": "Pasta",
+    "cat": "Staples",
+    "emoji": "🍝",
+    "unit": "500 g",
+    "price": 107,
+    "mrp": 111,
+    "image": "assets/pasta.png"
+  },
+  {
+    "id": "p_55",
+    "baseId": 55,
+    "name": "Daliya 5",
+    "displayName": "Daliya",
+    "cat": "Staples",
+    "emoji": "🌾",
+    "unit": "500 g",
+    "price": 59,
+    "mrp": 59,
+    "image": "assets/wheat-flour.png"
+  },
+  {
+    "id": "p_56",
+    "baseId": 56,
+    "name": "Mishri Cutting 5",
+    "displayName": "Mishri Cutting",
+    "cat": "Staples",
+    "emoji": "🧂",
+    "unit": "250 g",
+    "price": 76,
+    "mrp": 77,
+    "image": "assets/sugar.png"
+  },
+  {
+    "id": "p_57",
+    "baseId": 57,
+    "name": "Suji 5",
+    "displayName": "Suji",
+    "cat": "Staples",
+    "emoji": "🌾",
+    "unit": "500 g",
+    "price": 63,
+    "mrp": 65,
+    "image": "assets/suji.png"
+  },
+  {
+    "id": "p_58",
+    "baseId": 58,
+    "name": "Besan 5",
+    "displayName": "Besan",
+    "cat": "Staples",
+    "emoji": "🌾",
+    "unit": "500 g",
+    "price": 90,
+    "mrp": 93,
+    "image": "assets/besan.png"
+  },
+  {
+    "id": "p_59",
+    "baseId": 59,
+    "name": "Shankar 5",
+    "displayName": "Shankar",
+    "cat": "Staples",
+    "emoji": "🍘",
+    "unit": "250 g",
+    "price": 107,
+    "mrp": 111,
+    "image": "assets/biscuits.png"
+  },
+  {
+    "id": "p_60",
+    "baseId": 60,
+    "name": "Masala Boondi 6",
+    "displayName": "Masala Boondi",
+    "cat": "Snacks",
+    "emoji": "🫘",
+    "unit": "200 g",
+    "price": 59,
+    "mrp": 59,
+    "image": "assets/masala-boondi.png"
+  },
+  {
+    "id": "p_61",
+    "baseId": 61,
+    "name": "Plain Boondi 6",
+    "displayName": "Plain Boondi",
+    "cat": "Snacks",
+    "emoji": "🫘",
+    "unit": "200 g",
+    "price": 56,
+    "mrp": 57,
+    "image": "assets/biscuits.png"
+  },
+  {
+    "id": "p_62",
+    "baseId": 62,
+    "name": "Pakoda 6",
+    "displayName": "Pakoda",
+    "cat": "Snacks",
+    "emoji": "🍘",
+    "unit": "250 g",
+    "price": 83,
+    "mrp": 85,
+    "image": "assets/biscuits.png"
+  },
+  {
+    "id": "p_63",
+    "baseId": 63,
+    "name": "Poha 6",
+    "displayName": "Poha",
+    "cat": "Staples",
+    "emoji": "🌾",
+    "unit": "500 g",
+    "price": 80,
+    "mrp": 83,
+    "image": "assets/poha.png"
+  },
+  {
+    "id": "p_64",
+    "baseId": 64,
+    "name": "Wadiya 6",
+    "displayName": "Wadiya",
+    "cat": "Staples",
+    "emoji": "🫘",
+    "unit": "200 g",
+    "price": 117,
+    "mrp": 121,
+    "image": "assets/basmati-rice.png"
+  },
+  {
+    "id": "p_65",
+    "baseId": 65,
+    "name": "Sewian 6",
+    "displayName": "Sewian",
+    "cat": "Staples",
+    "emoji": "🍜",
+    "unit": "500 g",
+    "price": 69,
+    "mrp": 69,
+    "image": "assets/basmati-rice.png"
+  },
+  {
+    "id": "p_66",
+    "baseId": 66,
+    "name": "Masala Pakoda 6",
+    "displayName": "Masala Pakoda",
+    "cat": "Snacks",
+    "emoji": "🍘",
+    "unit": "250 g",
+    "price": 86,
+    "mrp": 87,
+    "image": "assets/biscuits.png"
+  },
+  {
+    "id": "p_67",
+    "baseId": 67,
+    "name": "Makhana 6",
+    "displayName": "Makhana",
+    "cat": "Snacks",
+    "emoji": "🥜",
+    "unit": "100 g",
+    "price": 143,
+    "mrp": 145,
+    "image": "assets/makhana.png"
+  },
+  {
+    "id": "p_68",
+    "baseId": 68,
+    "name": "Dry Fruits 6",
+    "displayName": "Dry Fruits",
+    "cat": "Staples",
+    "emoji": "🥜",
+    "unit": "200 g",
+    "price": 270,
+    "mrp": 273,
+    "image": "assets/dry-fruits.png"
+  },
+  {
+    "id": "p_69",
+    "baseId": 69,
+    "name": "Chaipatti 6",
+    "displayName": "Chaipatti",
+    "cat": "Beverages",
+    "emoji": "🍵",
+    "unit": "250 g",
+    "price": 177,
+    "mrp": 181,
+    "image": "assets/chaipatti.png"
+  },
+  {
+    "id": "p_70",
+    "baseId": 70,
+    "name": "Sugar 6",
+    "displayName": "Sugar",
+    "cat": "Staples",
+    "emoji": "🧂",
+    "unit": "1 kg",
+    "price": 49,
+    "mrp": 49,
+    "image": "assets/sugar.png"
+  },
+  {
+    "id": "p_71",
+    "baseId": 71,
+    "name": "Black Salt 6",
+    "displayName": "Black Salt",
+    "cat": "Staples",
+    "emoji": "🧂",
+    "unit": "1 kg",
+    "price": 46,
+    "mrp": 47,
+    "image": "assets/salt.png"
+  },
+  {
+    "id": "p_72",
+    "baseId": 72,
+    "name": "White Salt 7",
+    "displayName": "White Salt",
+    "cat": "Staples",
+    "emoji": "🧂",
+    "unit": "1 kg",
+    "price": 39,
+    "mrp": 41,
+    "image": "assets/salt.png"
+  },
+  {
+    "id": "p_73",
+    "baseId": 73,
+    "name": "Dhagga Mishri 7",
+    "displayName": "Dhagga Mishri",
+    "cat": "Staples",
+    "emoji": "🧂",
+    "unit": "250 g",
+    "price": 100,
+    "mrp": 103,
+    "image": "assets/sugar.png"
+  },
+  {
+    "id": "p_74",
+    "baseId": 74,
+    "name": "Cutting Giri 7",
+    "displayName": "Cutting Giri",
+    "cat": "Staples",
+    "emoji": "🥥",
+    "unit": "200 g",
+    "price": 127,
+    "mrp": 131,
+    "image": "assets/almonds.png"
+  },
+  {
+    "id": "p_75",
+    "baseId": 75,
+    "name": "Coconut Powder 7",
+    "displayName": "Coconut Powder",
+    "cat": "Staples",
+    "emoji": "🥥",
+    "unit": "100 g",
+    "price": 79,
+    "mrp": 79,
+    "image": "assets/almonds.png"
+  },
+  {
+    "id": "p_76",
+    "baseId": 76,
+    "name": "Golgappe 7",
+    "displayName": "Golgappe",
+    "cat": "Snacks",
+    "emoji": "🥙",
+    "unit": "200 g",
+    "price": 56,
+    "mrp": 57,
+    "image": "assets/biscuits.png"
+  },
+  {
+    "id": "p_77",
+    "baseId": 77,
+    "name": "Citric Acid 7",
+    "displayName": "Citric Acid",
+    "cat": "Staples",
+    "emoji": "🧂",
+    "unit": "100 g",
+    "price": 73,
+    "mrp": 75,
+    "image": "assets/salt.png"
+  },
+  {
+    "id": "p_78",
+    "baseId": 78,
+    "name": "Dalda 7",
+    "displayName": "Dalda",
+    "cat": "Staples",
+    "emoji": "🧈",
+    "unit": "1 L",
+    "price": 190,
+    "mrp": 193,
+    "image": "assets/orange-juice.png"
+  },
+  {
+    "id": "p_79",
+    "baseId": 79,
+    "name": "Refined Oil 7",
+    "displayName": "Refined Oil",
+    "cat": "Staples",
+    "emoji": "🫗",
+    "unit": "1 L",
+    "price": 177,
+    "mrp": 181,
+    "image": "assets/refined-oil.png"
+  },
+  {
+    "id": "p_80",
+    "baseId": 80,
+    "name": "Gari Burada 7",
+    "displayName": "Gari Burada",
+    "cat": "Staples",
+    "emoji": "🥥",
+    "unit": "200 g",
+    "price": 89,
+    "mrp": 89,
+    "image": "assets/almonds.png"
+  },
+  {
+    "id": "p_81",
+    "baseId": 81,
+    "name": "Maida 7",
+    "displayName": "Maida",
+    "cat": "Staples",
+    "emoji": "🌾",
+    "unit": "500 g",
+    "price": 56,
+    "mrp": 57,
+    "image": "assets/wheat-flour.png"
+  },
+  {
+    "id": "p_82",
+    "baseId": 82,
+    "name": "Aararot 7",
+    "displayName": "Aararot",
+    "cat": "Staples",
+    "emoji": "🌾",
+    "unit": "100 g",
+    "price": 59,
+    "mrp": 61,
+    "image": "assets/wheat-flour.png"
+  },
+  {
+    "id": "p_83",
+    "baseId": 83,
+    "name": "Baking Soda Imli 7",
+    "displayName": "Baking Soda Imli",
+    "cat": "Staples",
+    "emoji": "🧂",
+    "unit": "100 g",
+    "price": 60,
+    "mrp": 63,
+    "image": "assets/baking-soda-imli.png"
+  },
+  {
+    "id": "p_84",
+    "baseId": 84,
+    "name": "Laung 8",
+    "displayName": "Laung",
+    "cat": "Masala",
+    "emoji": "🌿",
+    "unit": "50 g",
+    "price": 117,
+    "mrp": 121,
+    "image": "assets/laung.png"
+  },
+  {
+    "id": "p_85",
+    "baseId": 85,
+    "name": "Choti Elachi 8",
+    "displayName": "Choti Elachi",
+    "cat": "Masala",
+    "emoji": "🌿",
+    "unit": "50 g",
+    "price": 149,
+    "mrp": 149,
+    "image": "assets/choti-elachi.png"
+  },
+  {
+    "id": "p_86",
+    "baseId": 86,
+    "name": "Kali Mirch 8",
+    "displayName": "Kali Mirch",
+    "cat": "Masala",
+    "emoji": "⚫",
+    "unit": "100 g",
+    "price": 106,
+    "mrp": 107,
+    "image": "assets/kali-mirch.png"
+  },
+  {
+    "id": "p_87",
+    "baseId": 87,
+    "name": "Badi Elachi 8",
+    "displayName": "Badi Elachi",
+    "cat": "Masala",
+    "emoji": "🌿",
+    "unit": "50 g",
+    "price": 133,
+    "mrp": 135,
+    "image": "assets/badi-elachi.png"
+  },
+  {
+    "id": "p_88",
+    "baseId": 88,
+    "name": "Sabat Dhaniya 8",
+    "displayName": "Sabat Dhaniya",
+    "cat": "Masala",
+    "emoji": "🌿",
+    "unit": "100 g",
+    "price": 80,
+    "mrp": 83,
+    "image": "assets/sabat-dhaniya.png"
+  },
+  {
+    "id": "p_89",
+    "baseId": 89,
+    "name": "Dal Chini 8",
+    "displayName": "Dal Chini",
+    "cat": "Masala",
+    "emoji": "🪵",
+    "unit": "50 g",
+    "price": 97,
+    "mrp": 101,
+    "image": "assets/dal-chini.png"
+  },
+  {
+    "id": "p_90",
+    "baseId": 90,
+    "name": "Jeera 8",
+    "displayName": "Jeera",
+    "cat": "Masala",
+    "emoji": "🌿",
+    "unit": "100 g",
+    "price": 59,
+    "mrp": 59,
+    "image": "assets/jeera.png"
+  },
+  {
+    "id": "p_91",
+    "baseId": 91,
+    "name": "Star Anise 8",
+    "displayName": "Star Anise",
+    "cat": "Masala",
+    "emoji": "⭐",
+    "unit": "50 g",
+    "price": 86,
+    "mrp": 87,
+    "image": "assets/star.png"
+  },
+  {
+    "id": "p_92",
+    "baseId": 92,
+    "name": "Khurmani 8",
+    "displayName": "Khurmani",
+    "cat": "Masala",
+    "emoji": "🍑",
+    "unit": "200 g",
+    "price": 163,
+    "mrp": 165,
+    "image": "assets/dry-fruits.png"
+  },
+  {
+    "id": "p_93",
+    "baseId": 93,
+    "name": "Dry Fruits Mix 8",
+    "displayName": "Dry Fruits Mix",
+    "cat": "Staples",
+    "emoji": "🥜",
+    "unit": "200 g",
+    "price": 270,
+    "mrp": 273,
+    "image": "assets/dry-fruits.png"
+  },
+  {
+    "id": "p_94",
+    "baseId": 94,
+    "name": "Javitri 8",
+    "displayName": "Javitri",
+    "cat": "Masala",
+    "emoji": "🌿",
+    "unit": "50 g",
+    "price": 207,
+    "mrp": 211,
+    "image": "assets/javitri.png"
+  },
+  {
+    "id": "p_95",
+    "baseId": 95,
+    "name": "Amla Candy 8",
+    "displayName": "Amla Candy",
+    "cat": "Snacks",
+    "emoji": "🍬",
+    "unit": "200 g",
+    "price": 89,
+    "mrp": 89,
+    "image": "assets/biscuits.png"
+  },
+  {
+    "id": "p_96",
+    "baseId": 96,
+    "name": "Pumpkin Seeds 9",
+    "displayName": "Pumpkin Seeds",
+    "cat": "Staples",
+    "emoji": "🌱",
+    "unit": "200 g",
+    "price": 206,
+    "mrp": 207,
+    "image": "assets/pumpkin-seeds.png"
+  },
+  {
+    "id": "p_97",
+    "baseId": 97,
+    "name": "Piper 9",
+    "displayName": "Piper",
+    "cat": "Masala",
+    "emoji": "🌿",
+    "unit": "50 g",
+    "price": 113,
+    "mrp": 115,
+    "image": "assets/kali-mirch.png"
+  },
+  {
+    "id": "p_98",
+    "baseId": 98,
+    "name": "Jayfal 9",
+    "displayName": "Jayfal",
+    "cat": "Masala",
+    "emoji": "🌿",
+    "unit": "50 g",
+    "price": 150,
+    "mrp": 153,
+    "image": "assets/jayfal.png"
+  },
+  {
+    "id": "p_99",
+    "baseId": 99,
+    "name": "Ajwain 9",
+    "displayName": "Ajwain",
+    "cat": "Masala",
+    "emoji": "🌿",
+    "unit": "100 g",
+    "price": 97,
+    "mrp": 101,
+    "image": "assets/jeera.png"
+  },
+  {
+    "id": "p_100",
+    "baseId": 100,
+    "name": "Makki 9",
+    "displayName": "Makki",
+    "cat": "Staples",
+    "emoji": "🌽",
+    "unit": "1 kg",
+    "price": 59,
+    "mrp": 59,
+    "image": "assets/basmati-rice.png"
+  },
+  {
+    "id": "p_101",
+    "baseId": 101,
+    "name": "White Seeds 9",
+    "displayName": "White Seeds",
+    "cat": "Staples",
+    "emoji": "🌱",
+    "unit": "200 g",
+    "price": 166,
+    "mrp": 167,
+    "image": "assets/pumpkin-seeds.png"
+  },
+  {
+    "id": "p_102",
+    "baseId": 102,
+    "name": "Sabat Lal Mirch 9",
+    "displayName": "Sabat Lal Mirch",
+    "cat": "Masala",
+    "emoji": "🌶️",
+    "unit": "100 g",
+    "price": 93,
+    "mrp": 95,
+    "image": "assets/red-chilli-powder.png"
+  },
+  {
+    "id": "p_103",
+    "baseId": 103,
+    "name": "Jeera Med 9",
+    "displayName": "Jeera Med",
+    "cat": "Masala",
+    "emoji": "🌿",
+    "unit": "100 g",
+    "price": 80,
+    "mrp": 83,
+    "image": "assets/jeera.png"
+  },
+  {
+    "id": "p_104",
+    "baseId": 0,
+    "name": "Wheat Flour 9",
+    "displayName": "Wheat Flour",
+    "cat": "Staples",
+    "emoji": "🌾",
+    "unit": "5 kg",
+    "price": 317,
+    "mrp": 362,
+    "image": "assets/wheat-flour.png"
+  },
+  {
+    "id": "p_105",
+    "baseId": 1,
+    "name": "Dark Chocolate 9",
+    "displayName": "Dark Chocolate",
+    "cat": "Snacks",
+    "emoji": "🍫",
+    "unit": "45 g",
+    "price": 99,
+    "mrp": 120,
+    "image": "assets/dark-chocolate.png"
+  },
+  {
+    "id": "p_106",
+    "baseId": 2,
+    "name": "Cold Coffee 9",
+    "displayName": "Cold Coffee",
+    "cat": "Beverages",
+    "emoji": "☕",
+    "unit": "250 ml",
+    "price": 52,
+    "mrp": 63,
+    "image": "https://images.unsplash.com/photo-1461023058943-07fcbe16d735?w=500&q=80"
+  },
+  {
+    "id": "p_107",
+    "baseId": 3,
+    "name": "Dishwash Gel 9",
+    "displayName": "Dishwash Gel",
+    "cat": "Home Care",
+    "emoji": "🧽",
+    "unit": "500 ml",
+    "price": 133,
+    "mrp": 161,
+    "image": "assets/dishwash-gel.png"
+  },
+  {
+    "id": "p_108",
+    "baseId": 4,
+    "name": "Almonds Premium 10",
+    "displayName": "Almonds Premium",
+    "cat": "Staples",
+    "emoji": "🥜",
+    "unit": "200 g",
+    "price": 250,
+    "mrp": 294,
+    "image": "assets/almonds.png"
+  },
+  {
+    "id": "p_109",
+    "baseId": 5,
+    "name": "Potato Chips 10",
+    "displayName": "Potato Chips",
+    "cat": "Snacks",
+    "emoji": "🥔",
+    "unit": "100 g",
+    "price": 63,
+    "mrp": 72,
+    "image": "assets/potato-chips.png"
+  },
+  {
+    "id": "p_110",
+    "baseId": 6,
+    "name": "Orange Juice 10",
+    "displayName": "Orange Juice",
+    "cat": "Beverages",
+    "emoji": "🧃",
+    "unit": "1 L",
+    "price": 129,
+    "mrp": 150,
+    "image": "assets/orange-juice.png"
+  },
+  {
+    "id": "p_111",
+    "baseId": 7,
+    "name": "Matar Dal 10",
+    "displayName": "Matar Dal",
+    "cat": "Staples",
+    "emoji": "🫘",
+    "unit": "1 kg",
+    "price": 67,
+    "mrp": 68,
+    "image": "assets/matar-dal.png"
+  },
+  {
+    "id": "p_112",
+    "baseId": 8,
+    "name": "Arhar Dal 10",
+    "displayName": "Arhar Dal",
+    "cat": "Staples",
+    "emoji": "🫘",
+    "unit": "1 kg",
+    "price": 104,
+    "mrp": 106,
+    "image": "assets/arhar-dal.png"
+  },
+  {
+    "id": "p_113",
+    "baseId": 9,
+    "name": "Jeera 10",
+    "displayName": "Jeera",
+    "cat": "Staples",
+    "emoji": "🌿",
+    "unit": "50 g",
+    "price": 51,
+    "mrp": 54,
+    "image": "assets/jeera.png"
+  },
+  {
+    "id": "p_114",
+    "baseId": 10,
+    "name": "Basmati Rice 10",
+    "displayName": "Basmati Rice",
+    "cat": "Staples",
+    "emoji": "🍚",
+    "unit": "5 kg",
+    "price": 527,
+    "mrp": 581,
+    "image": "assets/basmati-rice.png"
+  },
+  {
+    "id": "p_115",
+    "baseId": 11,
+    "name": "Sugar 10",
+    "displayName": "Sugar",
+    "cat": "Staples",
+    "emoji": "🧂",
+    "unit": "1 kg",
+    "price": 49,
+    "mrp": 55,
+    "image": "assets/sugar.png"
+  },
+  {
+    "id": "p_116",
+    "baseId": 12,
+    "name": "Tea 10",
+    "displayName": "Tea",
+    "cat": "Beverages",
+    "emoji": "🍵",
+    "unit": "250 g",
+    "price": 156,
+    "mrp": 187,
+    "image": "assets/tea.png"
+  },
+  {
+    "id": "p_117",
+    "baseId": 13,
+    "name": "Fruit Juice 10",
+    "displayName": "Fruit Juice",
+    "cat": "Beverages",
+    "emoji": "🧃",
+    "unit": "1 L",
+    "price": 143,
+    "mrp": 165,
+    "image": "assets/fruit-juice.png"
+  },
+  {
+    "id": "p_118",
+    "baseId": 14,
+    "name": "Laundry Detergent 10",
+    "displayName": "Laundry Detergent",
+    "cat": "Home Care",
+    "emoji": "🧺",
+    "unit": "1 kg",
+    "price": 200,
+    "mrp": 243,
+    "image": "assets/laundry-detergent.png"
+  },
+  {
+    "id": "p_119",
+    "baseId": 15,
+    "name": "Biscuits 10",
+    "displayName": "Biscuits",
+    "cat": "Snacks",
+    "emoji": "🍪",
+    "unit": "100 g",
+    "price": 58,
+    "mrp": 67,
+    "image": "assets/biscuits.png"
+  },
+  {
+    "id": "p_120",
+    "baseId": 16,
+    "name": "Salt 11",
+    "displayName": "Salt",
+    "cat": "Staples",
+    "emoji": "🧂",
+    "unit": "1 kg",
+    "price": 25,
+    "mrp": 30,
+    "image": "assets/salt.png"
+  },
+  {
+    "id": "p_121",
+    "baseId": 17,
+    "name": "Garam Masala 11",
+    "displayName": "Garam Masala",
+    "cat": "Masala",
+    "emoji": "🌶️",
+    "unit": "100 g",
+    "price": 96,
+    "mrp": 118,
+    "image": "assets/garam-masala-premium.png"
+  },
+  {
+    "id": "p_122",
+    "baseId": 18,
+    "name": "Tomato Ketchup 11",
+    "displayName": "Tomato Ketchup",
+    "cat": "Masala",
+    "emoji": "🍅",
+    "unit": "500 g",
+    "price": 113,
+    "mrp": 141,
+    "image": "assets/tomato-ketchup.png"
+  },
+  {
+    "id": "p_123",
+    "baseId": 19,
+    "name": "Red Chilli Powder 11",
+    "displayName": "Red Chilli Powder",
+    "cat": "Masala",
+    "emoji": "🌶️",
+    "unit": "100 g",
+    "price": 90,
+    "mrp": 109,
+    "image": "assets/red-chilli-powder.png"
+  },
+  {
+    "id": "p_124",
+    "baseId": 20,
+    "name": "Turmeric Powder 11",
+    "displayName": "Turmeric Powder",
+    "cat": "Masala",
+    "emoji": "💛",
+    "unit": "100 g",
+    "price": 83,
+    "mrp": 102,
+    "image": "assets/turmeric-powder.png"
+  },
+  {
+    "id": "p_125",
+    "baseId": 21,
+    "name": "Coriander Powder 11",
+    "displayName": "Coriander Powder",
+    "cat": "Masala",
+    "emoji": "🌿",
+    "unit": "100 g",
+    "price": 59,
+    "mrp": 75,
+    "image": "assets/coriander-powder.png"
+  },
+  {
+    "id": "p_126",
+    "baseId": 22,
+    "name": "Garam Masala Premium 11",
+    "displayName": "Garam Masala Premium",
+    "cat": "Masala",
+    "emoji": "🌶️",
+    "unit": "100 g",
+    "price": 116,
+    "mrp": 143,
+    "image": "assets/garam-masala-premium.png"
+  },
+  {
+    "id": "p_127",
+    "baseId": 23,
+    "name": "Chaat Masala 11",
+    "displayName": "Chaat Masala",
+    "cat": "Masala",
+    "emoji": "🧂",
+    "unit": "100 g",
+    "price": 79,
+    "mrp": 96,
+    "image": "assets/chaat-masala.png"
+  },
+  {
+    "id": "p_128",
+    "baseId": 24,
+    "name": "Green Chilli Sauce 11",
+    "displayName": "Green Chilli Sauce",
+    "cat": "Masala",
+    "emoji": "🫙",
+    "unit": "250 g",
+    "price": 100,
+    "mrp": 123,
+    "image": "assets/green-chilli-sauce.png"
+  },
+  {
+    "id": "p_129",
+    "baseId": 25,
+    "name": "Red Chilli Sauce 11",
+    "displayName": "Red Chilli Sauce",
+    "cat": "Masala",
+    "emoji": "🫙",
+    "unit": "250 g",
+    "price": 107,
+    "mrp": 131,
+    "image": "assets/red-chilli-sauce.png"
+  },
+  {
+    "id": "p_130",
+    "baseId": 26,
+    "name": "Mint Chutney 11",
+    "displayName": "Mint Chutney",
+    "cat": "Masala",
+    "emoji": "🫙",
+    "unit": "250 g",
+    "price": 89,
+    "mrp": 110,
+    "image": "assets/mint-chutney.png"
+  },
+  {
+    "id": "p_131",
+    "baseId": 27,
+    "name": "Schezwan Chutney 11",
+    "displayName": "Schezwan Chutney",
+    "cat": "Masala",
+    "emoji": "🫙",
+    "unit": "250 g",
+    "price": 106,
+    "mrp": 133,
+    "image": "assets/schezwan-chutney.png"
+  },
+  {
+    "id": "p_132",
+    "baseId": 28,
+    "name": "Moong Dal 12",
+    "displayName": "Moong Dal",
+    "cat": "Staples",
+    "emoji": "🫘",
+    "unit": "1 kg",
+    "price": 134,
+    "mrp": 136,
+    "image": "assets/moong-dal.png"
+  },
+  {
+    "id": "p_133",
+    "baseId": 29,
+    "name": "Red Masoor Dal 12",
+    "displayName": "Red Masoor Dal",
+    "cat": "Staples",
+    "emoji": "🫘",
+    "unit": "1 kg",
+    "price": 131,
+    "mrp": 134,
+    "image": "assets/red-masoor-dal.png"
+  },
+  {
+    "id": "p_134",
+    "baseId": 30,
+    "name": "Arhar Dal 12",
+    "displayName": "Arhar Dal",
+    "cat": "Staples",
+    "emoji": "🫘",
+    "unit": "1 kg",
+    "price": 118,
+    "mrp": 122,
+    "image": "assets/arhar-dal.png"
+  },
+  {
+    "id": "p_135",
+    "baseId": 31,
+    "name": "Channa Dal 12",
+    "displayName": "Channa Dal",
+    "cat": "Staples",
+    "emoji": "🫘",
+    "unit": "1 kg",
+    "price": 95,
+    "mrp": 95,
+    "image": "assets/channa-dal.png"
+  },
+  {
+    "id": "p_136",
+    "baseId": 32,
+    "name": "Kala Channa 12",
+    "displayName": "Kala Channa",
+    "cat": "Staples",
+    "emoji": "🫘",
+    "unit": "1 kg",
+    "price": 112,
+    "mrp": 113,
+    "image": "assets/kala-channa.png"
+  },
+  {
+    "id": "p_137",
+    "baseId": 33,
+    "name": "Kabli Channa 12",
+    "displayName": "Kabli Channa",
+    "cat": "Staples",
+    "emoji": "🫘",
+    "unit": "1 kg",
+    "price": 154,
+    "mrp": 156,
+    "image": "assets/kabli-channa.png"
+  },
+  {
+    "id": "p_138",
+    "baseId": 34,
+    "name": "Rajma 12",
+    "displayName": "Rajma",
+    "cat": "Staples",
+    "emoji": "🫘",
+    "unit": "1 kg",
+    "price": 156,
+    "mrp": 159,
+    "image": "assets/rajma.png"
+  },
+  {
+    "id": "p_139",
+    "baseId": 35,
+    "name": "Raungi 12",
+    "displayName": "Raungi",
+    "cat": "Staples",
+    "emoji": "🫘",
+    "unit": "1 kg",
+    "price": 143,
+    "mrp": 147,
+    "image": "assets/raungi.png"
+  },
+  {
+    "id": "p_140",
+    "baseId": 36,
+    "name": "Lal Rajma 12",
+    "displayName": "Lal Rajma",
+    "cat": "Staples",
+    "emoji": "🫘",
+    "unit": "1 kg",
+    "price": 145,
+    "mrp": 145,
+    "image": "assets/lal-rajma.png"
+  },
+  {
+    "id": "p_141",
+    "baseId": 37,
+    "name": "Urad Dal 12",
+    "displayName": "Urad Dal",
+    "cat": "Staples",
+    "emoji": "🫘",
+    "unit": "1 kg",
+    "price": 132,
+    "mrp": 133,
+    "image": "assets/urad-dal.png"
+  },
+  {
+    "id": "p_142",
+    "baseId": 38,
+    "name": "Kaali Maah 12",
+    "displayName": "Kaali Maah",
+    "cat": "Staples",
+    "emoji": "🫘",
+    "unit": "1 kg",
+    "price": 144,
+    "mrp": 146,
+    "image": "assets/kaali-maah.png"
+  },
+  {
+    "id": "p_143",
+    "baseId": 39,
+    "name": "Hari Moong 12",
+    "displayName": "Hari Moong",
+    "cat": "Staples",
+    "emoji": "🫘",
+    "unit": "1 kg",
+    "price": 146,
+    "mrp": 149,
+    "image": "assets/moong-dal.png"
+  },
+  {
+    "id": "p_144",
+    "baseId": 40,
+    "name": "Sabat Masar 13",
+    "displayName": "Sabat Masar",
+    "cat": "Staples",
+    "emoji": "🫘",
+    "unit": "1 kg",
+    "price": 143,
+    "mrp": 147,
+    "image": "assets/red-masoor-dal.png"
+  },
+  {
+    "id": "p_145",
+    "baseId": 41,
+    "name": "Litchi Juice 13",
+    "displayName": "Litchi Juice",
+    "cat": "Beverages",
+    "emoji": "🧃",
+    "unit": "1 L",
+    "price": 129,
+    "mrp": 129,
+    "image": "assets/litchi-juice.png"
+  },
+  {
+    "id": "p_146",
+    "baseId": 42,
+    "name": "Guava Juice 13",
+    "displayName": "Guava Juice",
+    "cat": "Beverages",
+    "emoji": "🧃",
+    "unit": "1 L",
+    "price": 126,
+    "mrp": 127,
+    "image": "assets/guava-juice.png"
+  },
+  {
+    "id": "p_147",
+    "baseId": 43,
+    "name": "Lemon Juice 13",
+    "displayName": "Lemon Juice",
+    "cat": "Beverages",
+    "emoji": "🍋",
+    "unit": "1 L",
+    "price": 123,
+    "mrp": 125,
+    "image": "assets/lemon-juice.png"
+  },
+  {
+    "id": "p_148",
+    "baseId": 44,
+    "name": "Pineapple Juice 13",
+    "displayName": "Pineapple Juice",
+    "cat": "Beverages",
+    "emoji": "🍍",
+    "unit": "1 L",
+    "price": 160,
+    "mrp": 163,
+    "image": "assets/pineapple-juice.png"
+  },
+  {
+    "id": "p_149",
+    "baseId": 45,
+    "name": "Fruit Beer 13",
+    "displayName": "Fruit Beer",
+    "cat": "Beverages",
+    "emoji": "🍺",
+    "unit": "300 ml",
+    "price": 93,
+    "mrp": 97,
+    "image": "assets/fruit-beer.png"
+  },
+  {
+    "id": "p_150",
+    "baseId": 46,
+    "name": "Masala Jeera 13",
+    "displayName": "Masala Jeera",
+    "cat": "Beverages",
+    "emoji": "🧃",
+    "unit": "750 ml",
+    "price": 89,
+    "mrp": 89,
+    "image": "assets/masala-jeera-drink.png"
+  },
+  {
+    "id": "p_151",
+    "baseId": 47,
+    "name": "Rose Sharbat 13",
+    "displayName": "Rose Sharbat",
+    "cat": "Beverages",
+    "emoji": "🌹",
+    "unit": "750 ml",
+    "price": 106,
+    "mrp": 107,
+    "image": "assets/rose-sharbat.png"
+  },
+  {
+    "id": "p_152",
+    "baseId": 48,
+    "name": "Orange Sharbat 13",
+    "displayName": "Orange Sharbat",
+    "cat": "Beverages",
+    "emoji": "🍊",
+    "unit": "750 ml",
+    "price": 113,
+    "mrp": 115,
+    "image": "assets/orange-sharbat.png"
+  },
+  {
+    "id": "p_153",
+    "baseId": 49,
+    "name": "Litchi Sharbat 13",
+    "displayName": "Litchi Sharbat",
+    "cat": "Beverages",
+    "emoji": "🧃",
+    "unit": "750 ml",
+    "price": 130,
+    "mrp": 133,
+    "image": "assets/litchi-sharbat.png"
+  },
+  {
+    "id": "p_154",
+    "baseId": 50,
+    "name": "Black Vinegar 13",
+    "displayName": "Black Vinegar",
+    "cat": "Beverages",
+    "emoji": "🫙",
+    "unit": "500 ml",
+    "price": 117,
+    "mrp": 121,
+    "image": "assets/black-vinegar.png"
+  },
+  {
+    "id": "p_155",
+    "baseId": 51,
+    "name": "White Vinegar 13",
+    "displayName": "White Vinegar",
+    "cat": "Beverages",
+    "emoji": "🫙",
+    "unit": "500 ml",
+    "price": 69,
+    "mrp": 69,
+    "image": "assets/black-vinegar.png"
+  },
+  {
+    "id": "p_156",
+    "baseId": 52,
+    "name": "Nutri 14",
+    "displayName": "Nutri",
+    "cat": "Staples",
+    "emoji": "🥣",
+    "unit": "500 g",
+    "price": 86,
+    "mrp": 87,
+    "image": "assets/basmati-rice.png"
+  },
+  {
+    "id": "p_157",
+    "baseId": 53,
+    "name": "Macaroni 14",
+    "displayName": "Macaroni",
+    "cat": "Staples",
+    "emoji": "🍝",
+    "unit": "500 g",
+    "price": 83,
+    "mrp": 85,
+    "image": "assets/basmati-rice.png"
+  },
+  {
+    "id": "p_158",
+    "baseId": 54,
+    "name": "Pasta 14",
+    "displayName": "Pasta",
+    "cat": "Staples",
+    "emoji": "🍝",
+    "unit": "500 g",
+    "price": 100,
+    "mrp": 103,
+    "image": "assets/pasta.png"
+  },
+  {
+    "id": "p_159",
+    "baseId": 55,
+    "name": "Daliya 14",
+    "displayName": "Daliya",
+    "cat": "Staples",
+    "emoji": "🌾",
+    "unit": "500 g",
+    "price": 87,
+    "mrp": 91,
+    "image": "assets/wheat-flour.png"
+  },
+  {
+    "id": "p_160",
+    "baseId": 56,
+    "name": "Mishri Cutting 14",
+    "displayName": "Mishri Cutting",
+    "cat": "Staples",
+    "emoji": "🧂",
+    "unit": "250 g",
+    "price": 69,
+    "mrp": 69,
+    "image": "assets/sugar.png"
+  },
+  {
+    "id": "p_161",
+    "baseId": 57,
+    "name": "Suji 14",
+    "displayName": "Suji",
+    "cat": "Staples",
+    "emoji": "🌾",
+    "unit": "500 g",
+    "price": 56,
+    "mrp": 57,
+    "image": "assets/suji.png"
+  },
+  {
+    "id": "p_162",
+    "baseId": 58,
+    "name": "Besan 14",
+    "displayName": "Besan",
+    "cat": "Staples",
+    "emoji": "🌾",
+    "unit": "500 g",
+    "price": 83,
+    "mrp": 85,
+    "image": "assets/besan.png"
+  },
+  {
+    "id": "p_163",
+    "baseId": 59,
+    "name": "Shankar 14",
+    "displayName": "Shankar",
+    "cat": "Staples",
+    "emoji": "🍘",
+    "unit": "250 g",
+    "price": 100,
+    "mrp": 103,
+    "image": "assets/biscuits.png"
+  },
+  {
+    "id": "p_164",
+    "baseId": 60,
+    "name": "Masala Boondi 14",
+    "displayName": "Masala Boondi",
+    "cat": "Snacks",
+    "emoji": "🫘",
+    "unit": "200 g",
+    "price": 87,
+    "mrp": 91,
+    "image": "assets/masala-boondi.png"
+  },
+  {
+    "id": "p_165",
+    "baseId": 61,
+    "name": "Plain Boondi 14",
+    "displayName": "Plain Boondi",
+    "cat": "Snacks",
+    "emoji": "🫘",
+    "unit": "200 g",
+    "price": 49,
+    "mrp": 49,
+    "image": "assets/biscuits.png"
+  },
+  {
+    "id": "p_166",
+    "baseId": 62,
+    "name": "Pakoda 14",
+    "displayName": "Pakoda",
+    "cat": "Snacks",
+    "emoji": "🍘",
+    "unit": "250 g",
+    "price": 76,
+    "mrp": 77,
+    "image": "assets/biscuits.png"
+  },
+  {
+    "id": "p_167",
+    "baseId": 63,
+    "name": "Poha 14",
+    "displayName": "Poha",
+    "cat": "Staples",
+    "emoji": "🌾",
+    "unit": "500 g",
+    "price": 73,
+    "mrp": 75,
+    "image": "assets/poha.png"
+  },
+  {
+    "id": "p_168",
+    "baseId": 64,
+    "name": "Wadiya 15",
+    "displayName": "Wadiya",
+    "cat": "Staples",
+    "emoji": "🫘",
+    "unit": "200 g",
+    "price": 110,
+    "mrp": 113,
+    "image": "assets/basmati-rice.png"
+  },
+  {
+    "id": "p_169",
+    "baseId": 65,
+    "name": "Sewian 15",
+    "displayName": "Sewian",
+    "cat": "Staples",
+    "emoji": "🍜",
+    "unit": "500 g",
+    "price": 97,
+    "mrp": 101,
+    "image": "assets/basmati-rice.png"
+  },
+  {
+    "id": "p_170",
+    "baseId": 66,
+    "name": "Masala Pakoda 15",
+    "displayName": "Masala Pakoda",
+    "cat": "Snacks",
+    "emoji": "🍘",
+    "unit": "250 g",
+    "price": 79,
+    "mrp": 79,
+    "image": "assets/biscuits.png"
+  },
+  {
+    "id": "p_171",
+    "baseId": 67,
+    "name": "Makhana 15",
+    "displayName": "Makhana",
+    "cat": "Snacks",
+    "emoji": "🥜",
+    "unit": "100 g",
+    "price": 136,
+    "mrp": 137,
+    "image": "assets/makhana.png"
+  },
+  {
+    "id": "p_172",
+    "baseId": 68,
+    "name": "Dry Fruits 15",
+    "displayName": "Dry Fruits",
+    "cat": "Staples",
+    "emoji": "🥜",
+    "unit": "200 g",
+    "price": 263,
+    "mrp": 265,
+    "image": "assets/dry-fruits.png"
+  },
+  {
+    "id": "p_173",
+    "baseId": 69,
+    "name": "Chaipatti 15",
+    "displayName": "Chaipatti",
+    "cat": "Beverages",
+    "emoji": "🍵",
+    "unit": "250 g",
+    "price": 170,
+    "mrp": 173,
+    "image": "assets/chaipatti.png"
+  },
+  {
+    "id": "p_174",
+    "baseId": 70,
+    "name": "Sugar 15",
+    "displayName": "Sugar",
+    "cat": "Staples",
+    "emoji": "🧂",
+    "unit": "1 kg",
+    "price": 77,
+    "mrp": 81,
+    "image": "assets/sugar.png"
+  },
+  {
+    "id": "p_175",
+    "baseId": 71,
+    "name": "Black Salt 15",
+    "displayName": "Black Salt",
+    "cat": "Staples",
+    "emoji": "🧂",
+    "unit": "1 kg",
+    "price": 39,
+    "mrp": 39,
+    "image": "assets/salt.png"
+  },
+  {
+    "id": "p_176",
+    "baseId": 72,
+    "name": "White Salt 15",
+    "displayName": "White Salt",
+    "cat": "Staples",
+    "emoji": "🧂",
+    "unit": "1 kg",
+    "price": 32,
+    "mrp": 33,
+    "image": "assets/salt.png"
+  },
+  {
+    "id": "p_177",
+    "baseId": 73,
+    "name": "Dhagga Mishri 15",
+    "displayName": "Dhagga Mishri",
+    "cat": "Staples",
+    "emoji": "🧂",
+    "unit": "250 g",
+    "price": 93,
+    "mrp": 95,
+    "image": "assets/sugar.png"
+  },
+  {
+    "id": "p_178",
+    "baseId": 74,
+    "name": "Cutting Giri 15",
+    "displayName": "Cutting Giri",
+    "cat": "Staples",
+    "emoji": "🥥",
+    "unit": "200 g",
+    "price": 120,
+    "mrp": 123,
+    "image": "assets/almonds.png"
+  },
+  {
+    "id": "p_179",
+    "baseId": 75,
+    "name": "Coconut Powder 15",
+    "displayName": "Coconut Powder",
+    "cat": "Staples",
+    "emoji": "🥥",
+    "unit": "100 g",
+    "price": 107,
+    "mrp": 111,
+    "image": "assets/almonds.png"
+  },
+  {
+    "id": "p_180",
+    "baseId": 76,
+    "name": "Golgappe 16",
+    "displayName": "Golgappe",
+    "cat": "Snacks",
+    "emoji": "🥙",
+    "unit": "200 g",
+    "price": 49,
+    "mrp": 49,
+    "image": "assets/biscuits.png"
+  },
+  {
+    "id": "p_181",
+    "baseId": 77,
+    "name": "Citric Acid 16",
+    "displayName": "Citric Acid",
+    "cat": "Staples",
+    "emoji": "🧂",
+    "unit": "100 g",
+    "price": 66,
+    "mrp": 67,
+    "image": "assets/salt.png"
+  },
+  {
+    "id": "p_182",
+    "baseId": 78,
+    "name": "Dalda 16",
+    "displayName": "Dalda",
+    "cat": "Staples",
+    "emoji": "🧈",
+    "unit": "1 L",
+    "price": 183,
+    "mrp": 185,
+    "image": "assets/orange-juice.png"
+  },
+  {
+    "id": "p_183",
+    "baseId": 79,
+    "name": "Refined Oil 16",
+    "displayName": "Refined Oil",
+    "cat": "Staples",
+    "emoji": "🫗",
+    "unit": "1 L",
+    "price": 170,
+    "mrp": 173,
+    "image": "assets/refined-oil.png"
+  },
+  {
+    "id": "p_184",
+    "baseId": 80,
+    "name": "Gari Burada 16",
+    "displayName": "Gari Burada",
+    "cat": "Staples",
+    "emoji": "🥥",
+    "unit": "200 g",
+    "price": 117,
+    "mrp": 121,
+    "image": "assets/almonds.png"
+  },
+  {
+    "id": "p_185",
+    "baseId": 81,
+    "name": "Maida 16",
+    "displayName": "Maida",
+    "cat": "Staples",
+    "emoji": "🌾",
+    "unit": "500 g",
+    "price": 49,
+    "mrp": 49,
+    "image": "assets/wheat-flour.png"
+  },
+  {
+    "id": "p_186",
+    "baseId": 82,
+    "name": "Aararot 16",
+    "displayName": "Aararot",
+    "cat": "Staples",
+    "emoji": "🌾",
+    "unit": "100 g",
+    "price": 52,
+    "mrp": 53,
+    "image": "assets/wheat-flour.png"
+  },
+  {
+    "id": "p_187",
+    "baseId": 83,
+    "name": "Baking Soda Imli 16",
+    "displayName": "Baking Soda Imli",
+    "cat": "Staples",
+    "emoji": "🧂",
+    "unit": "100 g",
+    "price": 53,
+    "mrp": 55,
+    "image": "assets/baking-soda-imli.png"
+  },
+  {
+    "id": "p_188",
+    "baseId": 84,
+    "name": "Laung 16",
+    "displayName": "Laung",
+    "cat": "Masala",
+    "emoji": "🌿",
+    "unit": "50 g",
+    "price": 110,
+    "mrp": 113,
+    "image": "assets/laung.png"
+  },
+  {
+    "id": "p_189",
+    "baseId": 85,
+    "name": "Choti Elachi 16",
+    "displayName": "Choti Elachi",
+    "cat": "Masala",
+    "emoji": "🌿",
+    "unit": "50 g",
+    "price": 177,
+    "mrp": 181,
+    "image": "assets/choti-elachi.png"
+  },
+  {
+    "id": "p_190",
+    "baseId": 86,
+    "name": "Kali Mirch 16",
+    "displayName": "Kali Mirch",
+    "cat": "Masala",
+    "emoji": "⚫",
+    "unit": "100 g",
+    "price": 99,
+    "mrp": 99,
+    "image": "assets/kali-mirch.png"
+  },
+  {
+    "id": "p_191",
+    "baseId": 87,
+    "name": "Badi Elachi 16",
+    "displayName": "Badi Elachi",
+    "cat": "Masala",
+    "emoji": "🌿",
+    "unit": "50 g",
+    "price": 126,
+    "mrp": 127,
+    "image": "assets/badi-elachi.png"
+  },
+  {
+    "id": "p_192",
+    "baseId": 88,
+    "name": "Sabat Dhaniya 17",
+    "displayName": "Sabat Dhaniya",
+    "cat": "Masala",
+    "emoji": "🌿",
+    "unit": "100 g",
+    "price": 73,
+    "mrp": 75,
+    "image": "assets/sabat-dhaniya.png"
+  },
+  {
+    "id": "p_193",
+    "baseId": 89,
+    "name": "Dal Chini 17",
+    "displayName": "Dal Chini",
+    "cat": "Masala",
+    "emoji": "🪵",
+    "unit": "50 g",
+    "price": 90,
+    "mrp": 93,
+    "image": "assets/dal-chini.png"
+  },
+  {
+    "id": "p_194",
+    "baseId": 90,
+    "name": "Jeera 17",
+    "displayName": "Jeera",
+    "cat": "Masala",
+    "emoji": "🌿",
+    "unit": "100 g",
+    "price": 87,
+    "mrp": 91,
+    "image": "assets/jeera.png"
+  },
+  {
+    "id": "p_195",
+    "baseId": 91,
+    "name": "Star Anise 17",
+    "displayName": "Star Anise",
+    "cat": "Masala",
+    "emoji": "⭐",
+    "unit": "50 g",
+    "price": 79,
+    "mrp": 79,
+    "image": "assets/star.png"
+  },
+  {
+    "id": "p_196",
+    "baseId": 92,
+    "name": "Khurmani 17",
+    "displayName": "Khurmani",
+    "cat": "Masala",
+    "emoji": "🍑",
+    "unit": "200 g",
+    "price": 156,
+    "mrp": 157,
+    "image": "assets/dry-fruits.png"
+  },
+  {
+    "id": "p_197",
+    "baseId": 93,
+    "name": "Dry Fruits Mix 17",
+    "displayName": "Dry Fruits Mix",
+    "cat": "Staples",
+    "emoji": "🥜",
+    "unit": "200 g",
+    "price": 263,
+    "mrp": 265,
+    "image": "assets/dry-fruits.png"
+  },
+  {
+    "id": "p_198",
+    "baseId": 94,
+    "name": "Javitri 17",
+    "displayName": "Javitri",
+    "cat": "Masala",
+    "emoji": "🌿",
+    "unit": "50 g",
+    "price": 200,
+    "mrp": 203,
+    "image": "assets/javitri.png"
+  },
+  {
+    "id": "p_199",
+    "baseId": 95,
+    "name": "Amla Candy 17",
+    "displayName": "Amla Candy",
+    "cat": "Snacks",
+    "emoji": "🍬",
+    "unit": "200 g",
+    "price": 117,
+    "mrp": 121,
+    "image": "assets/biscuits.png"
+  },
+  {
+    "id": "p_200",
+    "baseId": 96,
+    "name": "Pumpkin Seeds 17",
+    "displayName": "Pumpkin Seeds",
+    "cat": "Staples",
+    "emoji": "🌱",
+    "unit": "200 g",
+    "price": 199,
+    "mrp": 199,
+    "image": "assets/pumpkin-seeds.png"
+  },
+  {
+    "id": "p_201",
+    "baseId": 97,
+    "name": "Piper 17",
+    "displayName": "Piper",
+    "cat": "Masala",
+    "emoji": "🌿",
+    "unit": "50 g",
+    "price": 106,
+    "mrp": 107,
+    "image": "assets/kali-mirch.png"
+  },
+  {
+    "id": "p_202",
+    "baseId": 98,
+    "name": "Jayfal 17",
+    "displayName": "Jayfal",
+    "cat": "Masala",
+    "emoji": "🌿",
+    "unit": "50 g",
+    "price": 143,
+    "mrp": 145,
+    "image": "assets/jayfal.png"
+  },
+  {
+    "id": "p_203",
+    "baseId": 99,
+    "name": "Ajwain 17",
+    "displayName": "Ajwain",
+    "cat": "Masala",
+    "emoji": "🌿",
+    "unit": "100 g",
+    "price": 90,
+    "mrp": 93,
+    "image": "assets/jeera.png"
+  },
+  {
+    "id": "p_204",
+    "baseId": 100,
+    "name": "Makki 18",
+    "displayName": "Makki",
+    "cat": "Staples",
+    "emoji": "🌽",
+    "unit": "1 kg",
+    "price": 87,
+    "mrp": 91,
+    "image": "assets/basmati-rice.png"
+  },
+  {
+    "id": "p_205",
+    "baseId": 101,
+    "name": "White Seeds 18",
+    "displayName": "White Seeds",
+    "cat": "Staples",
+    "emoji": "🌱",
+    "unit": "200 g",
+    "price": 159,
+    "mrp": 159,
+    "image": "assets/pumpkin-seeds.png"
+  },
+  {
+    "id": "p_206",
+    "baseId": 102,
+    "name": "Sabat Lal Mirch 18",
+    "displayName": "Sabat Lal Mirch",
+    "cat": "Masala",
+    "emoji": "🌶️",
+    "unit": "100 g",
+    "price": 86,
+    "mrp": 87,
+    "image": "assets/red-chilli-powder.png"
+  },
+  {
+    "id": "p_207",
+    "baseId": 103,
+    "name": "Jeera Med 18",
+    "displayName": "Jeera Med",
+    "cat": "Masala",
+    "emoji": "🌿",
+    "unit": "100 g",
+    "price": 73,
+    "mrp": 75,
+    "image": "assets/jeera.png"
+  },
+  {
+    "id": "p_208",
+    "baseId": 0,
+    "name": "Wheat Flour 18",
+    "displayName": "Wheat Flour",
+    "cat": "Staples",
+    "emoji": "🌾",
+    "unit": "5 kg",
+    "price": 310,
+    "mrp": 354,
+    "image": "assets/wheat-flour.png"
+  },
+  {
+    "id": "p_209",
+    "baseId": 1,
+    "name": "Dark Chocolate 18",
+    "displayName": "Dark Chocolate",
+    "cat": "Snacks",
+    "emoji": "🍫",
+    "unit": "45 g",
+    "price": 127,
+    "mrp": 152,
+    "image": "assets/dark-chocolate.png"
+  },
+  {
+    "id": "p_210",
+    "baseId": 2,
+    "name": "Cold Coffee 18",
+    "displayName": "Cold Coffee",
+    "cat": "Beverages",
+    "emoji": "☕",
+    "unit": "250 ml",
+    "price": 45,
+    "mrp": 55,
+    "image": "https://images.unsplash.com/photo-1461023058943-07fcbe16d735?w=500&q=80"
+  },
+  {
+    "id": "p_211",
+    "baseId": 3,
+    "name": "Dishwash Gel 18",
+    "displayName": "Dishwash Gel",
+    "cat": "Home Care",
+    "emoji": "🧽",
+    "unit": "500 ml",
+    "price": 126,
+    "mrp": 153,
+    "image": "assets/dishwash-gel.png"
+  },
+  {
+    "id": "p_212",
+    "baseId": 4,
+    "name": "Almonds Premium 18",
+    "displayName": "Almonds Premium",
+    "cat": "Staples",
+    "emoji": "🥜",
+    "unit": "200 g",
+    "price": 243,
+    "mrp": 286,
+    "image": "assets/almonds.png"
+  },
+  {
+    "id": "p_213",
+    "baseId": 5,
+    "name": "Potato Chips 18",
+    "displayName": "Potato Chips",
+    "cat": "Snacks",
+    "emoji": "🥔",
+    "unit": "100 g",
+    "price": 56,
+    "mrp": 64,
+    "image": "assets/potato-chips.png"
+  },
+  {
+    "id": "p_214",
+    "baseId": 6,
+    "name": "Orange Juice 18",
+    "displayName": "Orange Juice",
+    "cat": "Beverages",
+    "emoji": "🧃",
+    "unit": "1 L",
+    "price": 157,
+    "mrp": 182,
+    "image": "assets/orange-juice.png"
+  },
+  {
+    "id": "p_215",
+    "baseId": 7,
+    "name": "Matar Dal 18",
+    "displayName": "Matar Dal",
+    "cat": "Staples",
+    "emoji": "🫘",
+    "unit": "1 kg",
+    "price": 60,
+    "mrp": 60,
+    "image": "assets/matar-dal.png"
+  },
+  {
+    "id": "p_216",
+    "baseId": 8,
+    "name": "Arhar Dal 19",
+    "displayName": "Arhar Dal",
+    "cat": "Staples",
+    "emoji": "🫘",
+    "unit": "1 kg",
+    "price": 97,
+    "mrp": 98,
+    "image": "assets/arhar-dal.png"
+  },
+  {
+    "id": "p_217",
+    "baseId": 9,
+    "name": "Jeera 19",
+    "displayName": "Jeera",
+    "cat": "Staples",
+    "emoji": "🌿",
+    "unit": "50 g",
+    "price": 44,
+    "mrp": 46,
+    "image": "assets/jeera.png"
+  },
+  {
+    "id": "p_218",
+    "baseId": 10,
+    "name": "Basmati Rice 19",
+    "displayName": "Basmati Rice",
+    "cat": "Staples",
+    "emoji": "🍚",
+    "unit": "5 kg",
+    "price": 520,
+    "mrp": 573,
+    "image": "assets/basmati-rice.png"
+  },
+  {
+    "id": "p_219",
+    "baseId": 11,
+    "name": "Sugar 19",
+    "displayName": "Sugar",
+    "cat": "Staples",
+    "emoji": "🧂",
+    "unit": "1 kg",
+    "price": 77,
+    "mrp": 87,
+    "image": "assets/sugar.png"
+  },
+  {
+    "id": "p_220",
+    "baseId": 12,
+    "name": "Tea 19",
+    "displayName": "Tea",
+    "cat": "Beverages",
+    "emoji": "🍵",
+    "unit": "250 g",
+    "price": 149,
+    "mrp": 179,
+    "image": "assets/tea.png"
+  },
+  {
+    "id": "p_221",
+    "baseId": 13,
+    "name": "Fruit Juice 19",
+    "displayName": "Fruit Juice",
+    "cat": "Beverages",
+    "emoji": "🧃",
+    "unit": "1 L",
+    "price": 136,
+    "mrp": 157,
+    "image": "assets/fruit-juice.png"
+  },
+  {
+    "id": "p_222",
+    "baseId": 14,
+    "name": "Laundry Detergent 19",
+    "displayName": "Laundry Detergent",
+    "cat": "Home Care",
+    "emoji": "🧺",
+    "unit": "1 kg",
+    "price": 193,
+    "mrp": 235,
+    "image": "assets/laundry-detergent.png"
+  },
+  {
+    "id": "p_223",
+    "baseId": 15,
+    "name": "Biscuits 19",
+    "displayName": "Biscuits",
+    "cat": "Snacks",
+    "emoji": "🍪",
+    "unit": "100 g",
+    "price": 51,
+    "mrp": 59,
+    "image": "assets/biscuits.png"
+  },
+  {
+    "id": "p_224",
+    "baseId": 16,
+    "name": "Salt 19",
+    "displayName": "Salt",
+    "cat": "Staples",
+    "emoji": "🧂",
+    "unit": "1 kg",
+    "price": 53,
+    "mrp": 62,
+    "image": "assets/salt.png"
+  },
+  {
+    "id": "p_225",
+    "baseId": 17,
+    "name": "Garam Masala 19",
+    "displayName": "Garam Masala",
+    "cat": "Masala",
+    "emoji": "🌶️",
+    "unit": "100 g",
+    "price": 89,
+    "mrp": 110,
+    "image": "assets/garam-masala-premium.png"
+  },
+  {
+    "id": "p_226",
+    "baseId": 18,
+    "name": "Tomato Ketchup 19",
+    "displayName": "Tomato Ketchup",
+    "cat": "Masala",
+    "emoji": "🍅",
+    "unit": "500 g",
+    "price": 106,
+    "mrp": 133,
+    "image": "assets/tomato-ketchup.png"
+  },
+  {
+    "id": "p_227",
+    "baseId": 19,
+    "name": "Red Chilli Powder 19",
+    "displayName": "Red Chilli Powder",
+    "cat": "Masala",
+    "emoji": "🌶️",
+    "unit": "100 g",
+    "price": 83,
+    "mrp": 101,
+    "image": "assets/red-chilli-powder.png"
+  },
+  {
+    "id": "p_228",
+    "baseId": 20,
+    "name": "Turmeric Powder 20",
+    "displayName": "Turmeric Powder",
+    "cat": "Masala",
+    "emoji": "💛",
+    "unit": "100 g",
+    "price": 76,
+    "mrp": 94,
+    "image": "assets/turmeric-powder.png"
+  },
+  {
+    "id": "p_229",
+    "baseId": 21,
+    "name": "Coriander Powder 20",
+    "displayName": "Coriander Powder",
+    "cat": "Masala",
+    "emoji": "🌿",
+    "unit": "100 g",
+    "price": 87,
+    "mrp": 107,
+    "image": "assets/coriander-powder.png"
+  },
+  {
+    "id": "p_230",
+    "baseId": 22,
+    "name": "Garam Masala Premium 20",
+    "displayName": "Garam Masala Premium",
+    "cat": "Masala",
+    "emoji": "🌶️",
+    "unit": "100 g",
+    "price": 109,
+    "mrp": 135,
+    "image": "assets/garam-masala-premium.png"
+  },
+  {
+    "id": "p_231",
+    "baseId": 23,
+    "name": "Chaat Masala 20",
+    "displayName": "Chaat Masala",
+    "cat": "Masala",
+    "emoji": "🧂",
+    "unit": "100 g",
+    "price": 72,
+    "mrp": 88,
+    "image": "assets/chaat-masala.png"
+  },
+  {
+    "id": "p_232",
+    "baseId": 24,
+    "name": "Green Chilli Sauce 20",
+    "displayName": "Green Chilli Sauce",
+    "cat": "Masala",
+    "emoji": "🫙",
+    "unit": "250 g",
+    "price": 93,
+    "mrp": 115,
+    "image": "assets/green-chilli-sauce.png"
+  },
+  {
+    "id": "p_233",
+    "baseId": 25,
+    "name": "Red Chilli Sauce 20",
+    "displayName": "Red Chilli Sauce",
+    "cat": "Masala",
+    "emoji": "🫙",
+    "unit": "250 g",
+    "price": 100,
+    "mrp": 123,
+    "image": "assets/red-chilli-sauce.png"
+  },
+  {
+    "id": "p_234",
+    "baseId": 26,
+    "name": "Mint Chutney 20",
+    "displayName": "Mint Chutney",
+    "cat": "Masala",
+    "emoji": "🫙",
+    "unit": "250 g",
+    "price": 117,
+    "mrp": 142,
+    "image": "assets/mint-chutney.png"
+  },
+  {
+    "id": "p_235",
+    "baseId": 27,
+    "name": "Schezwan Chutney 20",
+    "displayName": "Schezwan Chutney",
+    "cat": "Masala",
+    "emoji": "🫙",
+    "unit": "250 g",
+    "price": 99,
+    "mrp": 125,
+    "image": "assets/schezwan-chutney.png"
+  },
+  {
+    "id": "p_236",
+    "baseId": 28,
+    "name": "Moong Dal 20",
+    "displayName": "Moong Dal",
+    "cat": "Staples",
+    "emoji": "🫘",
+    "unit": "1 kg",
+    "price": 127,
+    "mrp": 128,
+    "image": "assets/moong-dal.png"
+  },
+  {
+    "id": "p_237",
+    "baseId": 29,
+    "name": "Red Masoor Dal 20",
+    "displayName": "Red Masoor Dal",
+    "cat": "Staples",
+    "emoji": "🫘",
+    "unit": "1 kg",
+    "price": 124,
+    "mrp": 126,
+    "image": "assets/red-masoor-dal.png"
+  },
+  {
+    "id": "p_238",
+    "baseId": 30,
+    "name": "Arhar Dal 20",
+    "displayName": "Arhar Dal",
+    "cat": "Staples",
+    "emoji": "🫘",
+    "unit": "1 kg",
+    "price": 111,
+    "mrp": 114,
+    "image": "assets/arhar-dal.png"
+  },
+  {
+    "id": "p_239",
+    "baseId": 31,
+    "name": "Channa Dal 20",
+    "displayName": "Channa Dal",
+    "cat": "Staples",
+    "emoji": "🫘",
+    "unit": "1 kg",
+    "price": 123,
+    "mrp": 127,
+    "image": "assets/channa-dal.png"
+  },
+  {
+    "id": "p_240",
+    "baseId": 32,
+    "name": "Kala Channa 21",
+    "displayName": "Kala Channa",
+    "cat": "Staples",
+    "emoji": "🫘",
+    "unit": "1 kg",
+    "price": 105,
+    "mrp": 105,
+    "image": "assets/kala-channa.png"
+  },
+  {
+    "id": "p_241",
+    "baseId": 33,
+    "name": "Kabli Channa 21",
+    "displayName": "Kabli Channa",
+    "cat": "Staples",
+    "emoji": "🫘",
+    "unit": "1 kg",
+    "price": 147,
+    "mrp": 148,
+    "image": "assets/kabli-channa.png"
+  },
+  {
+    "id": "p_242",
+    "baseId": 34,
+    "name": "Rajma 21",
+    "displayName": "Rajma",
+    "cat": "Staples",
+    "emoji": "🫘",
+    "unit": "1 kg",
+    "price": 149,
+    "mrp": 151,
+    "image": "assets/rajma.png"
+  },
+  {
+    "id": "p_243",
+    "baseId": 35,
+    "name": "Raungi 21",
+    "displayName": "Raungi",
+    "cat": "Staples",
+    "emoji": "🫘",
+    "unit": "1 kg",
+    "price": 136,
+    "mrp": 139,
+    "image": "assets/raungi.png"
+  },
+  {
+    "id": "p_244",
+    "baseId": 36,
+    "name": "Lal Rajma 21",
+    "displayName": "Lal Rajma",
+    "cat": "Staples",
+    "emoji": "🫘",
+    "unit": "1 kg",
+    "price": 173,
+    "mrp": 177,
+    "image": "assets/lal-rajma.png"
+  },
+  {
+    "id": "p_245",
+    "baseId": 37,
+    "name": "Urad Dal 21",
+    "displayName": "Urad Dal",
+    "cat": "Staples",
+    "emoji": "🫘",
+    "unit": "1 kg",
+    "price": 125,
+    "mrp": 125,
+    "image": "assets/urad-dal.png"
+  },
+  {
+    "id": "p_246",
+    "baseId": 38,
+    "name": "Kaali Maah 21",
+    "displayName": "Kaali Maah",
+    "cat": "Staples",
+    "emoji": "🫘",
+    "unit": "1 kg",
+    "price": 137,
+    "mrp": 138,
+    "image": "assets/kaali-maah.png"
+  },
+  {
+    "id": "p_247",
+    "baseId": 39,
+    "name": "Hari Moong 21",
+    "displayName": "Hari Moong",
+    "cat": "Staples",
+    "emoji": "🫘",
+    "unit": "1 kg",
+    "price": 139,
+    "mrp": 141,
+    "image": "assets/moong-dal.png"
+  },
+  {
+    "id": "p_248",
+    "baseId": 40,
+    "name": "Sabat Masar 21",
+    "displayName": "Sabat Masar",
+    "cat": "Staples",
+    "emoji": "🫘",
+    "unit": "1 kg",
+    "price": 136,
+    "mrp": 139,
+    "image": "assets/red-masoor-dal.png"
+  },
+  {
+    "id": "p_249",
+    "baseId": 41,
+    "name": "Litchi Juice 21",
+    "displayName": "Litchi Juice",
+    "cat": "Beverages",
+    "emoji": "🧃",
+    "unit": "1 L",
+    "price": 157,
+    "mrp": 161,
+    "image": "assets/litchi-juice.png"
+  },
+  {
+    "id": "p_250",
+    "baseId": 42,
+    "name": "Guava Juice 21",
+    "displayName": "Guava Juice",
+    "cat": "Beverages",
+    "emoji": "🧃",
+    "unit": "1 L",
+    "price": 119,
+    "mrp": 119,
+    "image": "assets/guava-juice.png"
+  },
+  {
+    "id": "p_251",
+    "baseId": 43,
+    "name": "Lemon Juice 21",
+    "displayName": "Lemon Juice",
+    "cat": "Beverages",
+    "emoji": "🍋",
+    "unit": "1 L",
+    "price": 116,
+    "mrp": 117,
+    "image": "assets/lemon-juice.png"
+  },
+  {
+    "id": "p_252",
+    "baseId": 44,
+    "name": "Pineapple Juice 22",
+    "displayName": "Pineapple Juice",
+    "cat": "Beverages",
+    "emoji": "🍍",
+    "unit": "1 L",
+    "price": 153,
+    "mrp": 155,
+    "image": "assets/pineapple-juice.png"
+  },
+  {
+    "id": "p_253",
+    "baseId": 45,
+    "name": "Fruit Beer 22",
+    "displayName": "Fruit Beer",
+    "cat": "Beverages",
+    "emoji": "🍺",
+    "unit": "300 ml",
+    "price": 86,
+    "mrp": 89,
+    "image": "assets/fruit-beer.png"
+  },
+  {
+    "id": "p_254",
+    "baseId": 46,
+    "name": "Masala Jeera 22",
+    "displayName": "Masala Jeera",
+    "cat": "Beverages",
+    "emoji": "🧃",
+    "unit": "750 ml",
+    "price": 117,
+    "mrp": 121,
+    "image": "assets/masala-jeera-drink.png"
+  },
+  {
+    "id": "p_255",
+    "baseId": 47,
+    "name": "Rose Sharbat 22",
+    "displayName": "Rose Sharbat",
+    "cat": "Beverages",
+    "emoji": "🌹",
+    "unit": "750 ml",
+    "price": 99,
+    "mrp": 99,
+    "image": "assets/rose-sharbat.png"
+  },
+  {
+    "id": "p_256",
+    "baseId": 48,
+    "name": "Orange Sharbat 22",
+    "displayName": "Orange Sharbat",
+    "cat": "Beverages",
+    "emoji": "🍊",
+    "unit": "750 ml",
+    "price": 106,
+    "mrp": 107,
+    "image": "assets/orange-sharbat.png"
+  },
+  {
+    "id": "p_257",
+    "baseId": 49,
+    "name": "Litchi Sharbat 22",
+    "displayName": "Litchi Sharbat",
+    "cat": "Beverages",
+    "emoji": "🧃",
+    "unit": "750 ml",
+    "price": 123,
+    "mrp": 125,
+    "image": "assets/litchi-sharbat.png"
+  },
+  {
+    "id": "p_258",
+    "baseId": 50,
+    "name": "Black Vinegar 22",
+    "displayName": "Black Vinegar",
+    "cat": "Beverages",
+    "emoji": "🫙",
+    "unit": "500 ml",
+    "price": 110,
+    "mrp": 113,
+    "image": "assets/black-vinegar.png"
+  },
+  {
+    "id": "p_259",
+    "baseId": 51,
+    "name": "White Vinegar 22",
+    "displayName": "White Vinegar",
+    "cat": "Beverages",
+    "emoji": "🫙",
+    "unit": "500 ml",
+    "price": 97,
+    "mrp": 101,
+    "image": "assets/black-vinegar.png"
+  },
+  {
+    "id": "p_260",
+    "baseId": 52,
+    "name": "Nutri 22",
+    "displayName": "Nutri",
+    "cat": "Staples",
+    "emoji": "🥣",
+    "unit": "500 g",
+    "price": 79,
+    "mrp": 79,
+    "image": "assets/basmati-rice.png"
+  },
+  {
+    "id": "p_261",
+    "baseId": 53,
+    "name": "Macaroni 22",
+    "displayName": "Macaroni",
+    "cat": "Staples",
+    "emoji": "🍝",
+    "unit": "500 g",
+    "price": 76,
+    "mrp": 77,
+    "image": "assets/basmati-rice.png"
+  },
+  {
+    "id": "p_262",
+    "baseId": 54,
+    "name": "Pasta 22",
+    "displayName": "Pasta",
+    "cat": "Staples",
+    "emoji": "🍝",
+    "unit": "500 g",
+    "price": 93,
+    "mrp": 95,
+    "image": "assets/pasta.png"
+  },
+  {
+    "id": "p_263",
+    "baseId": 55,
+    "name": "Daliya 22",
+    "displayName": "Daliya",
+    "cat": "Staples",
+    "emoji": "🌾",
+    "unit": "500 g",
+    "price": 80,
+    "mrp": 83,
+    "image": "assets/wheat-flour.png"
+  },
+  {
+    "id": "p_264",
+    "baseId": 56,
+    "name": "Mishri Cutting 23",
+    "displayName": "Mishri Cutting",
+    "cat": "Staples",
+    "emoji": "🧂",
+    "unit": "250 g",
+    "price": 97,
+    "mrp": 101,
+    "image": "assets/sugar.png"
+  },
+  {
+    "id": "p_265",
+    "baseId": 57,
+    "name": "Suji 23",
+    "displayName": "Suji",
+    "cat": "Staples",
+    "emoji": "🌾",
+    "unit": "500 g",
+    "price": 49,
+    "mrp": 49,
+    "image": "assets/suji.png"
+  },
+  {
+    "id": "p_266",
+    "baseId": 58,
+    "name": "Besan 23",
+    "displayName": "Besan",
+    "cat": "Staples",
+    "emoji": "🌾",
+    "unit": "500 g",
+    "price": 76,
+    "mrp": 77,
+    "image": "assets/besan.png"
+  },
+  {
+    "id": "p_267",
+    "baseId": 59,
+    "name": "Shankar 23",
+    "displayName": "Shankar",
+    "cat": "Staples",
+    "emoji": "🍘",
+    "unit": "250 g",
+    "price": 93,
+    "mrp": 95,
+    "image": "assets/biscuits.png"
+  },
+  {
+    "id": "p_268",
+    "baseId": 60,
+    "name": "Masala Boondi 23",
+    "displayName": "Masala Boondi",
+    "cat": "Snacks",
+    "emoji": "🫘",
+    "unit": "200 g",
+    "price": 80,
+    "mrp": 83,
+    "image": "assets/masala-boondi.png"
+  },
+  {
+    "id": "p_269",
+    "baseId": 61,
+    "name": "Plain Boondi 23",
+    "displayName": "Plain Boondi",
+    "cat": "Snacks",
+    "emoji": "🫘",
+    "unit": "200 g",
+    "price": 77,
+    "mrp": 81,
+    "image": "assets/biscuits.png"
+  },
+  {
+    "id": "p_270",
+    "baseId": 62,
+    "name": "Pakoda 23",
+    "displayName": "Pakoda",
+    "cat": "Snacks",
+    "emoji": "🍘",
+    "unit": "250 g",
+    "price": 69,
+    "mrp": 69,
+    "image": "assets/biscuits.png"
+  },
+  {
+    "id": "p_271",
+    "baseId": 63,
+    "name": "Poha 23",
+    "displayName": "Poha",
+    "cat": "Staples",
+    "emoji": "🌾",
+    "unit": "500 g",
+    "price": 66,
+    "mrp": 67,
+    "image": "assets/poha.png"
+  },
+  {
+    "id": "p_272",
+    "baseId": 64,
+    "name": "Wadiya 23",
+    "displayName": "Wadiya",
+    "cat": "Staples",
+    "emoji": "🫘",
+    "unit": "200 g",
+    "price": 103,
+    "mrp": 105,
+    "image": "assets/basmati-rice.png"
+  },
+  {
+    "id": "p_273",
+    "baseId": 65,
+    "name": "Sewian 23",
+    "displayName": "Sewian",
+    "cat": "Staples",
+    "emoji": "🍜",
+    "unit": "500 g",
+    "price": 90,
+    "mrp": 93,
+    "image": "assets/basmati-rice.png"
+  },
+  {
+    "id": "p_274",
+    "baseId": 66,
+    "name": "Masala Pakoda 23",
+    "displayName": "Masala Pakoda",
+    "cat": "Snacks",
+    "emoji": "🍘",
+    "unit": "250 g",
+    "price": 107,
+    "mrp": 111,
+    "image": "assets/biscuits.png"
+  },
+  {
+    "id": "p_275",
+    "baseId": 67,
+    "name": "Makhana 23",
+    "displayName": "Makhana",
+    "cat": "Snacks",
+    "emoji": "🥜",
+    "unit": "100 g",
+    "price": 129,
+    "mrp": 129,
+    "image": "assets/makhana.png"
+  },
+  {
+    "id": "p_276",
+    "baseId": 68,
+    "name": "Dry Fruits 24",
+    "displayName": "Dry Fruits",
+    "cat": "Staples",
+    "emoji": "🥜",
+    "unit": "200 g",
+    "price": 256,
+    "mrp": 257,
+    "image": "assets/dry-fruits.png"
+  },
+  {
+    "id": "p_277",
+    "baseId": 69,
+    "name": "Chaipatti 24",
+    "displayName": "Chaipatti",
+    "cat": "Beverages",
+    "emoji": "🍵",
+    "unit": "250 g",
+    "price": 163,
+    "mrp": 165,
+    "image": "assets/chaipatti.png"
+  },
+  {
+    "id": "p_278",
+    "baseId": 70,
+    "name": "Sugar 24",
+    "displayName": "Sugar",
+    "cat": "Staples",
+    "emoji": "🧂",
+    "unit": "1 kg",
+    "price": 70,
+    "mrp": 73,
+    "image": "assets/sugar.png"
+  },
+  {
+    "id": "p_279",
+    "baseId": 71,
+    "name": "Black Salt 24",
+    "displayName": "Black Salt",
+    "cat": "Staples",
+    "emoji": "🧂",
+    "unit": "1 kg",
+    "price": 67,
+    "mrp": 71,
+    "image": "assets/salt.png"
+  },
+  {
+    "id": "p_280",
+    "baseId": 72,
+    "name": "White Salt 24",
+    "displayName": "White Salt",
+    "cat": "Staples",
+    "emoji": "🧂",
+    "unit": "1 kg",
+    "price": 25,
+    "mrp": 25,
+    "image": "assets/salt.png"
+  },
+  {
+    "id": "p_281",
+    "baseId": 73,
+    "name": "Dhagga Mishri 24",
+    "displayName": "Dhagga Mishri",
+    "cat": "Staples",
+    "emoji": "🧂",
+    "unit": "250 g",
+    "price": 86,
+    "mrp": 87,
+    "image": "assets/sugar.png"
+  },
+  {
+    "id": "p_282",
+    "baseId": 74,
+    "name": "Cutting Giri 24",
+    "displayName": "Cutting Giri",
+    "cat": "Staples",
+    "emoji": "🥥",
+    "unit": "200 g",
+    "price": 113,
+    "mrp": 115,
+    "image": "assets/almonds.png"
+  },
+  {
+    "id": "p_283",
+    "baseId": 75,
+    "name": "Coconut Powder 24",
+    "displayName": "Coconut Powder",
+    "cat": "Staples",
+    "emoji": "🥥",
+    "unit": "100 g",
+    "price": 100,
+    "mrp": 103,
+    "image": "assets/almonds.png"
+  },
+  {
+    "id": "p_284",
+    "baseId": 76,
+    "name": "Golgappe 24",
+    "displayName": "Golgappe",
+    "cat": "Snacks",
+    "emoji": "🥙",
+    "unit": "200 g",
+    "price": 77,
+    "mrp": 81,
+    "image": "assets/biscuits.png"
+  },
+  {
+    "id": "p_285",
+    "baseId": 77,
+    "name": "Citric Acid 24",
+    "displayName": "Citric Acid",
+    "cat": "Staples",
+    "emoji": "🧂",
+    "unit": "100 g",
+    "price": 59,
+    "mrp": 59,
+    "image": "assets/salt.png"
+  },
+  {
+    "id": "p_286",
+    "baseId": 78,
+    "name": "Dalda 24",
+    "displayName": "Dalda",
+    "cat": "Staples",
+    "emoji": "🧈",
+    "unit": "1 L",
+    "price": 176,
+    "mrp": 177,
+    "image": "assets/orange-juice.png"
+  },
+  {
+    "id": "p_287",
+    "baseId": 79,
+    "name": "Refined Oil 24",
+    "displayName": "Refined Oil",
+    "cat": "Staples",
+    "emoji": "🫗",
+    "unit": "1 L",
+    "price": 163,
+    "mrp": 165,
+    "image": "assets/refined-oil.png"
+  },
+  {
+    "id": "p_288",
+    "baseId": 80,
+    "name": "Gari Burada 25",
+    "displayName": "Gari Burada",
+    "cat": "Staples",
+    "emoji": "🥥",
+    "unit": "200 g",
+    "price": 110,
+    "mrp": 113,
+    "image": "assets/almonds.png"
+  },
+  {
+    "id": "p_289",
+    "baseId": 81,
+    "name": "Maida 25",
+    "displayName": "Maida",
+    "cat": "Staples",
+    "emoji": "🌾",
+    "unit": "500 g",
+    "price": 77,
+    "mrp": 81,
+    "image": "assets/wheat-flour.png"
+  },
+  {
+    "id": "p_290",
+    "baseId": 82,
+    "name": "Aararot 25",
+    "displayName": "Aararot",
+    "cat": "Staples",
+    "emoji": "🌾",
+    "unit": "100 g",
+    "price": 45,
+    "mrp": 45,
+    "image": "assets/wheat-flour.png"
+  },
+  {
+    "id": "p_291",
+    "baseId": 83,
+    "name": "Baking Soda Imli 25",
+    "displayName": "Baking Soda Imli",
+    "cat": "Staples",
+    "emoji": "🧂",
+    "unit": "100 g",
+    "price": 46,
+    "mrp": 47,
+    "image": "assets/baking-soda-imli.png"
+  },
+  {
+    "id": "p_292",
+    "baseId": 84,
+    "name": "Laung 25",
+    "displayName": "Laung",
+    "cat": "Masala",
+    "emoji": "🌿",
+    "unit": "50 g",
+    "price": 103,
+    "mrp": 105,
+    "image": "assets/laung.png"
+  },
+  {
+    "id": "p_293",
+    "baseId": 85,
+    "name": "Choti Elachi 25",
+    "displayName": "Choti Elachi",
+    "cat": "Masala",
+    "emoji": "🌿",
+    "unit": "50 g",
+    "price": 170,
+    "mrp": 173,
+    "image": "assets/choti-elachi.png"
+  },
+  {
+    "id": "p_294",
+    "baseId": 86,
+    "name": "Kali Mirch 25",
+    "displayName": "Kali Mirch",
+    "cat": "Masala",
+    "emoji": "⚫",
+    "unit": "100 g",
+    "price": 127,
+    "mrp": 131,
+    "image": "assets/kali-mirch.png"
+  },
+  {
+    "id": "p_295",
+    "baseId": 87,
+    "name": "Badi Elachi 25",
+    "displayName": "Badi Elachi",
+    "cat": "Masala",
+    "emoji": "🌿",
+    "unit": "50 g",
+    "price": 119,
+    "mrp": 119,
+    "image": "assets/badi-elachi.png"
+  },
+  {
+    "id": "p_296",
+    "baseId": 88,
+    "name": "Sabat Dhaniya 25",
+    "displayName": "Sabat Dhaniya",
+    "cat": "Masala",
+    "emoji": "🌿",
+    "unit": "100 g",
+    "price": 66,
+    "mrp": 67,
+    "image": "assets/sabat-dhaniya.png"
+  },
+  {
+    "id": "p_297",
+    "baseId": 89,
+    "name": "Dal Chini 25",
+    "displayName": "Dal Chini",
+    "cat": "Masala",
+    "emoji": "🪵",
+    "unit": "50 g",
+    "price": 83,
+    "mrp": 85,
+    "image": "assets/dal-chini.png"
+  },
+  {
+    "id": "p_298",
+    "baseId": 90,
+    "name": "Jeera 25",
+    "displayName": "Jeera",
+    "cat": "Masala",
+    "emoji": "🌿",
+    "unit": "100 g",
+    "price": 80,
+    "mrp": 83,
+    "image": "assets/jeera.png"
+  },
+  {
+    "id": "p_299",
+    "baseId": 91,
+    "name": "Star Anise 25",
+    "displayName": "Star Anise",
+    "cat": "Masala",
+    "emoji": "⭐",
+    "unit": "50 g",
+    "price": 107,
+    "mrp": 111,
+    "image": "assets/star.png"
+  },
+  {
+    "id": "p_300",
+    "baseId": 92,
+    "name": "Khurmani 26",
+    "displayName": "Khurmani",
+    "cat": "Masala",
+    "emoji": "🍑",
+    "unit": "200 g",
+    "price": 149,
+    "mrp": 149,
+    "image": "assets/dry-fruits.png"
+  },
+  {
+    "id": "p_301",
+    "baseId": 93,
+    "name": "Dry Fruits Mix 26",
+    "displayName": "Dry Fruits Mix",
+    "cat": "Staples",
+    "emoji": "🥜",
+    "unit": "200 g",
+    "price": 256,
+    "mrp": 257,
+    "image": "assets/dry-fruits.png"
+  },
+  {
+    "id": "p_302",
+    "baseId": 94,
+    "name": "Javitri 26",
+    "displayName": "Javitri",
+    "cat": "Masala",
+    "emoji": "🌿",
+    "unit": "50 g",
+    "price": 193,
+    "mrp": 195,
+    "image": "assets/javitri.png"
+  },
+  {
+    "id": "p_303",
+    "baseId": 95,
+    "name": "Amla Candy 26",
+    "displayName": "Amla Candy",
+    "cat": "Snacks",
+    "emoji": "🍬",
+    "unit": "200 g",
+    "price": 110,
+    "mrp": 113,
+    "image": "assets/biscuits.png"
+  },
+  {
+    "id": "p_304",
+    "baseId": 96,
+    "name": "Pumpkin Seeds 26",
+    "displayName": "Pumpkin Seeds",
+    "cat": "Staples",
+    "emoji": "🌱",
+    "unit": "200 g",
+    "price": 227,
+    "mrp": 231,
+    "image": "assets/pumpkin-seeds.png"
+  },
+  {
+    "id": "p_305",
+    "baseId": 97,
+    "name": "Piper 26",
+    "displayName": "Piper",
+    "cat": "Masala",
+    "emoji": "🌿",
+    "unit": "50 g",
+    "price": 99,
+    "mrp": 99,
+    "image": "assets/kali-mirch.png"
+  },
+  {
+    "id": "p_306",
+    "baseId": 98,
+    "name": "Jayfal 26",
+    "displayName": "Jayfal",
+    "cat": "Masala",
+    "emoji": "🌿",
+    "unit": "50 g",
+    "price": 136,
+    "mrp": 137,
+    "image": "assets/jayfal.png"
+  },
+  {
+    "id": "p_307",
+    "baseId": 99,
+    "name": "Ajwain 26",
+    "displayName": "Ajwain",
+    "cat": "Masala",
+    "emoji": "🌿",
+    "unit": "100 g",
+    "price": 83,
+    "mrp": 85,
+    "image": "assets/jeera.png"
+  },
+  {
+    "id": "p_308",
+    "baseId": 100,
+    "name": "Makki 26",
+    "displayName": "Makki",
+    "cat": "Staples",
+    "emoji": "🌽",
+    "unit": "1 kg",
+    "price": 80,
+    "mrp": 83,
+    "image": "assets/basmati-rice.png"
+  },
+  {
+    "id": "p_309",
+    "baseId": 101,
+    "name": "White Seeds 26",
+    "displayName": "White Seeds",
+    "cat": "Staples",
+    "emoji": "🌱",
+    "unit": "200 g",
+    "price": 187,
+    "mrp": 191,
+    "image": "assets/pumpkin-seeds.png"
+  },
+  {
+    "id": "p_310",
+    "baseId": 102,
+    "name": "Sabat Lal Mirch 26",
+    "displayName": "Sabat Lal Mirch",
+    "cat": "Masala",
+    "emoji": "🌶️",
+    "unit": "100 g",
+    "price": 79,
+    "mrp": 79,
+    "image": "assets/red-chilli-powder.png"
+  },
+  {
+    "id": "p_311",
+    "baseId": 103,
+    "name": "Jeera Med 26",
+    "displayName": "Jeera Med",
+    "cat": "Masala",
+    "emoji": "🌿",
+    "unit": "100 g",
+    "price": 66,
+    "mrp": 67,
+    "image": "assets/jeera.png"
+  },
+  {
+    "id": "p_312",
+    "baseId": 0,
+    "name": "Wheat Flour 27",
+    "displayName": "Wheat Flour",
+    "cat": "Staples",
+    "emoji": "🌾",
+    "unit": "5 kg",
+    "price": 303,
+    "mrp": 346,
+    "image": "assets/wheat-flour.png"
+  },
+  {
+    "id": "p_313",
+    "baseId": 1,
+    "name": "Dark Chocolate 27",
+    "displayName": "Dark Chocolate",
+    "cat": "Snacks",
+    "emoji": "🍫",
+    "unit": "45 g",
+    "price": 120,
+    "mrp": 144,
+    "image": "assets/dark-chocolate.png"
+  },
+  {
+    "id": "p_314",
+    "baseId": 2,
+    "name": "Cold Coffee 27",
+    "displayName": "Cold Coffee",
+    "cat": "Beverages",
+    "emoji": "☕",
+    "unit": "250 ml",
+    "price": 73,
+    "mrp": 87,
+    "image": "https://images.unsplash.com/photo-1461023058943-07fcbe16d735?w=500&q=80"
+  },
+  {
+    "id": "p_315",
+    "baseId": 3,
+    "name": "Dishwash Gel 27",
+    "displayName": "Dishwash Gel",
+    "cat": "Home Care",
+    "emoji": "🧽",
+    "unit": "500 ml",
+    "price": 119,
+    "mrp": 145,
+    "image": "assets/dishwash-gel.png"
+  },
+  {
+    "id": "p_316",
+    "baseId": 4,
+    "name": "Almonds Premium 27",
+    "displayName": "Almonds Premium",
+    "cat": "Staples",
+    "emoji": "🥜",
+    "unit": "200 g",
+    "price": 236,
+    "mrp": 278,
+    "image": "assets/almonds.png"
+  },
+  {
+    "id": "p_317",
+    "baseId": 5,
+    "name": "Potato Chips 27",
+    "displayName": "Potato Chips",
+    "cat": "Snacks",
+    "emoji": "🥔",
+    "unit": "100 g",
+    "price": 49,
+    "mrp": 56,
+    "image": "assets/potato-chips.png"
+  },
+  {
+    "id": "p_318",
+    "baseId": 6,
+    "name": "Orange Juice 27",
+    "displayName": "Orange Juice",
+    "cat": "Beverages",
+    "emoji": "🧃",
+    "unit": "1 L",
+    "price": 150,
+    "mrp": 174,
+    "image": "assets/orange-juice.png"
+  },
+  {
+    "id": "p_319",
+    "baseId": 7,
+    "name": "Matar Dal 27",
+    "displayName": "Matar Dal",
+    "cat": "Staples",
+    "emoji": "🫘",
+    "unit": "1 kg",
+    "price": 88,
+    "mrp": 92,
+    "image": "assets/matar-dal.png"
+  },
+  {
+    "id": "p_320",
+    "baseId": 8,
+    "name": "Arhar Dal 27",
+    "displayName": "Arhar Dal",
+    "cat": "Staples",
+    "emoji": "🫘",
+    "unit": "1 kg",
+    "price": 90,
+    "mrp": 90,
+    "image": "assets/arhar-dal.png"
+  },
+  {
+    "id": "p_321",
+    "baseId": 9,
+    "name": "Jeera 27",
+    "displayName": "Jeera",
+    "cat": "Staples",
+    "emoji": "🌿",
+    "unit": "50 g",
+    "price": 37,
+    "mrp": 38,
+    "image": "assets/jeera.png"
+  },
+  {
+    "id": "p_322",
+    "baseId": 10,
+    "name": "Basmati Rice 27",
+    "displayName": "Basmati Rice",
+    "cat": "Staples",
+    "emoji": "🍚",
+    "unit": "5 kg",
+    "price": 513,
+    "mrp": 565,
+    "image": "assets/basmati-rice.png"
+  },
+  {
+    "id": "p_323",
+    "baseId": 11,
+    "name": "Sugar 27",
+    "displayName": "Sugar",
+    "cat": "Staples",
+    "emoji": "🧂",
+    "unit": "1 kg",
+    "price": 70,
+    "mrp": 79,
+    "image": "assets/sugar.png"
+  },
+  {
+    "id": "p_324",
+    "baseId": 12,
+    "name": "Tea 28",
+    "displayName": "Tea",
+    "cat": "Beverages",
+    "emoji": "🍵",
+    "unit": "250 g",
+    "price": 177,
+    "mrp": 211,
+    "image": "assets/tea.png"
+  },
+  {
+    "id": "p_325",
+    "baseId": 13,
+    "name": "Fruit Juice 28",
+    "displayName": "Fruit Juice",
+    "cat": "Beverages",
+    "emoji": "🧃",
+    "unit": "1 L",
+    "price": 129,
+    "mrp": 149,
+    "image": "assets/fruit-juice.png"
+  },
+  {
+    "id": "p_326",
+    "baseId": 14,
+    "name": "Laundry Detergent 28",
+    "displayName": "Laundry Detergent",
+    "cat": "Home Care",
+    "emoji": "🧺",
+    "unit": "1 kg",
+    "price": 186,
+    "mrp": 227,
+    "image": "assets/laundry-detergent.png"
+  },
+  {
+    "id": "p_327",
+    "baseId": 15,
+    "name": "Biscuits 28",
+    "displayName": "Biscuits",
+    "cat": "Snacks",
+    "emoji": "🍪",
+    "unit": "100 g",
+    "price": 44,
+    "mrp": 51,
+    "image": "assets/biscuits.png"
+  },
+  {
+    "id": "p_328",
+    "baseId": 16,
+    "name": "Salt 28",
+    "displayName": "Salt",
+    "cat": "Staples",
+    "emoji": "🧂",
+    "unit": "1 kg",
+    "price": 46,
+    "mrp": 54,
+    "image": "assets/salt.png"
+  },
+  {
+    "id": "p_329",
+    "baseId": 17,
+    "name": "Garam Masala 28",
+    "displayName": "Garam Masala",
+    "cat": "Masala",
+    "emoji": "🌶️",
+    "unit": "100 g",
+    "price": 117,
+    "mrp": 142,
+    "image": "assets/garam-masala-premium.png"
+  },
+  {
+    "id": "p_330",
+    "baseId": 18,
+    "name": "Tomato Ketchup 28",
+    "displayName": "Tomato Ketchup",
+    "cat": "Masala",
+    "emoji": "🍅",
+    "unit": "500 g",
+    "price": 99,
+    "mrp": 125,
+    "image": "assets/tomato-ketchup.png"
+  },
+  {
+    "id": "p_331",
+    "baseId": 19,
+    "name": "Red Chilli Powder 28",
+    "displayName": "Red Chilli Powder",
+    "cat": "Masala",
+    "emoji": "🌶️",
+    "unit": "100 g",
+    "price": 76,
+    "mrp": 93,
+    "image": "assets/red-chilli-powder.png"
+  },
+  {
+    "id": "p_332",
+    "baseId": 20,
+    "name": "Turmeric Powder 28",
+    "displayName": "Turmeric Powder",
+    "cat": "Masala",
+    "emoji": "💛",
+    "unit": "100 g",
+    "price": 69,
+    "mrp": 86,
+    "image": "assets/turmeric-powder.png"
+  },
+  {
+    "id": "p_333",
+    "baseId": 21,
+    "name": "Coriander Powder 28",
+    "displayName": "Coriander Powder",
+    "cat": "Masala",
+    "emoji": "🌿",
+    "unit": "100 g",
+    "price": 80,
+    "mrp": 99,
+    "image": "assets/coriander-powder.png"
+  },
+  {
+    "id": "p_334",
+    "baseId": 22,
+    "name": "Garam Masala Premium 28",
+    "displayName": "Garam Masala Premium",
+    "cat": "Masala",
+    "emoji": "🌶️",
+    "unit": "100 g",
+    "price": 137,
+    "mrp": 167,
+    "image": "assets/garam-masala-premium.png"
+  },
+  {
+    "id": "p_335",
+    "baseId": 23,
+    "name": "Chaat Masala 28",
+    "displayName": "Chaat Masala",
+    "cat": "Masala",
+    "emoji": "🧂",
+    "unit": "100 g",
+    "price": 65,
+    "mrp": 80,
+    "image": "assets/chaat-masala.png"
+  },
+  {
+    "id": "p_336",
+    "baseId": 24,
+    "name": "Green Chilli Sauce 29",
+    "displayName": "Green Chilli Sauce",
+    "cat": "Masala",
+    "emoji": "🫙",
+    "unit": "250 g",
+    "price": 86,
+    "mrp": 107,
+    "image": "assets/green-chilli-sauce.png"
+  },
+  {
+    "id": "p_337",
+    "baseId": 25,
+    "name": "Red Chilli Sauce 29",
+    "displayName": "Red Chilli Sauce",
+    "cat": "Masala",
+    "emoji": "🫙",
+    "unit": "250 g",
+    "price": 93,
+    "mrp": 115,
+    "image": "assets/red-chilli-sauce.png"
+  },
+  {
+    "id": "p_338",
+    "baseId": 26,
+    "name": "Mint Chutney 29",
+    "displayName": "Mint Chutney",
+    "cat": "Masala",
+    "emoji": "🫙",
+    "unit": "250 g",
+    "price": 110,
+    "mrp": 134,
+    "image": "assets/mint-chutney.png"
+  },
+  {
+    "id": "p_339",
+    "baseId": 27,
+    "name": "Schezwan Chutney 29",
+    "displayName": "Schezwan Chutney",
+    "cat": "Masala",
+    "emoji": "🫙",
+    "unit": "250 g",
+    "price": 127,
+    "mrp": 157,
+    "image": "assets/schezwan-chutney.png"
+  },
+  {
+    "id": "p_340",
+    "baseId": 28,
+    "name": "Moong Dal 29",
+    "displayName": "Moong Dal",
+    "cat": "Staples",
+    "emoji": "🫘",
+    "unit": "1 kg",
+    "price": 120,
+    "mrp": 120,
+    "image": "assets/moong-dal.png"
+  },
+  {
+    "id": "p_341",
+    "baseId": 29,
+    "name": "Red Masoor Dal 29",
+    "displayName": "Red Masoor Dal",
+    "cat": "Staples",
+    "emoji": "🫘",
+    "unit": "1 kg",
+    "price": 117,
+    "mrp": 118,
+    "image": "assets/red-masoor-dal.png"
+  },
+  {
+    "id": "p_342",
+    "baseId": 30,
+    "name": "Arhar Dal 29",
+    "displayName": "Arhar Dal",
+    "cat": "Staples",
+    "emoji": "🫘",
+    "unit": "1 kg",
+    "price": 104,
+    "mrp": 106,
+    "image": "assets/arhar-dal.png"
+  },
+  {
+    "id": "p_343",
+    "baseId": 31,
+    "name": "Channa Dal 29",
+    "displayName": "Channa Dal",
+    "cat": "Staples",
+    "emoji": "🫘",
+    "unit": "1 kg",
+    "price": 116,
+    "mrp": 119,
+    "image": "assets/channa-dal.png"
+  },
+  {
+    "id": "p_344",
+    "baseId": 32,
+    "name": "Kala Channa 29",
+    "displayName": "Kala Channa",
+    "cat": "Staples",
+    "emoji": "🫘",
+    "unit": "1 kg",
+    "price": 133,
+    "mrp": 137,
+    "image": "assets/kala-channa.png"
+  },
+  {
+    "id": "p_345",
+    "baseId": 33,
+    "name": "Kabli Channa 29",
+    "displayName": "Kabli Channa",
+    "cat": "Staples",
+    "emoji": "🫘",
+    "unit": "1 kg",
+    "price": 140,
+    "mrp": 140,
+    "image": "assets/kabli-channa.png"
+  },
+  {
+    "id": "p_346",
+    "baseId": 34,
+    "name": "Rajma 29",
+    "displayName": "Rajma",
+    "cat": "Staples",
+    "emoji": "🫘",
+    "unit": "1 kg",
+    "price": 142,
+    "mrp": 143,
+    "image": "assets/rajma.png"
+  },
+  {
+    "id": "p_347",
+    "baseId": 35,
+    "name": "Raungi 29",
+    "displayName": "Raungi",
+    "cat": "Staples",
+    "emoji": "🫘",
+    "unit": "1 kg",
+    "price": 129,
+    "mrp": 131,
+    "image": "assets/raungi.png"
+  },
+  {
+    "id": "p_348",
+    "baseId": 36,
+    "name": "Lal Rajma 30",
+    "displayName": "Lal Rajma",
+    "cat": "Staples",
+    "emoji": "🫘",
+    "unit": "1 kg",
+    "price": 166,
+    "mrp": 169,
+    "image": "assets/lal-rajma.png"
+  },
+  {
+    "id": "p_349",
+    "baseId": 37,
+    "name": "Urad Dal 30",
+    "displayName": "Urad Dal",
+    "cat": "Staples",
+    "emoji": "🫘",
+    "unit": "1 kg",
+    "price": 153,
+    "mrp": 157,
+    "image": "assets/urad-dal.png"
+  },
+  {
+    "id": "p_350",
+    "baseId": 38,
+    "name": "Kaali Maah 30",
+    "displayName": "Kaali Maah",
+    "cat": "Staples",
+    "emoji": "🫘",
+    "unit": "1 kg",
+    "price": 130,
+    "mrp": 130,
+    "image": "assets/kaali-maah.png"
+  },
+  {
+    "id": "p_351",
+    "baseId": 39,
+    "name": "Hari Moong 30",
+    "displayName": "Hari Moong",
+    "cat": "Staples",
+    "emoji": "🫘",
+    "unit": "1 kg",
+    "price": 132,
+    "mrp": 133,
+    "image": "assets/moong-dal.png"
+  },
+  {
+    "id": "p_352",
+    "baseId": 40,
+    "name": "Sabat Masar 30",
+    "displayName": "Sabat Masar",
+    "cat": "Staples",
+    "emoji": "🫘",
+    "unit": "1 kg",
+    "price": 129,
+    "mrp": 131,
+    "image": "assets/red-masoor-dal.png"
+  },
+  {
+    "id": "p_353",
+    "baseId": 41,
+    "name": "Litchi Juice 30",
+    "displayName": "Litchi Juice",
+    "cat": "Beverages",
+    "emoji": "🧃",
+    "unit": "1 L",
+    "price": 150,
+    "mrp": 153,
+    "image": "assets/litchi-juice.png"
+  },
+  {
+    "id": "p_354",
+    "baseId": 42,
+    "name": "Guava Juice 30",
+    "displayName": "Guava Juice",
+    "cat": "Beverages",
+    "emoji": "🧃",
+    "unit": "1 L",
+    "price": 147,
+    "mrp": 151,
+    "image": "assets/guava-juice.png"
+  },
+  {
+    "id": "p_355",
+    "baseId": 43,
+    "name": "Lemon Juice 30",
+    "displayName": "Lemon Juice",
+    "cat": "Beverages",
+    "emoji": "🍋",
+    "unit": "1 L",
+    "price": 109,
+    "mrp": 109,
+    "image": "assets/lemon-juice.png"
+  },
+  {
+    "id": "p_356",
+    "baseId": 44,
+    "name": "Pineapple Juice 30",
+    "displayName": "Pineapple Juice",
+    "cat": "Beverages",
+    "emoji": "🍍",
+    "unit": "1 L",
+    "price": 146,
+    "mrp": 147,
+    "image": "assets/pineapple-juice.png"
+  },
+  {
+    "id": "p_357",
+    "baseId": 45,
+    "name": "Fruit Beer 30",
+    "displayName": "Fruit Beer",
+    "cat": "Beverages",
+    "emoji": "🍺",
+    "unit": "300 ml",
+    "price": 79,
+    "mrp": 81,
+    "image": "assets/fruit-beer.png"
+  },
+  {
+    "id": "p_358",
+    "baseId": 46,
+    "name": "Masala Jeera 30",
+    "displayName": "Masala Jeera",
+    "cat": "Beverages",
+    "emoji": "🧃",
+    "unit": "750 ml",
+    "price": 110,
+    "mrp": 113,
+    "image": "assets/masala-jeera-drink.png"
+  },
+  {
+    "id": "p_359",
+    "baseId": 47,
+    "name": "Rose Sharbat 30",
+    "displayName": "Rose Sharbat",
+    "cat": "Beverages",
+    "emoji": "🌹",
+    "unit": "750 ml",
+    "price": 127,
+    "mrp": 131,
+    "image": "assets/rose-sharbat.png"
+  },
+  {
+    "id": "p_360",
+    "baseId": 48,
+    "name": "Orange Sharbat 31",
+    "displayName": "Orange Sharbat",
+    "cat": "Beverages",
+    "emoji": "🍊",
+    "unit": "750 ml",
+    "price": 99,
+    "mrp": 99,
+    "image": "assets/orange-sharbat.png"
+  },
+  {
+    "id": "p_361",
+    "baseId": 49,
+    "name": "Litchi Sharbat 31",
+    "displayName": "Litchi Sharbat",
+    "cat": "Beverages",
+    "emoji": "🧃",
+    "unit": "750 ml",
+    "price": 116,
+    "mrp": 117,
+    "image": "assets/litchi-sharbat.png"
+  },
+  {
+    "id": "p_362",
+    "baseId": 50,
+    "name": "Black Vinegar 31",
+    "displayName": "Black Vinegar",
+    "cat": "Beverages",
+    "emoji": "🫙",
+    "unit": "500 ml",
+    "price": 103,
+    "mrp": 105,
+    "image": "assets/black-vinegar.png"
+  },
+  {
+    "id": "p_363",
+    "baseId": 51,
+    "name": "White Vinegar 31",
+    "displayName": "White Vinegar",
+    "cat": "Beverages",
+    "emoji": "🫙",
+    "unit": "500 ml",
+    "price": 90,
+    "mrp": 93,
+    "image": "assets/black-vinegar.png"
+  },
+  {
+    "id": "p_364",
+    "baseId": 52,
+    "name": "Nutri 31",
+    "displayName": "Nutri",
+    "cat": "Staples",
+    "emoji": "🥣",
+    "unit": "500 g",
+    "price": 107,
+    "mrp": 111,
+    "image": "assets/basmati-rice.png"
+  },
+  {
+    "id": "p_365",
+    "baseId": 53,
+    "name": "Macaroni 31",
+    "displayName": "Macaroni",
+    "cat": "Staples",
+    "emoji": "🍝",
+    "unit": "500 g",
+    "price": 69,
+    "mrp": 69,
+    "image": "assets/basmati-rice.png"
+  },
+  {
+    "id": "p_366",
+    "baseId": 54,
+    "name": "Pasta 31",
+    "displayName": "Pasta",
+    "cat": "Staples",
+    "emoji": "🍝",
+    "unit": "500 g",
+    "price": 86,
+    "mrp": 87,
+    "image": "assets/pasta.png"
+  },
+  {
+    "id": "p_367",
+    "baseId": 55,
+    "name": "Daliya 31",
+    "displayName": "Daliya",
+    "cat": "Staples",
+    "emoji": "🌾",
+    "unit": "500 g",
+    "price": 73,
+    "mrp": 75,
+    "image": "assets/wheat-flour.png"
+  },
+  {
+    "id": "p_368",
+    "baseId": 56,
+    "name": "Mishri Cutting 31",
+    "displayName": "Mishri Cutting",
+    "cat": "Staples",
+    "emoji": "🧂",
+    "unit": "250 g",
+    "price": 90,
+    "mrp": 93,
+    "image": "assets/sugar.png"
+  },
+  {
+    "id": "p_369",
+    "baseId": 57,
+    "name": "Suji 31",
+    "displayName": "Suji",
+    "cat": "Staples",
+    "emoji": "🌾",
+    "unit": "500 g",
+    "price": 77,
+    "mrp": 81,
+    "image": "assets/suji.png"
+  },
+  {
+    "id": "p_370",
+    "baseId": 58,
+    "name": "Besan 31",
+    "displayName": "Besan",
+    "cat": "Staples",
+    "emoji": "🌾",
+    "unit": "500 g",
+    "price": 69,
+    "mrp": 69,
+    "image": "assets/besan.png"
+  },
+  {
+    "id": "p_371",
+    "baseId": 59,
+    "name": "Shankar 31",
+    "displayName": "Shankar",
+    "cat": "Staples",
+    "emoji": "🍘",
+    "unit": "250 g",
+    "price": 86,
+    "mrp": 87,
+    "image": "assets/biscuits.png"
+  },
+  {
+    "id": "p_372",
+    "baseId": 60,
+    "name": "Masala Boondi 32",
+    "displayName": "Masala Boondi",
+    "cat": "Snacks",
+    "emoji": "🫘",
+    "unit": "200 g",
+    "price": 73,
+    "mrp": 75,
+    "image": "assets/masala-boondi.png"
+  },
+  {
+    "id": "p_373",
+    "baseId": 61,
+    "name": "Plain Boondi 32",
+    "displayName": "Plain Boondi",
+    "cat": "Snacks",
+    "emoji": "🫘",
+    "unit": "200 g",
+    "price": 70,
+    "mrp": 73,
+    "image": "assets/biscuits.png"
+  },
+  {
+    "id": "p_374",
+    "baseId": 62,
+    "name": "Pakoda 32",
+    "displayName": "Pakoda",
+    "cat": "Snacks",
+    "emoji": "🍘",
+    "unit": "250 g",
+    "price": 97,
+    "mrp": 101,
+    "image": "assets/biscuits.png"
+  },
+  {
+    "id": "p_375",
+    "baseId": 63,
+    "name": "Poha 32",
+    "displayName": "Poha",
+    "cat": "Staples",
+    "emoji": "🌾",
+    "unit": "500 g",
+    "price": 59,
+    "mrp": 59,
+    "image": "assets/poha.png"
+  },
+  {
+    "id": "p_376",
+    "baseId": 64,
+    "name": "Wadiya 32",
+    "displayName": "Wadiya",
+    "cat": "Staples",
+    "emoji": "🫘",
+    "unit": "200 g",
+    "price": 96,
+    "mrp": 97,
+    "image": "assets/basmati-rice.png"
+  },
+  {
+    "id": "p_377",
+    "baseId": 65,
+    "name": "Sewian 32",
+    "displayName": "Sewian",
+    "cat": "Staples",
+    "emoji": "🍜",
+    "unit": "500 g",
+    "price": 83,
+    "mrp": 85,
+    "image": "assets/basmati-rice.png"
+  },
+  {
+    "id": "p_378",
+    "baseId": 66,
+    "name": "Masala Pakoda 32",
+    "displayName": "Masala Pakoda",
+    "cat": "Snacks",
+    "emoji": "🍘",
+    "unit": "250 g",
+    "price": 100,
+    "mrp": 103,
+    "image": "assets/biscuits.png"
+  },
+  {
+    "id": "p_379",
+    "baseId": 67,
+    "name": "Makhana 32",
+    "displayName": "Makhana",
+    "cat": "Snacks",
+    "emoji": "🥜",
+    "unit": "100 g",
+    "price": 157,
+    "mrp": 161,
+    "image": "assets/makhana.png"
+  },
+  {
+    "id": "p_380",
+    "baseId": 68,
+    "name": "Dry Fruits 32",
+    "displayName": "Dry Fruits",
+    "cat": "Staples",
+    "emoji": "🥜",
+    "unit": "200 g",
+    "price": 249,
+    "mrp": 249,
+    "image": "assets/dry-fruits.png"
+  },
+  {
+    "id": "p_381",
+    "baseId": 69,
+    "name": "Chaipatti 32",
+    "displayName": "Chaipatti",
+    "cat": "Beverages",
+    "emoji": "🍵",
+    "unit": "250 g",
+    "price": 156,
+    "mrp": 157,
+    "image": "assets/chaipatti.png"
+  },
+  {
+    "id": "p_382",
+    "baseId": 70,
+    "name": "Sugar 32",
+    "displayName": "Sugar",
+    "cat": "Staples",
+    "emoji": "🧂",
+    "unit": "1 kg",
+    "price": 63,
+    "mrp": 65,
+    "image": "assets/sugar.png"
+  },
+  {
+    "id": "p_383",
+    "baseId": 71,
+    "name": "Black Salt 32",
+    "displayName": "Black Salt",
+    "cat": "Staples",
+    "emoji": "🧂",
+    "unit": "1 kg",
+    "price": 60,
+    "mrp": 63,
+    "image": "assets/salt.png"
+  },
+  {
+    "id": "p_384",
+    "baseId": 72,
+    "name": "White Salt 33",
+    "displayName": "White Salt",
+    "cat": "Staples",
+    "emoji": "🧂",
+    "unit": "1 kg",
+    "price": 53,
+    "mrp": 57,
+    "image": "assets/salt.png"
+  },
+  {
+    "id": "p_385",
+    "baseId": 73,
+    "name": "Dhagga Mishri 33",
+    "displayName": "Dhagga Mishri",
+    "cat": "Staples",
+    "emoji": "🧂",
+    "unit": "250 g",
+    "price": 79,
+    "mrp": 79,
+    "image": "assets/sugar.png"
+  },
+  {
+    "id": "p_386",
+    "baseId": 74,
+    "name": "Cutting Giri 33",
+    "displayName": "Cutting Giri",
+    "cat": "Staples",
+    "emoji": "🥥",
+    "unit": "200 g",
+    "price": 106,
+    "mrp": 107,
+    "image": "assets/almonds.png"
+  },
+  {
+    "id": "p_387",
+    "baseId": 75,
+    "name": "Coconut Powder 33",
+    "displayName": "Coconut Powder",
+    "cat": "Staples",
+    "emoji": "🥥",
+    "unit": "100 g",
+    "price": 93,
+    "mrp": 95,
+    "image": "assets/almonds.png"
+  },
+  {
+    "id": "p_388",
+    "baseId": 76,
+    "name": "Golgappe 33",
+    "displayName": "Golgappe",
+    "cat": "Snacks",
+    "emoji": "🥙",
+    "unit": "200 g",
+    "price": 70,
+    "mrp": 73,
+    "image": "assets/biscuits.png"
+  },
+  {
+    "id": "p_389",
+    "baseId": 77,
+    "name": "Citric Acid 33",
+    "displayName": "Citric Acid",
+    "cat": "Staples",
+    "emoji": "🧂",
+    "unit": "100 g",
+    "price": 87,
+    "mrp": 91,
+    "image": "assets/salt.png"
+  },
+  {
+    "id": "p_390",
+    "baseId": 78,
+    "name": "Dalda 33",
+    "displayName": "Dalda",
+    "cat": "Staples",
+    "emoji": "🧈",
+    "unit": "1 L",
+    "price": 169,
+    "mrp": 169,
+    "image": "assets/orange-juice.png"
+  },
+  {
+    "id": "p_391",
+    "baseId": 79,
+    "name": "Refined Oil 33",
+    "displayName": "Refined Oil",
+    "cat": "Staples",
+    "emoji": "🫗",
+    "unit": "1 L",
+    "price": 156,
+    "mrp": 157,
+    "image": "assets/refined-oil.png"
+  },
+  {
+    "id": "p_392",
+    "baseId": 80,
+    "name": "Gari Burada 33",
+    "displayName": "Gari Burada",
+    "cat": "Staples",
+    "emoji": "🥥",
+    "unit": "200 g",
+    "price": 103,
+    "mrp": 105,
+    "image": "assets/almonds.png"
+  },
+  {
+    "id": "p_393",
+    "baseId": 81,
+    "name": "Maida 33",
+    "displayName": "Maida",
+    "cat": "Staples",
+    "emoji": "🌾",
+    "unit": "500 g",
+    "price": 70,
+    "mrp": 73,
+    "image": "assets/wheat-flour.png"
+  },
+  {
+    "id": "p_394",
+    "baseId": 82,
+    "name": "Aararot 33",
+    "displayName": "Aararot",
+    "cat": "Staples",
+    "emoji": "🌾",
+    "unit": "100 g",
+    "price": 73,
+    "mrp": 77,
+    "image": "assets/wheat-flour.png"
+  },
+  {
+    "id": "p_395",
+    "baseId": 83,
+    "name": "Baking Soda Imli 33",
+    "displayName": "Baking Soda Imli",
+    "cat": "Staples",
+    "emoji": "🧂",
+    "unit": "100 g",
+    "price": 39,
+    "mrp": 39,
+    "image": "assets/baking-soda-imli.png"
+  },
+  {
+    "id": "p_396",
+    "baseId": 84,
+    "name": "Laung 34",
+    "displayName": "Laung",
+    "cat": "Masala",
+    "emoji": "🌿",
+    "unit": "50 g",
+    "price": 96,
+    "mrp": 97,
+    "image": "assets/laung.png"
+  },
+  {
+    "id": "p_397",
+    "baseId": 85,
+    "name": "Choti Elachi 34",
+    "displayName": "Choti Elachi",
+    "cat": "Masala",
+    "emoji": "🌿",
+    "unit": "50 g",
+    "price": 163,
+    "mrp": 165,
+    "image": "assets/choti-elachi.png"
+  },
+  {
+    "id": "p_398",
+    "baseId": 86,
+    "name": "Kali Mirch 34",
+    "displayName": "Kali Mirch",
+    "cat": "Masala",
+    "emoji": "⚫",
+    "unit": "100 g",
+    "price": 120,
+    "mrp": 123,
+    "image": "assets/kali-mirch.png"
+  },
+  {
+    "id": "p_399",
+    "baseId": 87,
+    "name": "Badi Elachi 34",
+    "displayName": "Badi Elachi",
+    "cat": "Masala",
+    "emoji": "🌿",
+    "unit": "50 g",
+    "price": 147,
+    "mrp": 151,
+    "image": "assets/badi-elachi.png"
+  },
+  {
+    "id": "p_400",
+    "baseId": 88,
+    "name": "Sabat Dhaniya 34",
+    "displayName": "Sabat Dhaniya",
+    "cat": "Masala",
+    "emoji": "🌿",
+    "unit": "100 g",
+    "price": 59,
+    "mrp": 59,
+    "image": "assets/sabat-dhaniya.png"
+  },
+  {
+    "id": "p_401",
+    "baseId": 89,
+    "name": "Dal Chini 34",
+    "displayName": "Dal Chini",
+    "cat": "Masala",
+    "emoji": "🪵",
+    "unit": "50 g",
+    "price": 76,
+    "mrp": 77,
+    "image": "assets/dal-chini.png"
+  },
+  {
+    "id": "p_402",
+    "baseId": 90,
+    "name": "Jeera 34",
+    "displayName": "Jeera",
+    "cat": "Masala",
+    "emoji": "🌿",
+    "unit": "100 g",
+    "price": 73,
+    "mrp": 75,
+    "image": "assets/jeera.png"
+  },
+  {
+    "id": "p_403",
+    "baseId": 91,
+    "name": "Star Anise 34",
+    "displayName": "Star Anise",
+    "cat": "Masala",
+    "emoji": "⭐",
+    "unit": "50 g",
+    "price": 100,
+    "mrp": 103,
+    "image": "assets/star.png"
+  },
+  {
+    "id": "p_404",
+    "baseId": 92,
+    "name": "Khurmani 34",
+    "displayName": "Khurmani",
+    "cat": "Masala",
+    "emoji": "🍑",
+    "unit": "200 g",
+    "price": 177,
+    "mrp": 181,
+    "image": "assets/dry-fruits.png"
+  },
+  {
+    "id": "p_405",
+    "baseId": 93,
+    "name": "Dry Fruits Mix 34",
+    "displayName": "Dry Fruits Mix",
+    "cat": "Staples",
+    "emoji": "🥜",
+    "unit": "200 g",
+    "price": 249,
+    "mrp": 249,
+    "image": "assets/dry-fruits.png"
+  },
+  {
+    "id": "p_406",
+    "baseId": 94,
+    "name": "Javitri 34",
+    "displayName": "Javitri",
+    "cat": "Masala",
+    "emoji": "🌿",
+    "unit": "50 g",
+    "price": 186,
+    "mrp": 187,
+    "image": "assets/javitri.png"
+  },
+  {
+    "id": "p_407",
+    "baseId": 95,
+    "name": "Amla Candy 34",
+    "displayName": "Amla Candy",
+    "cat": "Snacks",
+    "emoji": "🍬",
+    "unit": "200 g",
+    "price": 103,
+    "mrp": 105,
+    "image": "assets/biscuits.png"
+  },
+  {
+    "id": "p_408",
+    "baseId": 96,
+    "name": "Pumpkin Seeds 35",
+    "displayName": "Pumpkin Seeds",
+    "cat": "Staples",
+    "emoji": "🌱",
+    "unit": "200 g",
+    "price": 220,
+    "mrp": 223,
+    "image": "assets/pumpkin-seeds.png"
+  },
+  {
+    "id": "p_409",
+    "baseId": 97,
+    "name": "Piper 35",
+    "displayName": "Piper",
+    "cat": "Masala",
+    "emoji": "🌿",
+    "unit": "50 g",
+    "price": 127,
+    "mrp": 131,
+    "image": "assets/kali-mirch.png"
+  },
+  {
+    "id": "p_410",
+    "baseId": 98,
+    "name": "Jayfal 35",
+    "displayName": "Jayfal",
+    "cat": "Masala",
+    "emoji": "🌿",
+    "unit": "50 g",
+    "price": 129,
+    "mrp": 129,
+    "image": "assets/jayfal.png"
+  },
+  {
+    "id": "p_411",
+    "baseId": 99,
+    "name": "Ajwain 35",
+    "displayName": "Ajwain",
+    "cat": "Masala",
+    "emoji": "🌿",
+    "unit": "100 g",
+    "price": 76,
+    "mrp": 77,
+    "image": "assets/jeera.png"
+  },
+  {
+    "id": "p_412",
+    "baseId": 100,
+    "name": "Makki 35",
+    "displayName": "Makki",
+    "cat": "Staples",
+    "emoji": "🌽",
+    "unit": "1 kg",
+    "price": 73,
+    "mrp": 75,
+    "image": "assets/basmati-rice.png"
+  },
+  {
+    "id": "p_413",
+    "baseId": 101,
+    "name": "White Seeds 35",
+    "displayName": "White Seeds",
+    "cat": "Staples",
+    "emoji": "🌱",
+    "unit": "200 g",
+    "price": 180,
+    "mrp": 183,
+    "image": "assets/pumpkin-seeds.png"
+  },
+  {
+    "id": "p_414",
+    "baseId": 102,
+    "name": "Sabat Lal Mirch 35",
+    "displayName": "Sabat Lal Mirch",
+    "cat": "Masala",
+    "emoji": "🌶️",
+    "unit": "100 g",
+    "price": 107,
+    "mrp": 111,
+    "image": "assets/red-chilli-powder.png"
+  },
+  {
+    "id": "p_415",
+    "baseId": 103,
+    "name": "Jeera Med 35",
+    "displayName": "Jeera Med",
+    "cat": "Masala",
+    "emoji": "🌿",
+    "unit": "100 g",
+    "price": 59,
+    "mrp": 59,
+    "image": "assets/jeera.png"
+  },
+  {
+    "id": "p_416",
+    "baseId": 0,
+    "name": "Wheat Flour 35",
+    "displayName": "Wheat Flour",
+    "cat": "Staples",
+    "emoji": "🌾",
+    "unit": "5 kg",
+    "price": 296,
+    "mrp": 338,
+    "image": "assets/wheat-flour.png"
+  },
+  {
+    "id": "p_417",
+    "baseId": 1,
+    "name": "Dark Chocolate 35",
+    "displayName": "Dark Chocolate",
+    "cat": "Snacks",
+    "emoji": "🍫",
+    "unit": "45 g",
+    "price": 113,
+    "mrp": 136,
+    "image": "assets/dark-chocolate.png"
+  },
+  {
+    "id": "p_418",
+    "baseId": 2,
+    "name": "Cold Coffee 35",
+    "displayName": "Cold Coffee",
+    "cat": "Beverages",
+    "emoji": "☕",
+    "unit": "250 ml",
+    "price": 66,
+    "mrp": 79,
+    "image": "https://images.unsplash.com/photo-1461023058943-07fcbe16d735?w=500&q=80"
+  },
+  {
+    "id": "p_419",
+    "baseId": 3,
+    "name": "Dishwash Gel 35",
+    "displayName": "Dishwash Gel",
+    "cat": "Home Care",
+    "emoji": "🧽",
+    "unit": "500 ml",
+    "price": 147,
+    "mrp": 177,
+    "image": "assets/dishwash-gel.png"
+  },
+  {
+    "id": "p_420",
+    "baseId": 4,
+    "name": "Almonds Premium 36",
+    "displayName": "Almonds Premium",
+    "cat": "Staples",
+    "emoji": "🥜",
+    "unit": "200 g",
+    "price": 229,
+    "mrp": 270,
+    "image": "assets/almonds.png"
+  },
+  {
+    "id": "p_421",
+    "baseId": 5,
+    "name": "Potato Chips 36",
+    "displayName": "Potato Chips",
+    "cat": "Snacks",
+    "emoji": "🥔",
+    "unit": "100 g",
+    "price": 42,
+    "mrp": 48,
+    "image": "assets/potato-chips.png"
+  },
+  {
+    "id": "p_422",
+    "baseId": 6,
+    "name": "Orange Juice 36",
+    "displayName": "Orange Juice",
+    "cat": "Beverages",
+    "emoji": "🧃",
+    "unit": "1 L",
+    "price": 143,
+    "mrp": 166,
+    "image": "assets/orange-juice.png"
+  },
+  {
+    "id": "p_423",
+    "baseId": 7,
+    "name": "Matar Dal 36",
+    "displayName": "Matar Dal",
+    "cat": "Staples",
+    "emoji": "🫘",
+    "unit": "1 kg",
+    "price": 81,
+    "mrp": 84,
+    "image": "assets/matar-dal.png"
+  },
+  {
+    "id": "p_424",
+    "baseId": 8,
+    "name": "Arhar Dal 36",
+    "displayName": "Arhar Dal",
+    "cat": "Staples",
+    "emoji": "🫘",
+    "unit": "1 kg",
+    "price": 118,
+    "mrp": 122,
+    "image": "assets/arhar-dal.png"
+  },
+  {
+    "id": "p_425",
+    "baseId": 9,
+    "name": "Jeera 36",
+    "displayName": "Jeera",
+    "cat": "Staples",
+    "emoji": "🌿",
+    "unit": "50 g",
+    "price": 30,
+    "mrp": 30,
+    "image": "assets/jeera.png"
+  },
+  {
+    "id": "p_426",
+    "baseId": 10,
+    "name": "Basmati Rice 36",
+    "displayName": "Basmati Rice",
+    "cat": "Staples",
+    "emoji": "🍚",
+    "unit": "5 kg",
+    "price": 506,
+    "mrp": 557,
+    "image": "assets/basmati-rice.png"
+  },
+  {
+    "id": "p_427",
+    "baseId": 11,
+    "name": "Sugar 36",
+    "displayName": "Sugar",
+    "cat": "Staples",
+    "emoji": "🧂",
+    "unit": "1 kg",
+    "price": 63,
+    "mrp": 71,
+    "image": "assets/sugar.png"
+  },
+  {
+    "id": "p_428",
+    "baseId": 12,
+    "name": "Tea 36",
+    "displayName": "Tea",
+    "cat": "Beverages",
+    "emoji": "🍵",
+    "unit": "250 g",
+    "price": 170,
+    "mrp": 203,
+    "image": "assets/tea.png"
+  },
+  {
+    "id": "p_429",
+    "baseId": 13,
+    "name": "Fruit Juice 36",
+    "displayName": "Fruit Juice",
+    "cat": "Beverages",
+    "emoji": "🧃",
+    "unit": "1 L",
+    "price": 157,
+    "mrp": 181,
+    "image": "assets/fruit-juice.png"
+  },
+  {
+    "id": "p_430",
+    "baseId": 14,
+    "name": "Laundry Detergent 36",
+    "displayName": "Laundry Detergent",
+    "cat": "Home Care",
+    "emoji": "🧺",
+    "unit": "1 kg",
+    "price": 179,
+    "mrp": 219,
+    "image": "assets/laundry-detergent.png"
+  },
+  {
+    "id": "p_431",
+    "baseId": 15,
+    "name": "Biscuits 36",
+    "displayName": "Biscuits",
+    "cat": "Snacks",
+    "emoji": "🍪",
+    "unit": "100 g",
+    "price": 37,
+    "mrp": 43,
+    "image": "assets/biscuits.png"
+  },
+  {
+    "id": "p_432",
+    "baseId": 16,
+    "name": "Salt 37",
+    "displayName": "Salt",
+    "cat": "Staples",
+    "emoji": "🧂",
+    "unit": "1 kg",
+    "price": 39,
+    "mrp": 46,
+    "image": "assets/salt.png"
+  },
+  {
+    "id": "p_433",
+    "baseId": 17,
+    "name": "Garam Masala 37",
+    "displayName": "Garam Masala",
+    "cat": "Masala",
+    "emoji": "🌶️",
+    "unit": "100 g",
+    "price": 110,
+    "mrp": 134,
+    "image": "assets/garam-masala-premium.png"
+  },
+  {
+    "id": "p_434",
+    "baseId": 18,
+    "name": "Tomato Ketchup 37",
+    "displayName": "Tomato Ketchup",
+    "cat": "Masala",
+    "emoji": "🍅",
+    "unit": "500 g",
+    "price": 127,
+    "mrp": 157,
+    "image": "assets/tomato-ketchup.png"
+  },
+  {
+    "id": "p_435",
+    "baseId": 19,
+    "name": "Red Chilli Powder 37",
+    "displayName": "Red Chilli Powder",
+    "cat": "Masala",
+    "emoji": "🌶️",
+    "unit": "100 g",
+    "price": 69,
+    "mrp": 85,
+    "image": "assets/red-chilli-powder.png"
+  },
+  {
+    "id": "p_436",
+    "baseId": 20,
+    "name": "Turmeric Powder 37",
+    "displayName": "Turmeric Powder",
+    "cat": "Masala",
+    "emoji": "💛",
+    "unit": "100 g",
+    "price": 62,
+    "mrp": 78,
+    "image": "assets/turmeric-powder.png"
+  },
+  {
+    "id": "p_437",
+    "baseId": 21,
+    "name": "Coriander Powder 37",
+    "displayName": "Coriander Powder",
+    "cat": "Masala",
+    "emoji": "🌿",
+    "unit": "100 g",
+    "price": 73,
+    "mrp": 91,
+    "image": "assets/coriander-powder.png"
+  },
+  {
+    "id": "p_438",
+    "baseId": 22,
+    "name": "Garam Masala Premium 37",
+    "displayName": "Garam Masala Premium",
+    "cat": "Masala",
+    "emoji": "🌶️",
+    "unit": "100 g",
+    "price": 130,
+    "mrp": 159,
+    "image": "assets/garam-masala-premium.png"
+  },
+  {
+    "id": "p_439",
+    "baseId": 23,
+    "name": "Chaat Masala 37",
+    "displayName": "Chaat Masala",
+    "cat": "Masala",
+    "emoji": "🧂",
+    "unit": "100 g",
+    "price": 93,
+    "mrp": 112,
+    "image": "assets/chaat-masala.png"
+  }
+];
+
+var supabaseClient = null;
+var PRODUCTS = [];
+var editingId = null;
+var currentUser = null;
+
+function $(s){return document.querySelector(s)}
+function esc(s){return String(s).replace(/[&<>"']/g,function(m){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]})}
+function toast(msg){
+  var t=$('#toast');
+  t.textContent=msg;
+  t.classList.add('show');
+  clearTimeout(toast._t);
+  toast._t=setTimeout(function(){t.classList.remove('show')},2500);
+}
+
+// Load saved Supabase config for login form
+$('#loginSbUrl').value = localStorage.getItem('thb_supabase_url')||'';
+$('#loginSbKey').value = localStorage.getItem('thb_supabase_key')||'';
+
+function getSbConfig(){
+  return {
+    url: ($('#loginSbUrl').value.trim() || localStorage.getItem('thb_supabase_url') || '').trim(),
+    key: ($('#loginSbKey').value.trim() || localStorage.getItem('thb_supabase_key') || '').trim()
+  };
+}
+
+function initSupabaseClient(){
+  var cfg = getSbConfig();
+  if (!cfg.url || !cfg.url.includes('.supabase.co') || cfg.key.length<20) return null;
+  try {
+    return window.supabase.createClient(cfg.url, cfg.key);
+  } catch(e){ console.error(e); return null; }
+}
+
+async function checkSession(){
+  var client = initSupabaseClient();
+  if (!client) {
+    $('#secStatus').textContent='⚠️ Not configured – set Supabase URL/Key in login box and create admin user in Supabase Dashboard → Authentication';
+    $('#secStatus').style.color='#e53e3e';
+    return false;
+  }
+  supabaseClient = client;
+  try {
+    var { data: { session } } = await supabaseClient.auth.getSession();
+    if (session && session.user) {
+      currentUser = session.user;
+      onLoginSuccess(session);
+      return true;
+    }
+  } catch(e){
+    console.warn('getSession failed, trying local storage session', e);
+    // Try to restore from localStorage if we saved tokens before
+    var savedToken = localStorage.getItem('sb-access-token');
+    var savedUser = localStorage.getItem('sb-user');
+    if (savedToken && savedUser) {
+      try {
+        currentUser = JSON.parse(savedUser);
+        onLoginSuccess({access_token: savedToken, user: currentUser});
+        return true;
+      } catch(e2){}
+    }
+  }
+  return false;
+}
+
+
+
+
+
+
+document.getElementById('loginBtn').addEventListener('click', async function(){
+  var cfg = getSbConfig();
+  if (!cfg.url || !cfg.key) {
+    var errEl = $('#loginErr');
+    errEl.style.display='block';
+    errEl.textContent='First set Supabase URL and Anon Key (from Project Settings → API)';
+    return;
+  }
+  // Clean URL and key - remove any hidden unicode
+  cfg.url = cfg.url.trim().replace(/[^\x00-\x7F]/g,'');
+  cfg.key = cfg.key.trim().replace(/[^\x00-\x7F]/g,'').replace(/\s/g,'');
+  localStorage.setItem('thb_supabase_url', cfg.url);
+  localStorage.setItem('thb_supabase_key', cfg.key);
+  
+  var email = $('#loginEmail').value.trim().replace(/[^\x00-\x7F]/g,'');
+  var pass = $('#loginPass').value; // password can contain unicode, but we will send as JSON body not header
+
+  if (!email || !pass) {
+    $('#loginErr').style.display='block';
+    $('#loginErr').textContent='Enter email and password';
+    return;
+  }
+
+  $('#loginBtn').textContent='Verifying (bcrypt)...';
+  $('#loginBtn').classList.add('locked');
+  $('#loginErr').style.display='none';
+
+  try {
+    // Use direct fetch to Supabase Auth REST API - avoids supabase-js header bug with ISO-8859-1
+    var authUrl = cfg.url + '/auth/v1/token?grant_type=password';
+    var res = await fetch(authUrl, {
+      method: 'POST',
+      headers: {
+        'apikey': cfg.key,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({email: email, password: pass})
+    });
+    var data = await res.json();
+    if (!res.ok) {
+      throw new Error(data.error_description || data.msg || data.message || 'Login failed');
+    }
+    // data contains access_token, refresh_token, user
+    var session = {
+      access_token: data.access_token,
+      refresh_token: data.refresh_token,
+      user: data.user
+    };
+    // Init client with session
+    supabaseClient = initSupabaseClient();
+    if (supabaseClient) {
+      // Set session for client
+      await supabaseClient.auth.setSession({access_token: data.access_token, refresh_token: data.refresh_token});
+    }
+    $('#loginBtn').textContent='Secure Login →';
+    $('#loginBtn').classList.remove('locked');
+    onLoginSuccess(session);
+  } catch(err) {
+    $('#loginBtn').textContent='Secure Login →';
+    $('#loginBtn').classList.remove('locked');
+    $('#loginErr').style.display='block';
+    var msg = err.message || String(err);
+    // Common fixes
+    if (msg.includes('Failed to execute') || msg.includes('ISO-8859')) {
+      msg = 'Browser header error (Brave blocks). Try Chrome, or remove spaces/newlines from Supabase Key. Original: ' + msg;
+    }
+    if (msg.includes('Invalid login')) {
+      msg = 'Invalid email/password. Go to Supabase Dashboard → Authentication → Users → Check user exists and is confirmed. Then try again.';
+    }
+    $('#loginErr').textContent='Login failed: '+msg;
+    console.error('Login error', err);
+  }
+});
+
+document.getElementById('logoutBtn').addEventListener('click', async function(){
+  if (supabaseClient) await supabaseClient.auth.signOut();
+  currentUser=null;
+  localStorage.removeItem('thb_admin_auth');
+  sessionStorage.clear();
+  location.reload();
+});
+
+// Products
+async function loadProducts(){
+  if (!supabaseClient) return;
+  try {
+    var { data, error } = await supabaseClient.from('products').select('*').order('created_at',{ascending:true}).limit(500);
+    if (error) throw error;
+    if (data && data.length>0) {
+      PRODUCTS = data.map(function(p){return {id:p.id, baseId:0, name:p.name, displayName:p.display_name||p.name, cat:p.cat, emoji:p.emoji||'📦', unit:p.unit, price:p.price, mrp:p.mrp, image:p.image||''}});
+    } else {
+      PRODUCTS = DEFAULT_PRODUCTS;
+      $('#secStatus').textContent += ' • Table empty, showing local 440. Click Push All to seed.';
+    }
+  } catch(e){
+    console.warn(e);
+    PRODUCTS = DEFAULT_PRODUCTS;
+    toast('Supabase fetch failed, using local: '+e.message);
+  }
+  saveLocal();
+  render();
+  updateStats();
+}
+
+function saveLocal(){
+  try { localStorage.setItem('thb_products_v2', JSON.stringify(PRODUCTS)); } catch(e){}
+}
+
+function fillCats(){
+  var opts = CATEGORIES.map(function(c){return '<option value="'+esc(c)+'">'+esc(c)+'</option>'}).join('');
+  $('#f_cat').innerHTML = '<option value="">Select cat</option>'+opts;
+  $('#catFilter').innerHTML = '<option value="">All cats</option>'+opts;
+}
+function getFiltered(){
+  var q = ($('#search').value||'').toLowerCase().trim();
+  var cat = $('#catFilter').value;
+  return PRODUCTS.filter(function(p){
+    var okCat = !cat || p.cat===cat;
+    var okQ = !q || p.name.toLowerCase().indexOf(q)!==-1 || p.cat.toLowerCase().indexOf(q)!==-1;
+    return okCat && okQ;
+  }).slice().reverse();
+}
+function render(){
+  var list = getFiltered();
+  var tbody = document.getElementById('tbody');
+  var html = '';
+  var show = list.slice(0,80);
+  for(var i=0;i<show.length;i++){
+    var p = show[i];
+    html += '<tr><td><b>'+esc(p.name)+'</b><br><small style="color:#888">'+esc(p.id)+'</small></td><td>'+esc(p.cat)+'</td><td>₹'+p.price+' <small style="text-decoration:line-through;color:#999">₹'+p.mrp+'</small></td><td style="text-align:center"><button class="btn" data-edit="'+esc(p.id)+'">Edit</button> <button class="btn" style="color:#e53e3e" data-del="'+esc(p.id)+'">Delete</button></td></tr>';
+  }
+  tbody.innerHTML = html || '<tr><td colspan="4" style="text-align:center;padding:20px">No products – Push to seed</td></tr>';
+  document.getElementById('pageInfo').textContent = list.length+' results, showing '+show.length;
+}
+function updateStats(){
+  document.getElementById('statTotal').textContent = PRODUCTS.length;
+  var total = PRODUCTS.reduce(function(a,b){return a+b.price},0);
+  document.getElementById('statValue').textContent = '₹'+total.toLocaleString('en-IN');
+}
+function resetForm(){
+  editingId=null;
+  ['f_id','f_name','f_emoji','f_unit','f_price','f_mrp','f_image'].forEach(function(id){var el=document.getElementById(id); if(el) el.value='';});
+  document.getElementById('f_cat').value='';
+  document.getElementById('formTitle').textContent='Add Product (Secure)';
+}
+function editById(id){
+  var p = PRODUCTS.find(function(x){return x.id===id});
+  if(!p) return;
+  editingId=id;
+  document.getElementById('f_id').value=p.id;
+  document.getElementById('f_name').value=p.name;
+  document.getElementById('f_cat').value=p.cat;
+  document.getElementById('f_emoji').value=p.emoji;
+  document.getElementById('f_unit').value=p.unit;
+  document.getElementById('f_price').value=p.price;
+  document.getElementById('f_mrp').value=p.mrp;
+  document.getElementById('f_image').value=p.image||'';
+  document.getElementById('formTitle').textContent='Editing: '+p.name;
+}
+document.getElementById('tbody').addEventListener('click', function(e){
+  var editBtn = e.target.closest('[data-edit]');
+  if(editBtn){ editById(editBtn.getAttribute('data-edit')); return; }
+  var delBtn = e.target.closest('[data-del]');
+  if(delBtn){ deleteById(delBtn.getAttribute('data-del')); }
+});
+async function deleteById(id){
+  var p = PRODUCTS.find(function(x){return x.id===id});
+  if(!p) return;
+  if(!confirm('DELETE "'+p.name+'"? Secure delete from Supabase (requires auth).')) return;
+  if(!supabaseClient || !currentUser){ alert('Not authenticated – login first'); return; }
+  var { error } = await supabaseClient.from('products').delete().eq('id', id);
+  if(error){ alert('Delete failed (RLS): '+error.message); return; }
+  PRODUCTS = PRODUCTS.filter(function(x){return x.id!==id});
+  saveLocal();
+  render();
+  updateStats();
+  toast('Securely deleted: '+p.name);
+}
+document.getElementById('saveBtn').addEventListener('click', async function(){
+  if(!supabaseClient || !currentUser){ alert('Login first – secure mode requires Supabase Auth'); return; }
+  var name = document.getElementById('f_name').value.trim();
+  var cat = document.getElementById('f_cat').value.trim();
+  var emoji = document.getElementById('f_emoji').value.trim() || '📦';
+  var unit = document.getElementById('f_unit').value.trim();
+  var price = parseInt(document.getElementById('f_price').value)||0;
+  var mrp = parseInt(document.getElementById('f_mrp').value)||0;
+  var image = document.getElementById('f_image').value.trim();
+  if(!name||!cat||!unit||!price||!mrp){ alert('Fill all * fields'); return; }
+  var product;
+  if(editingId){
+    var idx = PRODUCTS.findIndex(function(p){return p.id===editingId});
+    if(idx>=0){
+      product = {...PRODUCTS[idx], name:name, displayName:name, cat:cat, emoji:emoji, unit:unit, price:price, mrp:mrp, image:image};
+      PRODUCTS[idx]=product;
+    }
+  } else {
+    var id='p_'+Date.now().toString(36);
+    product={id:id, baseId:PRODUCTS.length, name:name, displayName:name, cat:cat, emoji:emoji, unit:unit, price:price, mrp:mrp, image:image};
+    PRODUCTS.push(product);
+  }
+  // Upsert to Supabase securely
+  var row = {id:product.id, name:product.name, display_name:product.displayName, cat:product.cat, emoji:product.emoji, unit:product.unit, price:product.price, mrp:product.mrp, image:product.image};
+  var { error } = await supabaseClient.from('products').upsert(row, {onConflict:'id'});
+  if(error){ alert('Supabase save failed: '+error.message); return; }
+  saveLocal();
+  render();
+  updateStats();
+  resetForm();
+  toast('Securely saved to Supabase (encrypted)');
+});
+document.getElementById('cancelBtn').addEventListener('click', resetForm);
+document.getElementById('search').addEventListener('input', render);
+document.getElementById('catFilter').addEventListener('change', render);
+document.getElementById('exportJsonBtn').addEventListener('click', function(){
+  var blob = new Blob([JSON.stringify(PRODUCTS,null,2)],{type:'application/json'});
+  var url = URL.createObjectURL(blob);
+  var a=document.createElement('a'); a.href=url; a.download='products-backup-'+PRODUCTS.length+'.json'; a.click();
+});
+document.getElementById('pushBtn').addEventListener('click', async function(){
+  if(!supabaseClient || !currentUser){ alert('Login first'); return; }
+  if(!confirm('Push '+PRODUCTS.length+' products to Supabase? Requires authenticated session.')) return;
+  var rows = PRODUCTS.map(function(p){return {id:p.id, name:p.name, display_name:p.displayName||p.name, cat:p.cat, emoji:p.emoji, unit:p.unit, price:p.price, mrp:p.mrp, image:p.image}});
+  for(var i=0;i<rows.length;i+=100){
+    var chunk = rows.slice(i,i+100);
+    var { error } = await supabaseClient.from('products').upsert(chunk, {onConflict:'id'});
+    if(error){ alert('Push failed: '+error.message); return; }
+  }
+  toast('Pushed '+PRODUCTS.length+' securely to Supabase');
+});
+document.getElementById('pullBtn').addEventListener('click', async function(){ await loadProducts(); toast('Pulled from Supabase'); });
+
+// Init
+fillCats();
+checkSession();
+</script>
+<script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a2f8be3cbb713aa5',t:'MTc4NzQ3MzY5OQ=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>

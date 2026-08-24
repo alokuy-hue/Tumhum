@@ -1,0 +1,5610 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>TUM HUM basket </title>
+<meta name="description" content="TUM HUM basket delivers 400+ everyday essentials in 10 minutes across Ludhiana. Fruits, dairy, atta, snacks, beverages & more." />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&family=Fraunces:opsz,wght@9..144,900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --green:#0f5132;
+  --green-dark:#0a3a23;
+  --lime:#d7f36b;
+  --lime-dark:#c9e86a;
+  --cream:#fbfaf3;
+  --ink:#15231b;
+  --muted:#718078;
+  --line:#e7ebe2;
+  --orange:#ff7a45;
+  --shadow:0 18px 50px rgba(19,47,31,.10);
+  --radius:16px;
+  --radius-lg:24px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--cream);font-family:"Inter",ui-sans-serif,system-ui,-apple-system,Segoe UI,sans-serif;color:var(--ink);-webkit-font-smoothing:antialiased}
+button{font:inherit;cursor:pointer;border:0;background:none}
+img{display:block;max-width:100%}
+
+/* LOADER - faster, less annoying */
+.loader{position:fixed;inset:0;z-index:100;background:var(--green);color:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;transition:opacity .5s ease, visibility .5s ease}
+.loader.hidden{opacity:0;visibility:hidden;pointer-events:none}
+.loaderGlow{position:absolute;width:300px;height:300px;border-radius:50%;background:radial-gradient(circle,#d7f36b33,transparent 70%);filter:blur(10px);animation:pulse 1.8s ease-in-out infinite}
+.loaderMark{position:relative;width:78px;height:78px;border-radius:27px 27px 27px 8px;background:var(--lime);color:var(--green);display:grid;place-items:center;font-size:46px;box-shadow:9px 9px 0 #092f1d;animation:float 1.5s ease-in-out infinite}
+.loaderBrand{display:flex;gap:8px;align-items:baseline;font-size:26px;letter-spacing:-1.5px;position:relative}
+.loaderBrand b{color:#fff;font-weight:900}
+.loaderBrand em{font-style:normal;color:var(--lime);font-family:"Fraunces",serif;font-size:32px;font-weight:900;letter-spacing:-1px}
+.loaderTrack{width:160px;height:4px;background:#ffffff22;border-radius:9px;overflow:hidden;position:relative;margin-top:6px}
+.loaderTrack span{display:block;height:100%;width:0;background:var(--lime);border-radius:9px;animation:load 1.4s ease-out forwards}
+.loader small{position:relative;color:#c9dbca;font-size:11px;letter-spacing:.4px}
+@keyframes load{to{width:100%}}@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.15);opacity:.8}}@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px) rotate(2deg)}}
+
+/* TOP */
+.top{background:var(--green);color:#e6f3c6;text-align:center;font-size:12px;letter-spacing:.2px;padding:9px 12px}
+.top b{color:var(--lime)}
+
+/* NAV */
+.nav{height:76px;background:#fff;display:flex;align-items:center;padding:0 max(4vw,24px);gap:22px;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:20;backdrop-filter:saturate(180%) blur(8px)}
+.logo{display:flex;align-items:center;gap:10px;color:var(--green);white-space:nowrap;text-decoration:none}
+.logoMark{width:36px;height:36px;border-radius:12px 12px 12px 4px;background:var(--green);color:var(--lime);display:grid;place-items:center;font-size:22px;line-height:1;transform:rotate(-6deg);box-shadow:4px 4px 0 var(--lime-dark);flex:0 0 auto}
+.logoWords{display:flex;flex-direction:column;line-height:.9;letter-spacing:-.8px}
+.logoWords b{font-weight:900;color:var(--green);font-size:16px;letter-spacing:-1px}
+.logoWords em{font-style:normal;color:var(--orange);font-family:"Fraunces",serif;font-size:21px;font-weight:900;letter-spacing:-1.3px;margin-top:1px}
+.location{display:flex;gap:9px;align-items:center;font-size:13px;margin-left:8px;padding:8px 12px;border-radius:12px;transition:.2s;border:1px solid transparent}
+.location:hover{background:#f4f6f0;border-color:var(--line)}
+.location b{display:block;font-size:13px;line-height:1.1}
+.location span{font-size:11px;color:var(--muted)}
+.search{height:44px;background:#f4f6f0;border:1px solid transparent;border-radius:14px;display:flex;align-items:center;gap:10px;padding:0 14px;width:min(420px,36vw);color:#8a958d;transition:.2s;margin-left:auto}
+.search:focus-within{background:#fff;border-color:var(--green);box-shadow:0 0 0 4px #0f513211;color:var(--ink)}
+.search input{border:0;outline:0;background:none;width:100%;font-size:14px;color:var(--ink)}
+.search input::placeholder{color:#8a958d}
+.actions{display:flex;gap:10px;align-items:center;margin-left:4px}
+.account{display:flex;gap:7px;align-items:center;font-size:13px;font-weight:600;padding:8px 10px;border-radius:10px}
+.cartBtn{background:var(--green);color:#fff;padding:12px 16px;border-radius:12px;font-weight:800;position:relative;transition:.2s;display:flex;align-items:center;gap:6px}
+.cartBtn:hover{background:var(--green-dark);transform:translateY(-1px)}
+.cartBtn .badge{position:absolute;background:var(--lime);color:var(--green);font-size:11px;min-width:20px;height:20px;border-radius:20px;display:grid;place-items:center;top:-8px;right:-7px;font-weight:900;border:2px solid #fff}
+
+/* HERO */
+.hero{max-width:1240px;margin:22px auto 18px;padding:0 24px}
+.heroCard{min-height:280px;border-radius:28px;padding:36px 44px;overflow:hidden;position:relative;background:linear-gradient(115deg,#e2ff76 0%,#c7f080 30%,#b7e5a7 100%);display:flex;align-items:center;isolation:isolate}
+.heroCard::after{content:'🛒';position:absolute;font-size:180px;right:7%;bottom:-18px;filter:drop-shadow(12px 18px 12px #519d6c40) saturate(1.1);transform:rotate(-8deg);pointer-events:none;z-index:0}
+.heroContent{position:relative;z-index:1;max-width:560px}
+.eyebrow{font-size:11px;font-weight:800;letter-spacing:1.6px;color:#2e6a32;text-transform:uppercase;background:#ffffff90;display:inline-block;padding:6px 10px;border-radius:20px;border:1px solid #ffffff}
+.hero h1{font-family:"Fraunces",serif;font-size:clamp(36px,5.2vw,64px);line-height:.9;letter-spacing:-3px;margin:14px 0 12px;font-weight:900}
+.hero p{margin:0;color:#2f4a33;font-size:16px;line-height:1.4;max-width:36ch}
+.heroActions{display:flex;gap:10px;margin-top:22px}
+.btnPrimary{background:var(--green);color:#fff;padding:13px 20px;border-radius:12px;font-weight:800;transition:.2s;display:inline-flex;align-items:center;gap:6px}
+.btnPrimary:hover{background:var(--green-dark);transform:translateY(-1px)}
+.btnGhost{background:#fff;color:var(--green);padding:13px 18px;border-radius:12px;font-weight:700;border:1px solid var(--line)}
+
+/* CONTENT */
+.content{max-width:1240px;margin:auto;padding:0 24px 80px}
+.sectionHead{display:flex;justify-content:space-between;align-items:flex-end;margin:34px 0 16px;gap:12px}
+.sectionHead h2{font-family:"Fraunces",serif;font-size:26px;margin:2px 0 0;letter-spacing:-.8px;line-height:1}
+.sectionHead small{color:var(--muted);font-weight:700;letter-spacing:1.2px;font-size:11px;text-transform:uppercase}
+.cats{display:flex;gap:10px;overflow:auto;padding-bottom:8px;scrollbar-width:none}
+.cats::-webkit-scrollbar{display:none}
+.cat{flex:0 0 auto;background:#fff;border:1px solid var(--line);border-radius:16px;padding:12px 16px;min-width:108px;text-align:center;transition:.2s;display:flex;flex-direction:column;align-items:center;gap:4px}
+.cat:hover,.cat.active{background:var(--green);color:white;border-color:var(--green);transform:translateY(-2px);box-shadow:var(--shadow)}
+.cat div{font-size:26px}
+.cat span{font-size:11.5px;font-weight:700;letter-spacing:-.1px}
+.aisles{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.aisle{background:#fff;border:1px solid var(--line);border-radius:16px;padding:14px;display:flex;align-items:center;gap:12px;text-align:left;transition:.2s;width:100%}
+.aisle:hover{border-color:#a8c95b;box-shadow:var(--shadow);transform:translateY(-2px)}
+.aisleIcon{width:48px;height:48px;background:#f0f7dc;border-radius:13px;display:grid;place-items:center;font-size:26px;flex:0 0 auto}
+.aisle b{display:block;font-size:13.5px}
+.aisle small{color:var(--muted);font-size:11px}
+.toolbar{display:flex;gap:10px;align-items:center}
+.select{border:1px solid var(--line);padding:9px 12px;border-radius:10px;background:#fff;color:var(--ink);font-size:13px;font-weight:600}
+.grid{display:grid;grid-template-columns:repeat(5,1fr);gap:14px}
+.product{background:#fff;border:1px solid var(--line);border-radius:16px;padding:11px;position:relative;transition:.2s;display:flex;flex-direction:column}
+.product:hover{box-shadow:var(--shadow);transform:translateY(-3px);border-color:#d8e2c9}
+.pic{height:148px;background:#f5f7ed;border-radius:12px;display:grid;place-items:center;font-size:66px;margin-bottom:10px;overflow:hidden;position:relative;cursor:pointer}
+.pic img{width:100%;height:100%;object-fit:contain;transition:.3s}
+.product:hover .pic img{transform:scale(1.04)}
+.tag{position:absolute;top:10px;left:10px;background:#e5f6b5;color:#2a5825;font-size:9.5px;font-weight:800;padding:5px 7px;border-radius:6px;letter-spacing:.5px;z-index:1}
+.product h3{margin:0;font-size:13.5px;line-height:1.3;min-height:36px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.meta{color:var(--muted);font-size:11.5px;margin:4px 0 8px}
+.priceRow{display:flex;align-items:center;justify-content:space-between;margin-top:auto;padding-top:6px}
+.price{font-size:14px;font-weight:800}
+.mrp{text-decoration:line-through;color:#a3aca6;font-weight:500;font-size:11px;margin-left:5px}
+.add{background:#f0f8d9;color:var(--green);border:1px solid #cfe788;border-radius:9px;padding:7px 12px;font-weight:800;font-size:12px;transition:.2s}
+.add:hover{background:var(--green);color:#fff;border-color:var(--green)}
+.empty{text-align:center;padding:60px 20px;color:var(--muted);grid-column:1/-1;background:#fff;border:1px dashed var(--line);border-radius:16px}
+
+/* TOAST */
+.toast{position:fixed;bottom:22px;left:50%;transform:translate(-50%,16px);background:var(--ink);color:#fff;padding:12px 16px;border-radius:12px;opacity:0;transition:.28s cubic-bezier(.2,.8,.2,1);z-index:30;font-size:13px;font-weight:600;box-shadow:0 12px 30px rgba(0,0,0,.25);pointer-events:none;display:flex;align-items:center;gap:8px}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+.toast i{width:22px;height:22px;background:var(--lime);color:var(--green);border-radius:50%;display:grid;place-items:center;font-style:normal;font-size:13px;flex:0 0 auto}
+
+/* MODALS */
+.productOverlay,.cartOverlay{display:none;position:fixed;inset:0;background:#15231b66;backdrop-filter:blur(8px);z-index:40;align-items:center;justify-content:center;padding:18px}
+.productOverlay.open,.cartOverlay.open{display:flex}
+.productModal{background:#fff;width:min(780px,100%);border-radius:26px;padding:18px;display:grid;grid-template-columns:1.05fr .95fr;gap:20px;position:relative;box-shadow:0 24px 70px #15231b40;animation:pop .28s cubic-bezier(.2,.8,.2,1)}
+@keyframes pop{from{transform:translateY(14px) scale(.98);opacity:0}to{transform:translateY(0) scale(1);opacity:1}}
+.modalPic{min-height:360px;background:#f5f7ed;border-radius:18px;display:grid;place-items:center;font-size:120px;overflow:hidden;position:relative}
+.modalPic img{width:100%;height:100%;object-fit:contain}
+.modalBody{padding:10px 8px 8px;display:flex;flex-direction:column}
+.modalBody small{color:var(--muted);font-weight:800;letter-spacing:1px;font-size:11px;text-transform:uppercase}
+.modalBody h2{font-family:"Fraunces",serif;font-size:30px;margin:6px 0 8px;line-height:.95;letter-spacing:-1px}
+.modalBody p{color:var(--muted);line-height:1.5;margin:0;font-size:14px}
+.variantLabel{font-weight:800;margin:22px 0 10px;font-size:13px}
+.variants{display:flex;gap:8px;flex-wrap:wrap}
+.variant{padding:10px 14px;background:#f4f7ec;border:1px solid var(--line);border-radius:10px;font-weight:700;color:var(--green);font-size:13px;transition:.2s}
+.variant:hover{border-color:var(--green)}
+.variant.selected{background:var(--green);color:#fff;border-color:var(--green)}
+.modalAdd{width:100%;margin-top:auto;padding:14px;background:var(--green);color:#fff;border-radius:12px;font-weight:800;font-size:14px;transition:.2s}
+.modalAdd:hover{background:var(--green-dark)}
+.close{position:absolute;top:14px;right:14px;background:#f1f4ed;border-radius:50%;width:36px;height:36px;font-size:22px;color:var(--green);display:grid;place-items:center;transition:.2s;z-index:2}
+.close:hover{background:#e3e9db}
+
+/* CART */
+.cartOverlay{align-items:flex-end}
+.cartPanel{background:#fff;width:min(520px,100%);max-height:88vh;border-radius:26px 26px 0 0;padding:22px;box-shadow:0 -15px 50px #15231b30;animation:up .28s cubic-bezier(.2,.8,.2,1);display:flex;flex-direction:column}
+@keyframes up{from{transform:translateY(30px);opacity:0}to{transform:translateY(0);opacity:1}}
+.cartTop{display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--line);padding-bottom:14px;position:relative}
+.cartTop h2{margin:0;font-size:20px;font-family:"Fraunces",serif;letter-spacing:-.5px}
+.cartTop .closeStatic{background:#f1f4ed;border-radius:50%;width:34px;height:34px;font-size:20px;color:var(--green);display:grid;place-items:center}
+.cartList{flex:1;overflow:auto;padding:6px 0;min-height:120px}
+.cartRow{display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid #f0f2ec}
+.cartIcon{width:48px;height:48px;background:#f5f7ed;border-radius:10px;display:grid;place-items:center;font-size:24px;position:relative;overflow:hidden;flex:0 0 auto}
+.cartIcon img{width:100%;height:100%;object-fit:contain}
+.cartInfo{flex:1;min-width:0}
+.cartInfo b{font-size:13px;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cartInfo small{display:block;color:var(--muted);margin-top:2px;font-size:11.5px}
+.qty{display:flex;align-items:center;gap:8px;background:#f4f6f0;border-radius:9px;padding:4px}
+.qty button{width:26px;height:26px;border-radius:7px;background:#fff;border:1px solid var(--line);color:var(--green);font-weight:800;display:grid;place-items:center;transition:.15s}
+.qty button:hover{background:var(--green);color:#fff;border-color:var(--green)}
+.qty b{font-size:13px;min-width:16px;text-align:center}
+.cartBottom{border-top:1px solid var(--line);padding-top:14px;background:#fff}
+.totalLine{display:flex;justify-content:space-between;font-size:14px;margin-bottom:6px;color:var(--muted)}
+.totalLine.total{font-size:18px;font-weight:800;color:var(--ink);margin-bottom:14px}
+.totalLine.total span:last-child{font-family:"Fraunces",serif}
+.whatsapp{display:flex;align-items:center;justify-content:center;gap:8px;text-align:center;text-decoration:none;background:#25d366;color:#fff;padding:14px;border-radius:12px;font-weight:800;font-size:14px;transition:.2s}
+.whatsapp:hover{background:#1ebe5d;transform:translateY(-1px)}
+.whatsapp:disabled{opacity:.5;pointer-events:none}
+.emptyCart{text-align:center;color:var(--muted);padding:40px 0}
+.emptyCart div{font-size:42px;margin-bottom:10px}
+.loadMoreWrap{grid-column:1/-1;display:flex;justify-content:center;padding:18px 0 4px}
+.btnLoadMore{background:#fff;border:1px solid var(--line);padding:12px 18px;border-radius:12px;font-weight:700;transition:.2s}
+.btnLoadMore:hover{border-color:var(--green);transform:translateY(-1px)}
+
+footer{border-top:1px solid var(--line);background:#fff;padding:28px 24px;margin-top:10px}
+.footerInner{max-width:1240px;margin:auto;display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;font-size:13px;color:var(--muted)}
+.footerInner b{color:var(--ink)}
+
+/* RESPONSIVE */
+@media(max-width:980px){
+  .grid{grid-template-columns:repeat(3,1fr)}
+  .aisles{grid-template-columns:repeat(2,1fr)}
+  .location{display:none}
+  .search{width:100%;margin-left:0}
+  .nav{gap:12px;height:auto;flex-wrap:wrap;padding:12px 16px}
+  .actions{margin-left:auto}
+  .hero{padding:0 16px}
+}
+@media(max-width:600px){
+  .content{padding:0 14px 60px}
+  .hero{margin-top:10px}
+  .heroCard{padding:22px 20px;min-height:250px;border-radius:22px}
+  .heroCard:after{font-size:110px;right:0}
+  .hero h1{font-size:38px}
+  .hero p{font-size:14px}
+  .sectionHead h2{font-size:21px}
+  .aisles{grid-template-columns:1fr 1fr;gap:8px}
+  .aisle{padding:10px;gap:8px}
+  .aisleIcon{width:38px;height:38px;font-size:20px}
+  .grid{grid-template-columns:repeat(2,1fr);gap:9px}
+  .pic{height:118px;font-size:50px}
+  .productModal{grid-template-columns:1fr;gap:0;max-height:92vh;overflow:auto}
+  .modalPic{min-height:220px}
+  .modalBody{padding:12px 4px 2px}
+  .cartPanel{padding:18px;border-radius:20px 20px 0 0}
+  .cats{gap:8px}
+  .cat{min-width:84px;padding:10px 12px}
+  .product h3{min-height:auto}
+}
+</style>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script>
+// Supabase Config - you can set via admin.html or localStorage
+const THBSUPABASE = {
+  url: localStorage.getItem('thb_supabase_url') || 'https://ysugaslkvsllfddjyffg.supabase.co',
+  key: localStorage.getItem('thb_supabase_key') || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlzdWdhc2xrdnNsbGZkZGp5ZmZnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODc0NDI2ODQsImV4cCI6MjEwMzAxODY4NH0.9JR4urDo02in8zEGwgjcB0tde6tp9HZ_llgjjXouw6Q',
+  table: 'products'
+};
+function isSupabaseConfigured(){
+  return THBSUPABASE.url && THBSUPABASE.url.includes('.supabase.co') && !THBSUPABASE.url.includes('YOUR_') && THBSUPABASE.key && THBSUPABASE.key.length>20;
+}
+</script>
+
+</head>
+<body>
+
+<div class="loader" id="loader">
+  <div class="loaderGlow"></div>
+  <div class="loaderMark">✦</div>
+  <div class="loaderBrand"><b>TUM HUM</b><em>basket</em></div>
+  <div class="loaderTrack"><span></span></div>
+  <small>Picking the freshest for you...</small>
+</div>
+
+<div class="top">🚚 Free delivery above <b>₹1500</b> · 400+ products ·delivery in Ludhiana · </div>
+
+<nav class="nav">
+  <a class="logo" href="#">
+    <span class="logoMark">✦</span>
+    <span class="logoWords"><b>TUM HUM</b><em>basket</em></span>
+  </a>
+  <button class="location" id="locationBtn" title="Set delivery location">
+    <span style="font-size:18px">⌖</span>
+    <div style="text-align:left">
+      <b>Deliver to Ludhiana</b>
+      <span id="locationText">PUNJAB▾</span>
+    </div>
+  </button>
+  <label class="search">⌕ <input id="searchInput" placeholder="Search for atta, fruits, snacks & more" autocomplete="off" /></label>
+  <div class="actions">
+    <div class="account">♙ <span>Hi,USER </span></div>
+    <button class="cartBtn" id="cartBtn" aria-label="Open cart">Cart <span class="badge" id="cartCount">0</span></button>
+  </div>
+</nav>
+<div style="max-width:1240px;margin:8px auto 0;padding:0 24px;display:flex;justify-content:flex-end"><span id="sbStatus" style="font-size:11px;font-weight:700;padding:6px 10px;border-radius:20px;border:1px solid var(--line);background:#fff;color:var(--muted)">○ Local mode</span></div>
+
+
+<!-- Product Modal -->
+<div class="productOverlay" id="productOverlay" role="dialog" aria-modal="true">
+  <section class="productModal">
+    <button class="close" id="closeProductBtn" aria-label="Close">×</button>
+    <div class="modalPic" id="modalPic"></div>
+    <div class="modalBody">
+      <small id="modalCat"></small>
+      <h2 id="modalName"></h2>
+      <p id="modalDetails"></p>
+      <div class="variantLabel">Choose pack size</div>
+      <div class="variants" id="variants"></div>
+      <button class="modalAdd" id="modalAddBtn">Add to cart · ₹0</button>
+    </div>
+  </section>
+</div>
+
+<!-- Cart Drawer -->
+<div class="cartOverlay" id="cartOverlay" role="dialog" aria-modal="true">
+  <section class="cartPanel">
+    <div class="cartTop">
+      <h2>Your basket <span id="cartItemsLabel" style="color:var(--muted);font-weight:400;font-family:Inter;font-size:16px"></span></h2>
+      <button class="closeStatic" id="closeCartBtn" aria-label="Close cart">×</button>
+    </div>
+    <div class="cartList" id="cartList"></div>
+    <div class="cartBottom" id="cartBottom">
+      <div class="totalLine"><span>Subtotal</span><span id="cartSubtotal">₹0</span></div>
+      <div class="totalLine"><span>Delivery fee <small style="font-size:11px;color:#8aa08f">(Free above ₹299)</small></span><span id="cartDelivery">₹29</span></div>
+      <div class="totalLine total"><span>Total</span><span id="cartTotal">₹0</span></div>
+      <a class="whatsapp" id="whatsappBtn" href="#" target="_blank" rel="noopener">Order on WhatsApp ↗</a>
+      <div id="locationNote" style="text-align:center;color:var(--muted);font-size:11px;margin-top:9px;line-height:1.4">We’ll ask for your live location on WhatsApp for accurate delivery.</div>
+      <button id="clearCartBtn" style="width:100%;margin-top:10px;color:var(--muted);font-size:12px;font-weight:600;text-decoration:underline">Clear basket</button>
+    </div>
+  </section>
+</div>
+
+<main>
+  <section class="hero">
+    <div class="heroCard">
+      <div class="heroContent">
+        <div class="eyebrow">Your everyday, upgraded</div>
+        <h1>Good food.<br>Great mood.</h1>
+        <p>10-minute delivery on 400+ essentials from your local store. Fresh, fair, fast — only in Ludhiana.</p>
+        <div class="heroActions">
+          <button class="btnPrimary" id="shopNowBtn">Shop essentials →</button>
+          <button class="btnGhost" onclick="document.getElementById('aislesSection').scrollIntoView({behavior:'smooth'})">Browse aisles</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="content">
+    <div class="sectionHead">
+      <div><small>Shop by mood</small><h2>Shop by category</h2></div>
+    </div>
+    <div class="cats" id="cats"></div>
+
+    <div class="sectionHead aisleTitle" id="aislesSection">
+      <div><small>Find it faster</small><h2>Browse all aisles</h2></div>
+      <small id="resultMeta" style="color:var(--muted);font-weight:600"></small>
+    </div>
+    <div class="aisles" id="aisles"></div>
+
+    <div class="sectionHead">
+      <div><small id="resultLabel">Handpicked for you</small><h2>Popular near you</h2></div>
+      <div class="toolbar">
+        <select class="select" id="sortSelect"><option value="featured">Sort: Featured</option><option value="low">Price: Low to high</option><option value="high">Price: High to low</option></select>
+      </div>
+    </div>
+    <div class="grid" id="productsGrid"></div>
+    <div class="loadMoreWrap"><button class="btnLoadMore" id="loadMoreBtn" style="display:none">Load more →</button></div>
+  </section>
+</main>
+
+<footer>
+  <div class="footerInner">
+    <div><b>TUM HUM basket</b> · Ludhiana's 10-min grocery. <br>141001, Punjab · WhatsApp: +91 80540 14445</div>
+    <div>© <span id="year"></span> Tum Hum Basket. Freshness guaranteed.</div>
+  </div>
+</footer>
+
+<div class="toast" id="toast"><i>✓</i><span id="toastText">Added to cart</span></div>
+
+<script>
+/* ---------- DATA ---------- */
+const CATEGORIES = [
+  {id:'All', label:'All', icon:'✨'},
+  {id:'Fruits & Veggies', label:'Fruits & Veggies', icon:'🥬'},
+  {id:'Dairy & Eggs', label:'Dairy & Eggs', icon:'🥛'},
+  {id:'Staples', label:'Staples', icon:'🌾'},
+  {id:'Snacks', label:'Snacks', icon:'🍿'},
+  {id:'Beverages', label:'Beverages', icon:'🧃'},
+  {id:'Personal Care', label:'Personal Care', icon:'🧴'},
+  {id:'Home Care', label:'Home Care', icon:'🧹'},
+];
+
+
+let PRODUCTS = [
+  {
+    "id": "p_0",
+    "baseId": 0,
+    "name": "Fresh Bananas",
+    "displayName": "Fresh Bananas",
+    "cat": "Fruits & Veggies",
+    "emoji": "🍌",
+    "unit": "1 kg",
+    "price": 51,
+    "mrp": 57,
+    "image": "https://images.unsplash.com/photo-1571771894821-ce9b6c11b08e?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_1",
+    "baseId": 1,
+    "name": "Robusta Bananas",
+    "displayName": "Robusta Bananas",
+    "cat": "Fruits & Veggies",
+    "emoji": "🍌",
+    "unit": "1 kg",
+    "price": 49,
+    "mrp": 52,
+    "image": "https://images.unsplash.com/photo-1571771894821-ce9b6c11b08e?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_2",
+    "baseId": 2,
+    "name": "Green Cavendish Bananas",
+    "displayName": "Green Cavendish Bananas",
+    "cat": "Fruits & Veggies",
+    "emoji": "🍌",
+    "unit": "1 kg",
+    "price": 58,
+    "mrp": 68,
+    "image": "https://images.unsplash.com/photo-1571771894821-ce9b6c11b08e?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_3",
+    "baseId": 3,
+    "name": "Shimla Apples",
+    "displayName": "Shimla Apples",
+    "cat": "Fruits & Veggies",
+    "emoji": "🍎",
+    "unit": "1 kg",
+    "price": 191,
+    "mrp": 222,
+    "image": "https://images.unsplash.com/photo-1560806887-1e4cd0b6cbd6?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_4",
+    "baseId": 4,
+    "name": "Royal Gala Apples",
+    "displayName": "Royal Gala Apples",
+    "cat": "Fruits & Veggies",
+    "emoji": "🍎",
+    "unit": "1 kg",
+    "price": 199,
+    "mrp": 223,
+    "image": "https://images.unsplash.com/photo-1560806887-1e4cd0b6cbd6?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_5",
+    "baseId": 5,
+    "name": "Green Apples",
+    "displayName": "Green Apples",
+    "cat": "Fruits & Veggies",
+    "emoji": "🍏",
+    "unit": "4 pcs",
+    "price": 172,
+    "mrp": 213,
+    "image": "https://images.unsplash.com/photo-1560806887-1e4cd0b6cbd6?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_6",
+    "baseId": 6,
+    "name": "Kashmiri Apples",
+    "displayName": "Kashmiri Apples",
+    "cat": "Fruits & Veggies",
+    "emoji": "🍎",
+    "unit": "1 kg",
+    "price": 213,
+    "mrp": 247,
+    "image": "https://images.unsplash.com/photo-1560806887-1e4cd0b6cbd6?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_7",
+    "baseId": 7,
+    "name": "Nagpur Oranges",
+    "displayName": "Nagpur Oranges",
+    "cat": "Fruits & Veggies",
+    "emoji": "🍊",
+    "unit": "1 kg",
+    "price": 103,
+    "mrp": 123,
+    "image": "https://images.unsplash.com/photo-1547514701-42782101795e?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_8",
+    "baseId": 8,
+    "name": "Kinnow Oranges",
+    "displayName": "Kinnow Oranges",
+    "cat": "Fruits & Veggies",
+    "emoji": "🍊",
+    "unit": "1 kg",
+    "price": 83,
+    "mrp": 94,
+    "image": "https://images.unsplash.com/photo-1547514701-42782101795e?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_9",
+    "baseId": 9,
+    "name": "Sweet Lime Mosambi",
+    "displayName": "Sweet Lime Mosambi",
+    "cat": "Fruits & Veggies",
+    "emoji": "🍋",
+    "unit": "1 kg",
+    "price": 86,
+    "mrp": 96,
+    "image": "https://images.unsplash.com/photo-1547514701-42782101795e?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_10",
+    "baseId": 10,
+    "name": "Blood Oranges",
+    "displayName": "Blood Oranges",
+    "cat": "Fruits & Veggies",
+    "emoji": "🍊",
+    "unit": "1 kg",
+    "price": 123,
+    "mrp": 146,
+    "image": "https://images.unsplash.com/photo-1547514701-42782101795e?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_11",
+    "baseId": 11,
+    "name": "Alphonso Mangoes",
+    "displayName": "Alphonso Mangoes",
+    "cat": "Fruits & Veggies",
+    "emoji": "🥭",
+    "unit": "1 kg",
+    "price": 300,
+    "mrp": 366,
+    "image": "https://images.unsplash.com/photo-1553279768-865429fa0078?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_12",
+    "baseId": 12,
+    "name": "Kesar Mangoes",
+    "displayName": "Kesar Mangoes",
+    "cat": "Fruits & Veggies",
+    "emoji": "🥭",
+    "unit": "1 kg",
+    "price": 253,
+    "mrp": 280,
+    "image": "https://images.unsplash.com/photo-1553279768-865429fa0078?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_13",
+    "baseId": 13,
+    "name": "Totapuri Mangoes",
+    "displayName": "Totapuri Mangoes",
+    "cat": "Fruits & Veggies",
+    "emoji": "🥭",
+    "unit": "1 kg",
+    "price": 103,
+    "mrp": 112,
+    "image": "https://images.unsplash.com/photo-1553279768-865429fa0078?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_14",
+    "baseId": 14,
+    "name": "Dasheri Mangoes",
+    "displayName": "Dasheri Mangoes",
+    "cat": "Fruits & Veggies",
+    "emoji": "🥭",
+    "unit": "1 kg",
+    "price": 153,
+    "mrp": 188,
+    "image": "https://images.unsplash.com/photo-1553279768-865429fa0078?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_15",
+    "baseId": 15,
+    "name": "Green Grapes",
+    "displayName": "Green Grapes",
+    "cat": "Fruits & Veggies",
+    "emoji": "🍇",
+    "unit": "500 g",
+    "price": 89,
+    "mrp": 106,
+    "image": "https://images.unsplash.com/photo-1596363505729-4190a9506133?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_16",
+    "baseId": 16,
+    "name": "Black Grapes",
+    "displayName": "Black Grapes",
+    "cat": "Fruits & Veggies",
+    "emoji": "🍇",
+    "unit": "500 g",
+    "price": 101,
+    "mrp": 119,
+    "image": "https://images.unsplash.com/photo-1596363505729-4190a9506133?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_17",
+    "baseId": 17,
+    "name": "Red Globe Grapes",
+    "displayName": "Red Globe Grapes",
+    "cat": "Fruits & Veggies",
+    "emoji": "🍇",
+    "unit": "500 g",
+    "price": 123,
+    "mrp": 143,
+    "image": "https://images.unsplash.com/photo-1596363505729-4190a9506133?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_18",
+    "baseId": 18,
+    "name": "Watermelon Kiran",
+    "displayName": "Watermelon Kiran",
+    "cat": "Fruits & Veggies",
+    "emoji": "🍉",
+    "unit": "1 pc",
+    "price": 82,
+    "mrp": 96,
+    "image": "https://images.unsplash.com/photo-1589984662646-e7b2e4962f18?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_19",
+    "baseId": 19,
+    "name": "Papaya Red",
+    "displayName": "Papaya Red",
+    "cat": "Fruits & Veggies",
+    "emoji": "🍈",
+    "unit": "1 pc",
+    "price": 63,
+    "mrp": 72,
+    "image": "https://images.unsplash.com/photo-1617112848923-cc2234396a8d?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_20",
+    "baseId": 20,
+    "name": "Pineapple Queen",
+    "displayName": "Pineapple Queen",
+    "cat": "Fruits & Veggies",
+    "emoji": "🍍",
+    "unit": "1 pc",
+    "price": 92,
+    "mrp": 110,
+    "image": "https://images.unsplash.com/photo-1550258987-190a2d41a8be1?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_21",
+    "baseId": 21,
+    "name": "Pomegranate Bhagwa",
+    "displayName": "Pomegranate Bhagwa",
+    "cat": "Fruits & Veggies",
+    "emoji": "🍎",
+    "unit": "1 kg",
+    "price": 202,
+    "mrp": 231,
+    "image": "https://images.unsplash.com/photo-1601050690597-df0568f70950?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_22",
+    "baseId": 22,
+    "name": "Kiwi Green",
+    "displayName": "Kiwi Green",
+    "cat": "Fruits & Veggies",
+    "emoji": "🥝",
+    "unit": "3 pcs",
+    "price": 99,
+    "mrp": 125,
+    "image": "https://images.unsplash.com/photo-1618897996318-5a901fa6ca71?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_23",
+    "baseId": 23,
+    "name": "Strawberries Box",
+    "displayName": "Strawberries Box",
+    "cat": "Fruits & Veggies",
+    "emoji": "🍓",
+    "unit": "200 g",
+    "price": 129,
+    "mrp": 165,
+    "image": "https://images.unsplash.com/photo-1464965911861-746a04b4bca6?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_24",
+    "baseId": 24,
+    "name": "Blueberries Box",
+    "displayName": "Blueberries Box",
+    "cat": "Fruits & Veggies",
+    "emoji": "🫐",
+    "unit": "125 g",
+    "price": 251,
+    "mrp": 284,
+    "image": "https://images.unsplash.com/photo-1498557850523-fd3d118b962e?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_25",
+    "baseId": 25,
+    "name": "Guava White",
+    "displayName": "Guava White",
+    "cat": "Fruits & Veggies",
+    "emoji": "🍐",
+    "unit": "500 g",
+    "price": 52,
+    "mrp": 60,
+    "image": "https://images.unsplash.com/photo-1536511132770-e5058c7e8c46?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_26",
+    "baseId": 26,
+    "name": "Chikoo Sapota",
+    "displayName": "Chikoo Sapota",
+    "cat": "Fruits & Veggies",
+    "emoji": "🍈",
+    "unit": "500 g",
+    "price": 60,
+    "mrp": 74,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_27",
+    "baseId": 27,
+    "name": "Litchi Fresh",
+    "displayName": "Litchi Fresh",
+    "cat": "Fruits & Veggies",
+    "emoji": "🍒",
+    "unit": "500 g",
+    "price": 150,
+    "mrp": 176,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_28",
+    "baseId": 28,
+    "name": "Dragon Fruit White",
+    "displayName": "Dragon Fruit White",
+    "cat": "Fruits & Veggies",
+    "emoji": "🍈",
+    "unit": "1 pc",
+    "price": 92,
+    "mrp": 113,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_29",
+    "baseId": 29,
+    "name": "Avocado Hass",
+    "displayName": "Avocado Hass",
+    "cat": "Fruits & Veggies",
+    "emoji": "🥑",
+    "unit": "1 pc",
+    "price": 130,
+    "mrp": 145,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_30",
+    "baseId": 30,
+    "name": "Pears Bartlett",
+    "displayName": "Pears Bartlett",
+    "cat": "Fruits & Veggies",
+    "emoji": "🍐",
+    "unit": "500 g",
+    "price": 99,
+    "mrp": 114,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_31",
+    "baseId": 31,
+    "name": "Plums Red",
+    "displayName": "Plums Red",
+    "cat": "Fruits & Veggies",
+    "emoji": "🍑",
+    "unit": "500 g",
+    "price": 120,
+    "mrp": 133,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_32",
+    "baseId": 32,
+    "name": "Peaches Fresh",
+    "displayName": "Peaches Fresh",
+    "cat": "Fruits & Veggies",
+    "emoji": "🍑",
+    "unit": "500 g",
+    "price": 139,
+    "mrp": 177,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_33",
+    "baseId": 33,
+    "name": "Custard Apple",
+    "displayName": "Custard Apple",
+    "cat": "Fruits & Veggies",
+    "emoji": "🍈",
+    "unit": "500 g",
+    "price": 101,
+    "mrp": 123,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_34",
+    "baseId": 34,
+    "name": "Coconut Tender",
+    "displayName": "Coconut Tender",
+    "cat": "Fruits & Veggies",
+    "emoji": "🥥",
+    "unit": "1 pc",
+    "price": 46,
+    "mrp": 50,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_35",
+    "baseId": 35,
+    "name": "Coconut Whole",
+    "displayName": "Coconut Whole",
+    "cat": "Fruits & Veggies",
+    "emoji": "🥥",
+    "unit": "1 pc",
+    "price": 39,
+    "mrp": 41,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_36",
+    "baseId": 36,
+    "name": "Onions Red",
+    "displayName": "Onions Red",
+    "cat": "Fruits & Veggies",
+    "emoji": "🧅",
+    "unit": "1 kg",
+    "price": 38,
+    "mrp": 45,
+    "image": "https://images.unsplash.com/photo-1518977956812-cd3dbadaaf31?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_37",
+    "baseId": 37,
+    "name": "Onions White",
+    "displayName": "Onions White",
+    "cat": "Fruits & Veggies",
+    "emoji": "🧅",
+    "unit": "1 kg",
+    "price": 45,
+    "mrp": 50,
+    "image": "https://images.unsplash.com/photo-1518977956812-cd3dbadaaf31?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_38",
+    "baseId": 38,
+    "name": "Potatoes Regular",
+    "displayName": "Potatoes Regular",
+    "cat": "Fruits & Veggies",
+    "emoji": "🥔",
+    "unit": "1 kg",
+    "price": 36,
+    "mrp": 38,
+    "image": "https://images.unsplash.com/photo-1518977676608-bd36c2ca4f9d?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_39",
+    "baseId": 39,
+    "name": "Baby Potatoes",
+    "displayName": "Baby Potatoes",
+    "cat": "Fruits & Veggies",
+    "emoji": "🥔",
+    "unit": "500 g",
+    "price": 32,
+    "mrp": 33,
+    "image": "https://images.unsplash.com/photo-1518977676608-bd36c2ca4f9d?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_40",
+    "baseId": 40,
+    "name": "Tomatoes Hybrid",
+    "displayName": "Tomatoes Hybrid",
+    "cat": "Fruits & Veggies",
+    "emoji": "🍅",
+    "unit": "1 kg",
+    "price": 46,
+    "mrp": 48,
+    "image": "https://images.unsplash.com/photo-1561136594-7f68413baa99?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_41",
+    "baseId": 41,
+    "name": "Cherry Tomatoes",
+    "displayName": "Cherry Tomatoes",
+    "cat": "Fruits & Veggies",
+    "emoji": "🍅",
+    "unit": "200 g",
+    "price": 63,
+    "mrp": 68,
+    "image": "https://images.unsplash.com/photo-1561136594-7f68413baa99?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_42",
+    "baseId": 42,
+    "name": "Capsicum Green",
+    "displayName": "Capsicum Green",
+    "cat": "Fruits & Veggies",
+    "emoji": "🫑",
+    "unit": "500 g",
+    "price": 42,
+    "mrp": 43,
+    "image": "https://images.unsplash.com/photo-1563565375-f3fdfdbefa83?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_43",
+    "baseId": 43,
+    "name": "Capsicum Red",
+    "displayName": "Capsicum Red",
+    "cat": "Fruits & Veggies",
+    "emoji": "🫑",
+    "unit": "250 g",
+    "price": 53,
+    "mrp": 59,
+    "image": "https://images.unsplash.com/photo-1563565375-f3fdfdbefa83?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_44",
+    "baseId": 44,
+    "name": "Capsicum Yellow",
+    "displayName": "Capsicum Yellow",
+    "cat": "Fruits & Veggies",
+    "emoji": "🫑",
+    "unit": "250 g",
+    "price": 50,
+    "mrp": 61,
+    "image": "https://images.unsplash.com/photo-1563565375-f3fdfdbefa83?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_45",
+    "baseId": 45,
+    "name": "Cucumber Green",
+    "displayName": "Cucumber Green",
+    "cat": "Fruits & Veggies",
+    "emoji": "🥒",
+    "unit": "500 g",
+    "price": 32,
+    "mrp": 33,
+    "image": "https://images.unsplash.com/photo-1604977042949-11b5b3b32875?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_46",
+    "baseId": 46,
+    "name": "English Cucumber",
+    "displayName": "English Cucumber",
+    "cat": "Fruits & Veggies",
+    "emoji": "🥒",
+    "unit": "1 pc",
+    "price": 37,
+    "mrp": 43,
+    "image": "https://images.unsplash.com/photo-1604977042949-11b5b3b32875?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_47",
+    "baseId": 47,
+    "name": "Carrots Ooty",
+    "displayName": "Carrots Ooty",
+    "cat": "Fruits & Veggies",
+    "emoji": "🥕",
+    "unit": "500 g",
+    "price": 35,
+    "mrp": 37,
+    "image": "https://images.unsplash.com/photo-1447175008436-054170c2e979?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_48",
+    "baseId": 48,
+    "name": "Beetroot Fresh",
+    "displayName": "Beetroot Fresh",
+    "cat": "Fruits & Veggies",
+    "emoji": "🥕",
+    "unit": "500 g",
+    "price": 29,
+    "mrp": 34,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_49",
+    "baseId": 49,
+    "name": "Radish White",
+    "displayName": "Radish White",
+    "cat": "Fruits & Veggies",
+    "emoji": "🥕",
+    "unit": "500 g",
+    "price": 26,
+    "mrp": 29,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_50",
+    "baseId": 50,
+    "name": "Cauliflower White",
+    "displayName": "Cauliflower White",
+    "cat": "Fruits & Veggies",
+    "emoji": "🥦",
+    "unit": "1 pc",
+    "price": 35,
+    "mrp": 39,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_51",
+    "baseId": 51,
+    "name": "Broccoli Fresh",
+    "displayName": "Broccoli Fresh",
+    "cat": "Fruits & Veggies",
+    "emoji": "🥦",
+    "unit": "1 pc",
+    "price": 60,
+    "mrp": 66,
+    "image": "https://images.unsplash.com/photo-1459411621453-7b03977f4bfc?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_52",
+    "baseId": 52,
+    "name": "Cabbage Green",
+    "displayName": "Cabbage Green",
+    "cat": "Fruits & Veggies",
+    "emoji": "🥬",
+    "unit": "1 pc",
+    "price": 29,
+    "mrp": 32,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_53",
+    "baseId": 53,
+    "name": "Cabbage Red",
+    "displayName": "Cabbage Red",
+    "cat": "Fruits & Veggies",
+    "emoji": "🥬",
+    "unit": "1 pc",
+    "price": 46,
+    "mrp": 52,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_54",
+    "baseId": 54,
+    "name": "Palak Spinach",
+    "displayName": "Palak Spinach",
+    "cat": "Fruits & Veggies",
+    "emoji": "🥬",
+    "unit": "250 g",
+    "price": 22,
+    "mrp": 25,
+    "image": "https://images.unsplash.com/photo-1576045057995-568f588f82fb?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_55",
+    "baseId": 55,
+    "name": "Methi Leaves",
+    "displayName": "Methi Leaves",
+    "cat": "Fruits & Veggies",
+    "emoji": "🌿",
+    "unit": "100 g",
+    "price": 20,
+    "mrp": 22,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_56",
+    "baseId": 56,
+    "name": "Coriander Leaves",
+    "displayName": "Coriander Leaves",
+    "cat": "Fruits & Veggies",
+    "emoji": "🌿",
+    "unit": "100 g",
+    "price": 19,
+    "mrp": 18,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_57",
+    "baseId": 57,
+    "name": "Mint Leaves",
+    "displayName": "Mint Leaves",
+    "cat": "Fruits & Veggies",
+    "emoji": "🌿",
+    "unit": "50 g",
+    "price": 13,
+    "mrp": 14,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_58",
+    "baseId": 58,
+    "name": "Curry Leaves",
+    "displayName": "Curry Leaves",
+    "cat": "Fruits & Veggies",
+    "emoji": "🌿",
+    "unit": "50 g",
+    "price": 18,
+    "mrp": 16,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_59",
+    "baseId": 59,
+    "name": "Garlic Pods",
+    "displayName": "Garlic Pods",
+    "cat": "Fruits & Veggies",
+    "emoji": "🧄",
+    "unit": "250 g",
+    "price": 31,
+    "mrp": 35,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_60",
+    "baseId": 60,
+    "name": "Ginger Fresh",
+    "displayName": "Ginger Fresh",
+    "cat": "Fruits & Veggies",
+    "emoji": "🫚",
+    "unit": "250 g",
+    "price": 28,
+    "mrp": 31,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_61",
+    "baseId": 61,
+    "name": "Green Chillies",
+    "displayName": "Green Chillies",
+    "cat": "Fruits & Veggies",
+    "emoji": "🌶️",
+    "unit": "100 g",
+    "price": 21,
+    "mrp": 22,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_62",
+    "baseId": 62,
+    "name": "Lemons",
+    "displayName": "Lemons",
+    "cat": "Fruits & Veggies",
+    "emoji": "🍋",
+    "unit": "4 pcs",
+    "price": 21,
+    "mrp": 22,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_63",
+    "baseId": 63,
+    "name": "Spring Onions",
+    "displayName": "Spring Onions",
+    "cat": "Fruits & Veggies",
+    "emoji": "🧅",
+    "unit": "250 g",
+    "price": 23,
+    "mrp": 25,
+    "image": "https://images.unsplash.com/photo-1518977956812-cd3dbadaaf31?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_64",
+    "baseId": 64,
+    "name": "Ladyfinger Okra",
+    "displayName": "Ladyfinger Okra",
+    "cat": "Fruits & Veggies",
+    "emoji": "🥬",
+    "unit": "500 g",
+    "price": 34,
+    "mrp": 39,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_65",
+    "baseId": 65,
+    "name": "Brinjal Big",
+    "displayName": "Brinjal Big",
+    "cat": "Fruits & Veggies",
+    "emoji": "🍆",
+    "unit": "500 g",
+    "price": 29,
+    "mrp": 35,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_66",
+    "baseId": 66,
+    "name": "Brinjal Small",
+    "displayName": "Brinjal Small",
+    "cat": "Fruits & Veggies",
+    "emoji": "🍆",
+    "unit": "500 g",
+    "price": 29,
+    "mrp": 31,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_67",
+    "baseId": 67,
+    "name": "Bottle Gourd Lauki",
+    "displayName": "Bottle Gourd Lauki",
+    "cat": "Fruits & Veggies",
+    "emoji": "🥒",
+    "unit": "1 pc",
+    "price": 29,
+    "mrp": 32,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_68",
+    "baseId": 68,
+    "name": "Bitter Gourd Karela",
+    "displayName": "Bitter Gourd Karela",
+    "cat": "Fruits & Veggies",
+    "emoji": "🥒",
+    "unit": "500 g",
+    "price": 36,
+    "mrp": 37,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_69",
+    "baseId": 69,
+    "name": "Ridge Gourd Torai",
+    "displayName": "Ridge Gourd Torai",
+    "cat": "Fruits & Veggies",
+    "emoji": "🥒",
+    "unit": "500 g",
+    "price": 30,
+    "mrp": 34,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_70",
+    "baseId": 70,
+    "name": "Pumpkin Yellow",
+    "displayName": "Pumpkin Yellow",
+    "cat": "Fruits & Veggies",
+    "emoji": "🎃",
+    "unit": "1 kg",
+    "price": 28,
+    "mrp": 33,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_71",
+    "baseId": 71,
+    "name": "Sweet Corn",
+    "displayName": "Sweet Corn",
+    "cat": "Fruits & Veggies",
+    "emoji": "🌽",
+    "unit": "2 pcs",
+    "price": 39,
+    "mrp": 49,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_72",
+    "baseId": 72,
+    "name": "Sweet Potato",
+    "displayName": "Sweet Potato",
+    "cat": "Fruits & Veggies",
+    "emoji": "🍠",
+    "unit": "500 g",
+    "price": 36,
+    "mrp": 37,
+    "image": "https://images.unsplash.com/photo-1518977676608-bd36c2ca4f9d?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_73",
+    "baseId": 73,
+    "name": "Green Peas",
+    "displayName": "Green Peas",
+    "cat": "Fruits & Veggies",
+    "emoji": "🟢",
+    "unit": "500 g",
+    "price": 53,
+    "mrp": 58,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_74",
+    "baseId": 74,
+    "name": "Mushroom Button",
+    "displayName": "Mushroom Button",
+    "cat": "Fruits & Veggies",
+    "emoji": "🍄",
+    "unit": "200 g",
+    "price": 53,
+    "mrp": 54,
+    "image": "https://images.unsplash.com/photo-1504545102780-26774c1bb073?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_75",
+    "baseId": 75,
+    "name": "French Beans",
+    "displayName": "French Beans",
+    "cat": "Fruits & Veggies",
+    "emoji": "🫛",
+    "unit": "250 g",
+    "price": 30,
+    "mrp": 31,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_76",
+    "baseId": 76,
+    "name": "Drumstick",
+    "displayName": "Drumstick",
+    "cat": "Fruits & Veggies",
+    "emoji": "🥢",
+    "unit": "250 g",
+    "price": 22,
+    "mrp": 26,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_77",
+    "baseId": 77,
+    "name": "Raw Mango",
+    "displayName": "Raw Mango",
+    "cat": "Fruits & Veggies",
+    "emoji": "🥭",
+    "unit": "500 g",
+    "price": 33,
+    "mrp": 36,
+    "image": "https://images.unsplash.com/photo-1553279768-865429fa0078?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_78",
+    "baseId": 78,
+    "name": "Amla Gooseberry",
+    "displayName": "Amla Gooseberry",
+    "cat": "Fruits & Veggies",
+    "emoji": "🍈",
+    "unit": "250 g",
+    "price": 28,
+    "mrp": 31,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_79",
+    "baseId": 79,
+    "name": "Fresh Bananas Pack 2",
+    "displayName": "Fresh Bananas Pack 2",
+    "cat": "Fruits & Veggies",
+    "emoji": "🍌",
+    "unit": "1 kg",
+    "price": 66,
+    "mrp": 74,
+    "image": "https://images.unsplash.com/photo-1571771894821-ce9b6c11b08e?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_80",
+    "baseId": 80,
+    "name": "Verka Toned Milk 500ml",
+    "displayName": "Verka Toned Milk 500ml",
+    "cat": "Dairy & Eggs",
+    "emoji": "🥛",
+    "unit": "500 ml",
+    "price": 28,
+    "mrp": 34,
+    "image": "https://images.unsplash.com/photo-1550583724-b2692b85b150?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_81",
+    "baseId": 81,
+    "name": "Verka Full Cream 500ml",
+    "displayName": "Verka Full Cream 500ml",
+    "cat": "Dairy & Eggs",
+    "emoji": "🥛",
+    "unit": "500 ml",
+    "price": 34,
+    "mrp": 40,
+    "image": "https://images.unsplash.com/photo-1550583724-b2692b85b150?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_82",
+    "baseId": 82,
+    "name": "Amul Gold Milk 500ml",
+    "displayName": "Amul Gold Milk 500ml",
+    "cat": "Dairy & Eggs",
+    "emoji": "🥛",
+    "unit": "500 ml",
+    "price": 36,
+    "mrp": 37,
+    "image": "https://images.unsplash.com/photo-1550583724-b2692b85b150?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_83",
+    "baseId": 83,
+    "name": "Amul Taaza 1L",
+    "displayName": "Amul Taaza 1L",
+    "cat": "Dairy & Eggs",
+    "emoji": "🥛",
+    "unit": "1 L",
+    "price": 62,
+    "mrp": 68,
+    "image": "https://images.unsplash.com/photo-1550583724-b2692b85b150?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_84",
+    "baseId": 84,
+    "name": "Mother Dairy Milk 1L",
+    "displayName": "Mother Dairy Milk 1L",
+    "cat": "Dairy & Eggs",
+    "emoji": "🥛",
+    "unit": "1 L",
+    "price": 62,
+    "mrp": 66,
+    "image": "https://images.unsplash.com/photo-1550583724-b2692b85b150?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_85",
+    "baseId": 85,
+    "name": "Country Delight Milk 500ml",
+    "displayName": "Country Delight Milk 500ml",
+    "cat": "Dairy & Eggs",
+    "emoji": "🥛",
+    "unit": "500 ml",
+    "price": 42,
+    "mrp": 43,
+    "image": "https://images.unsplash.com/photo-1550583724-b2692b85b150?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_86",
+    "baseId": 86,
+    "name": "Curd Cup 200g",
+    "displayName": "Curd Cup 200g",
+    "cat": "Dairy & Eggs",
+    "emoji": "🥣",
+    "unit": "200 g",
+    "price": 26,
+    "mrp": 27,
+    "image": "https://images.unsplash.com/photo-1584278860047-22db9ff82bed?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_87",
+    "baseId": 87,
+    "name": "Curd Bucket 1kg",
+    "displayName": "Curd Bucket 1kg",
+    "cat": "Dairy & Eggs",
+    "emoji": "🥣",
+    "unit": "1 kg",
+    "price": 86,
+    "mrp": 95,
+    "image": "https://images.unsplash.com/photo-1584278860047-22db9ff82bed?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_88",
+    "baseId": 88,
+    "name": "Greek Yogurt Plain 400g",
+    "displayName": "Greek Yogurt Plain 400g",
+    "cat": "Dairy & Eggs",
+    "emoji": "🥣",
+    "unit": "400 g",
+    "price": 116,
+    "mrp": 142,
+    "image": "https://images.unsplash.com/photo-1488477181946-6428a0291777?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_89",
+    "baseId": 89,
+    "name": "Greek Yogurt Mango 100g",
+    "displayName": "Greek Yogurt Mango 100g",
+    "cat": "Dairy & Eggs",
+    "emoji": "🥣",
+    "unit": "100 g",
+    "price": 44,
+    "mrp": 47,
+    "image": "https://images.unsplash.com/photo-1488477181946-6428a0291777?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_90",
+    "baseId": 90,
+    "name": "Paneer Fresh 200g",
+    "displayName": "Paneer Fresh 200g",
+    "cat": "Dairy & Eggs",
+    "emoji": "🧀",
+    "unit": "200 g",
+    "price": 88,
+    "mrp": 100,
+    "image": "https://images.unsplash.com/photo-1631452180519-c014fe946bc7?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_91",
+    "baseId": 91,
+    "name": "Paneer Fresh 500g",
+    "displayName": "Paneer Fresh 500g",
+    "cat": "Dairy & Eggs",
+    "emoji": "🧀",
+    "unit": "500 g",
+    "price": 200,
+    "mrp": 245,
+    "image": "https://images.unsplash.com/photo-1631452180519-c014fe946bc7?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_92",
+    "baseId": 92,
+    "name": "Amul Cheese Slices 10pc",
+    "displayName": "Amul Cheese Slices 10pc",
+    "cat": "Dairy & Eggs",
+    "emoji": "🧀",
+    "unit": "200 g",
+    "price": 129,
+    "mrp": 147,
+    "image": "https://images.unsplash.com/photo-1486297678162-eb2a19b0a32d?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_93",
+    "baseId": 93,
+    "name": "Amul Cheese Cubes 200g",
+    "displayName": "Amul Cheese Cubes 200g",
+    "cat": "Dairy & Eggs",
+    "emoji": "🧀",
+    "unit": "200 g",
+    "price": 132,
+    "mrp": 150,
+    "image": "https://images.unsplash.com/photo-1486297678162-eb2a19b0a32d?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_94",
+    "baseId": 94,
+    "name": "Mozzarella Cheese 200g",
+    "displayName": "Mozzarella Cheese 200g",
+    "cat": "Dairy & Eggs",
+    "emoji": "🧀",
+    "unit": "200 g",
+    "price": 150,
+    "mrp": 181,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_95",
+    "baseId": 95,
+    "name": "Amul Butter 100g",
+    "displayName": "Amul Butter 100g",
+    "cat": "Dairy & Eggs",
+    "emoji": "🧈",
+    "unit": "100 g",
+    "price": 56,
+    "mrp": 66,
+    "image": "https://images.unsplash.com/photo-1589985270826-4b7bb135bc9d?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_96",
+    "baseId": 96,
+    "name": "Amul Butter 500g",
+    "displayName": "Amul Butter 500g",
+    "cat": "Dairy & Eggs",
+    "emoji": "🧈",
+    "unit": "500 g",
+    "price": 275,
+    "mrp": 347,
+    "image": "https://images.unsplash.com/photo-1589985270826-4b7bb135bc9d?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_97",
+    "baseId": 97,
+    "name": "White Butter 100g",
+    "displayName": "White Butter 100g",
+    "cat": "Dairy & Eggs",
+    "emoji": "🧈",
+    "unit": "100 g",
+    "price": 48,
+    "mrp": 61,
+    "image": "https://images.unsplash.com/photo-1589985270826-4b7bb135bc9d?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_98",
+    "baseId": 98,
+    "name": "Ghee Pure 200ml",
+    "displayName": "Ghee Pure 200ml",
+    "cat": "Dairy & Eggs",
+    "emoji": "🧈",
+    "unit": "200 ml",
+    "price": 149,
+    "mrp": 182,
+    "image": "https://images.unsplash.com/photo-1586201375761-83865001e31c?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_99",
+    "baseId": 99,
+    "name": "Ghee Pure 500ml",
+    "displayName": "Ghee Pure 500ml",
+    "cat": "Dairy & Eggs",
+    "emoji": "🧈",
+    "unit": "500 ml",
+    "price": 317,
+    "mrp": 353,
+    "image": "https://images.unsplash.com/photo-1586201375761-83865001e31c?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_100",
+    "baseId": 0,
+    "name": "Cow Ghee 1L",
+    "displayName": "Cow Ghee 1L",
+    "cat": "Dairy & Eggs",
+    "emoji": "🧈",
+    "unit": "1 L",
+    "price": 603,
+    "mrp": 676,
+    "image": "https://images.unsplash.com/photo-1586201375761-83865001e31c?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_101",
+    "baseId": 1,
+    "name": "Farm Eggs White 6pc",
+    "displayName": "Farm Eggs White 6pc",
+    "cat": "Dairy & Eggs",
+    "emoji": "🥚",
+    "unit": "6 pcs",
+    "price": 63,
+    "mrp": 75,
+    "image": "https://images.unsplash.com/photo-1582722872445-44dc5f7e3c8f?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_102",
+    "baseId": 2,
+    "name": "Farm Eggs White 12pc",
+    "displayName": "Farm Eggs White 12pc",
+    "cat": "Dairy & Eggs",
+    "emoji": "🥚",
+    "unit": "12 pcs",
+    "price": 119,
+    "mrp": 143,
+    "image": "https://images.unsplash.com/photo-1582722872445-44dc5f7e3c8f?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_103",
+    "baseId": 3,
+    "name": "Farm Eggs White 30pc",
+    "displayName": "Farm Eggs White 30pc",
+    "cat": "Dairy & Eggs",
+    "emoji": "🥚",
+    "unit": "30 pcs",
+    "price": 232,
+    "mrp": 270,
+    "image": "https://images.unsplash.com/photo-1582722872445-44dc5f7e3c8f?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_104",
+    "baseId": 4,
+    "name": "Brown Eggs 6pc",
+    "displayName": "Brown Eggs 6pc",
+    "cat": "Dairy & Eggs",
+    "emoji": "🥚",
+    "unit": "6 pcs",
+    "price": 75,
+    "mrp": 94,
+    "image": "https://images.unsplash.com/photo-1582722872445-44dc5f7e3c8f?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_105",
+    "baseId": 5,
+    "name": "Organic Brown Eggs 6pc",
+    "displayName": "Organic Brown Eggs 6pc",
+    "cat": "Dairy & Eggs",
+    "emoji": "🥚",
+    "unit": "6 pcs",
+    "price": 102,
+    "mrp": 122,
+    "image": "https://images.unsplash.com/photo-1582722872445-44dc5f7e3c8f?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_106",
+    "baseId": 6,
+    "name": "Desi Eggs 6pc",
+    "displayName": "Desi Eggs 6pc",
+    "cat": "Dairy & Eggs",
+    "emoji": "🥚",
+    "unit": "6 pcs",
+    "price": 114,
+    "mrp": 132,
+    "image": "https://images.unsplash.com/photo-1582722872445-44dc5f7e3c8f?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_107",
+    "baseId": 7,
+    "name": "Sweet Lassi 200ml",
+    "displayName": "Sweet Lassi 200ml",
+    "cat": "Dairy & Eggs",
+    "emoji": "🥛",
+    "unit": "200 ml",
+    "price": 26,
+    "mrp": 29,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_108",
+    "baseId": 8,
+    "name": "Salted Chaas 200ml",
+    "displayName": "Salted Chaas 200ml",
+    "cat": "Dairy & Eggs",
+    "emoji": "🥛",
+    "unit": "200 ml",
+    "price": 21,
+    "mrp": 22,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_109",
+    "baseId": 9,
+    "name": "Masala Chaas 200ml",
+    "displayName": "Masala Chaas 200ml",
+    "cat": "Dairy & Eggs",
+    "emoji": "🥛",
+    "unit": "200 ml",
+    "price": 23,
+    "mrp": 27,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_110",
+    "baseId": 10,
+    "name": "Flavored Yogurt Strawberry 100g",
+    "displayName": "Flavored Yogurt Strawberry 100g",
+    "cat": "Dairy & Eggs",
+    "emoji": "🥣",
+    "unit": "100 g",
+    "price": 38,
+    "mrp": 39,
+    "image": "https://images.unsplash.com/photo-1488477181946-6428a0291777?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_111",
+    "baseId": 11,
+    "name": "Fresh Cream 200ml",
+    "displayName": "Fresh Cream 200ml",
+    "cat": "Dairy & Eggs",
+    "emoji": "🥛",
+    "unit": "200 ml",
+    "price": 65,
+    "mrp": 78,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_112",
+    "baseId": 12,
+    "name": "Malai Fresh 200g",
+    "displayName": "Malai Fresh 200g",
+    "cat": "Dairy & Eggs",
+    "emoji": "🥛",
+    "unit": "200 g",
+    "price": 52,
+    "mrp": 59,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_113",
+    "baseId": 13,
+    "name": "Milk Powder Amul 200g",
+    "displayName": "Milk Powder Amul 200g",
+    "cat": "Dairy & Eggs",
+    "emoji": "🥛",
+    "unit": "200 g",
+    "price": 116,
+    "mrp": 135,
+    "image": "https://images.unsplash.com/photo-1550583724-b2692b85b150?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_114",
+    "baseId": 14,
+    "name": "Condensed Milk 200g",
+    "displayName": "Condensed Milk 200g",
+    "cat": "Dairy & Eggs",
+    "emoji": "🥛",
+    "unit": "200 g",
+    "price": 72,
+    "mrp": 82,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_115",
+    "baseId": 15,
+    "name": "Cheese Spread 200g",
+    "displayName": "Cheese Spread 200g",
+    "cat": "Dairy & Eggs",
+    "emoji": "🧀",
+    "unit": "200 g",
+    "price": 99,
+    "mrp": 112,
+    "image": "https://images.unsplash.com/photo-1486297678162-eb2a19b0a32d?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_116",
+    "baseId": 16,
+    "name": "Mozzarella Shredded 200g",
+    "displayName": "Mozzarella Shredded 200g",
+    "cat": "Dairy & Eggs",
+    "emoji": "🧀",
+    "unit": "200 g",
+    "price": 162,
+    "mrp": 197,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_117",
+    "baseId": 17,
+    "name": "Cheddar Cheese Slices 200g",
+    "displayName": "Cheddar Cheese Slices 200g",
+    "cat": "Dairy & Eggs",
+    "emoji": "🧀",
+    "unit": "200 g",
+    "price": 141,
+    "mrp": 164,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_118",
+    "baseId": 18,
+    "name": "Shrikhand Kesar 500g",
+    "displayName": "Shrikhand Kesar 500g",
+    "cat": "Dairy & Eggs",
+    "emoji": "🥣",
+    "unit": "500 g",
+    "price": 150,
+    "mrp": 187,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_119",
+    "baseId": 19,
+    "name": "Mishti Doi 200g",
+    "displayName": "Mishti Doi 200g",
+    "cat": "Dairy & Eggs",
+    "emoji": "🥣",
+    "unit": "200 g",
+    "price": 49,
+    "mrp": 54,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_120",
+    "baseId": 20,
+    "name": "Khoya 200g",
+    "displayName": "Khoya 200g",
+    "cat": "Dairy & Eggs",
+    "emoji": "🥛",
+    "unit": "200 g",
+    "price": 91,
+    "mrp": 111,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_121",
+    "baseId": 21,
+    "name": "Rabdi Cup 100g",
+    "displayName": "Rabdi Cup 100g",
+    "cat": "Dairy & Eggs",
+    "emoji": "🥣",
+    "unit": "100 g",
+    "price": 51,
+    "mrp": 57,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_122",
+    "baseId": 22,
+    "name": "Butter Milk Tetra 500ml",
+    "displayName": "Butter Milk Tetra 500ml",
+    "cat": "Dairy & Eggs",
+    "emoji": "🥛",
+    "unit": "500 ml",
+    "price": 33,
+    "mrp": 34,
+    "image": "https://images.unsplash.com/photo-1550583724-b2692b85b150?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_123",
+    "baseId": 23,
+    "name": "Buttermilk Salted Family 1L",
+    "displayName": "Buttermilk Salted Family 1L",
+    "cat": "Dairy & Eggs",
+    "emoji": "🥛",
+    "unit": "1 L",
+    "price": 53,
+    "mrp": 66,
+    "image": "https://images.unsplash.com/photo-1550583724-b2692b85b150?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_124",
+    "baseId": 24,
+    "name": "Eggless Mayo 250g",
+    "displayName": "Eggless Mayo 250g",
+    "cat": "Dairy & Eggs",
+    "emoji": "🥫",
+    "unit": "250 g",
+    "price": 91,
+    "mrp": 104,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_125",
+    "baseId": 25,
+    "name": "Aashirvaad Atta 5kg",
+    "displayName": "Aashirvaad Atta 5kg",
+    "cat": "Staples",
+    "emoji": "🌾",
+    "unit": "5 kg",
+    "price": 293,
+    "mrp": 324,
+    "image": "https://images.unsplash.com/photo-1509440159596-0249088772ff?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_126",
+    "baseId": 26,
+    "name": "Aashirvaad Atta 1kg",
+    "displayName": "Aashirvaad Atta 1kg",
+    "cat": "Staples",
+    "emoji": "🌾",
+    "unit": "1 kg",
+    "price": 62,
+    "mrp": 78,
+    "image": "https://images.unsplash.com/photo-1509440159596-0249088772ff?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_127",
+    "baseId": 27,
+    "name": "Aashirvaad Atta 10kg",
+    "displayName": "Aashirvaad Atta 10kg",
+    "cat": "Staples",
+    "emoji": "🌾",
+    "unit": "10 kg",
+    "price": 550,
+    "mrp": 685,
+    "image": "https://images.unsplash.com/photo-1509440159596-0249088772ff?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_128",
+    "baseId": 28,
+    "name": "Fortune Atta 5kg",
+    "displayName": "Fortune Atta 5kg",
+    "cat": "Staples",
+    "emoji": "🌾",
+    "unit": "5 kg",
+    "price": 281,
+    "mrp": 342,
+    "image": "https://images.unsplash.com/photo-1509440159596-0249088772ff?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_129",
+    "baseId": 29,
+    "name": "Pillsbury Atta 5kg",
+    "displayName": "Pillsbury Atta 5kg",
+    "cat": "Staples",
+    "emoji": "🌾",
+    "unit": "5 kg",
+    "price": 288,
+    "mrp": 321,
+    "image": "https://images.unsplash.com/photo-1509440159596-0249088772ff?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_130",
+    "baseId": 30,
+    "name": "Maida 1kg",
+    "displayName": "Maida 1kg",
+    "cat": "Staples",
+    "emoji": "🌾",
+    "unit": "1 kg",
+    "price": 51,
+    "mrp": 55,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_131",
+    "baseId": 31,
+    "name": "Sooji Rava 500g",
+    "displayName": "Sooji Rava 500g",
+    "cat": "Staples",
+    "emoji": "🌾",
+    "unit": "500 g",
+    "price": 38,
+    "mrp": 39,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_132",
+    "baseId": 32,
+    "name": "Besan 500g",
+    "displayName": "Besan 500g",
+    "cat": "Staples",
+    "emoji": "🌾",
+    "unit": "500 g",
+    "price": 60,
+    "mrp": 73,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_133",
+    "baseId": 33,
+    "name": "Besan 1kg",
+    "displayName": "Besan 1kg",
+    "cat": "Staples",
+    "emoji": "🌾",
+    "unit": "1 kg",
+    "price": 112,
+    "mrp": 130,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_134",
+    "baseId": 34,
+    "name": "Poha Thick 500g",
+    "displayName": "Poha Thick 500g",
+    "cat": "Staples",
+    "emoji": "🌾",
+    "unit": "500 g",
+    "price": 45,
+    "mrp": 52,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_135",
+    "baseId": 35,
+    "name": "Poha Thin 500g",
+    "displayName": "Poha Thin 500g",
+    "cat": "Staples",
+    "emoji": "🌾",
+    "unit": "500 g",
+    "price": 43,
+    "mrp": 52,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_136",
+    "baseId": 36,
+    "name": "Daliya 500g",
+    "displayName": "Daliya 500g",
+    "cat": "Staples",
+    "emoji": "🌾",
+    "unit": "500 g",
+    "price": 45,
+    "mrp": 52,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_137",
+    "baseId": 37,
+    "name": "Basmati Rice Premium 1kg",
+    "displayName": "Basmati Rice Premium 1kg",
+    "cat": "Staples",
+    "emoji": "🍚",
+    "unit": "1 kg",
+    "price": 152,
+    "mrp": 190,
+    "image": "https://images.unsplash.com/photo-1586201375761-83865001e31c?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_138",
+    "baseId": 38,
+    "name": "Basmati Rice 5kg",
+    "displayName": "Basmati Rice 5kg",
+    "cat": "Staples",
+    "emoji": "🍚",
+    "unit": "5 kg",
+    "price": 703,
+    "mrp": 885,
+    "image": "https://images.unsplash.com/photo-1586201375761-83865001e31c?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_139",
+    "baseId": 39,
+    "name": "India Gate Basmati 1kg",
+    "displayName": "India Gate Basmati 1kg",
+    "cat": "Staples",
+    "emoji": "🍚",
+    "unit": "1 kg",
+    "price": 190,
+    "mrp": 235,
+    "image": "https://images.unsplash.com/photo-1586201375761-83865001e31c?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_140",
+    "baseId": 40,
+    "name": "Daawat Basmati 1kg",
+    "displayName": "Daawat Basmati 1kg",
+    "cat": "Staples",
+    "emoji": "🍚",
+    "unit": "1 kg",
+    "price": 186,
+    "mrp": 235,
+    "image": "https://images.unsplash.com/photo-1586201375761-83865001e31c?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_141",
+    "baseId": 41,
+    "name": "Sona Masoori Rice 5kg",
+    "displayName": "Sona Masoori Rice 5kg",
+    "cat": "Staples",
+    "emoji": "🍚",
+    "unit": "5 kg",
+    "price": 350,
+    "mrp": 422,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_142",
+    "baseId": 42,
+    "name": "Sona Masoori 1kg",
+    "displayName": "Sona Masoori 1kg",
+    "cat": "Staples",
+    "emoji": "🍚",
+    "unit": "1 kg",
+    "price": 74,
+    "mrp": 87,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_143",
+    "baseId": 43,
+    "name": "Brown Rice 1kg",
+    "displayName": "Brown Rice 1kg",
+    "cat": "Staples",
+    "emoji": "🍚",
+    "unit": "1 kg",
+    "price": 103,
+    "mrp": 112,
+    "image": "https://images.unsplash.com/photo-1536304929831-ee1ca9d44906?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_144",
+    "baseId": 44,
+    "name": "Parboiled Rice 5kg",
+    "displayName": "Parboiled Rice 5kg",
+    "cat": "Staples",
+    "emoji": "🍚",
+    "unit": "5 kg",
+    "price": 330,
+    "mrp": 382,
+    "image": "https://images.unsplash.com/photo-1536304929831-ee1ca9d44906?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_145",
+    "baseId": 45,
+    "name": "Toor Dal 1kg",
+    "displayName": "Toor Dal 1kg",
+    "cat": "Staples",
+    "emoji": "🫘",
+    "unit": "1 kg",
+    "price": 161,
+    "mrp": 189,
+    "image": "https://images.unsplash.com/photo-1515543904379-3d757afe72e4?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_146",
+    "baseId": 46,
+    "name": "Toor Dal 500g",
+    "displayName": "Toor Dal 500g",
+    "cat": "Staples",
+    "emoji": "🫘",
+    "unit": "500 g",
+    "price": 88,
+    "mrp": 100,
+    "image": "https://images.unsplash.com/photo-1515543904379-3d757afe72e4?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_147",
+    "baseId": 47,
+    "name": "Moong Dal Yellow 1kg",
+    "displayName": "Moong Dal Yellow 1kg",
+    "cat": "Staples",
+    "emoji": "🫘",
+    "unit": "1 kg",
+    "price": 139,
+    "mrp": 159,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_148",
+    "baseId": 48,
+    "name": "Moong Dal Yellow 500g",
+    "displayName": "Moong Dal Yellow 500g",
+    "cat": "Staples",
+    "emoji": "🫘",
+    "unit": "500 g",
+    "price": 79,
+    "mrp": 93,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_149",
+    "baseId": 49,
+    "name": "Moong Whole Green 500g",
+    "displayName": "Moong Whole Green 500g",
+    "cat": "Staples",
+    "emoji": "🫘",
+    "unit": "500 g",
+    "price": 76,
+    "mrp": 81,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_150",
+    "baseId": 50,
+    "name": "Masoor Dal Red 1kg",
+    "displayName": "Masoor Dal Red 1kg",
+    "cat": "Staples",
+    "emoji": "🫘",
+    "unit": "1 kg",
+    "price": 101,
+    "mrp": 116,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_151",
+    "baseId": 51,
+    "name": "Masoor Whole Black 500g",
+    "displayName": "Masoor Whole Black 500g",
+    "cat": "Staples",
+    "emoji": "🫘",
+    "unit": "500 g",
+    "price": 65,
+    "mrp": 74,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_152",
+    "baseId": 52,
+    "name": "Chana Dal 1kg",
+    "displayName": "Chana Dal 1kg",
+    "cat": "Staples",
+    "emoji": "🫘",
+    "unit": "1 kg",
+    "price": 98,
+    "mrp": 115,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_153",
+    "baseId": 53,
+    "name": "Kala Chana 500g",
+    "displayName": "Kala Chana 500g",
+    "cat": "Staples",
+    "emoji": "🫘",
+    "unit": "500 g",
+    "price": 59,
+    "mrp": 70,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_154",
+    "baseId": 54,
+    "name": "Kabuli Chana 500g",
+    "displayName": "Kabuli Chana 500g",
+    "cat": "Staples",
+    "emoji": "🫘",
+    "unit": "500 g",
+    "price": 92,
+    "mrp": 105,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_155",
+    "baseId": 55,
+    "name": "White Chole 1kg",
+    "displayName": "White Chole 1kg",
+    "cat": "Staples",
+    "emoji": "🫘",
+    "unit": "1 kg",
+    "price": 131,
+    "mrp": 163,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_156",
+    "baseId": 56,
+    "name": "Rajma Red 500g",
+    "displayName": "Rajma Red 500g",
+    "cat": "Staples",
+    "emoji": "🫘",
+    "unit": "500 g",
+    "price": 92,
+    "mrp": 104,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_157",
+    "baseId": 57,
+    "name": "Rajma Chitra 500g",
+    "displayName": "Rajma Chitra 500g",
+    "cat": "Staples",
+    "emoji": "🫘",
+    "unit": "500 g",
+    "price": 81,
+    "mrp": 96,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_158",
+    "baseId": 58,
+    "name": "Lobia White 500g",
+    "displayName": "Lobia White 500g",
+    "cat": "Staples",
+    "emoji": "🫘",
+    "unit": "500 g",
+    "price": 72,
+    "mrp": 81,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_159",
+    "baseId": 59,
+    "name": "Urad Dal White 500g",
+    "displayName": "Urad Dal White 500g",
+    "cat": "Staples",
+    "emoji": "🫘",
+    "unit": "500 g",
+    "price": 90,
+    "mrp": 109,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_160",
+    "baseId": 60,
+    "name": "Green Peas Dried 500g",
+    "displayName": "Green Peas Dried 500g",
+    "cat": "Staples",
+    "emoji": "🫘",
+    "unit": "500 g",
+    "price": 65,
+    "mrp": 71,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_161",
+    "baseId": 61,
+    "name": "Soya Chunks 200g",
+    "displayName": "Soya Chunks 200g",
+    "cat": "Staples",
+    "emoji": "🫘",
+    "unit": "200 g",
+    "price": 44,
+    "mrp": 47,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_162",
+    "baseId": 62,
+    "name": "Peanuts Raw 500g",
+    "displayName": "Peanuts Raw 500g",
+    "cat": "Staples",
+    "emoji": "🥜",
+    "unit": "500 g",
+    "price": 88,
+    "mrp": 104,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_163",
+    "baseId": 63,
+    "name": "Almonds Premium 200g",
+    "displayName": "Almonds Premium 200g",
+    "cat": "Staples",
+    "emoji": "🥜",
+    "unit": "200 g",
+    "price": 231,
+    "mrp": 263,
+    "image": "https://images.unsplash.com/photo-1508061253366-f7da158b6d46?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_164",
+    "baseId": 64,
+    "name": "Almonds Premium 500g",
+    "displayName": "Almonds Premium 500g",
+    "cat": "Staples",
+    "emoji": "🥜",
+    "unit": "500 g",
+    "price": 553,
+    "mrp": 616,
+    "image": "https://images.unsplash.com/photo-1508061253366-f7da158b6d46?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_165",
+    "baseId": 65,
+    "name": "Cashew W320 200g",
+    "displayName": "Cashew W320 200g",
+    "cat": "Staples",
+    "emoji": "🥜",
+    "unit": "200 g",
+    "price": 263,
+    "mrp": 324,
+    "image": "https://images.unsplash.com/photo-1508061253366-f7da158b6d46?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_166",
+    "baseId": 66,
+    "name": "Cashew 500g",
+    "displayName": "Cashew 500g",
+    "cat": "Staples",
+    "emoji": "🥜",
+    "unit": "500 g",
+    "price": 600,
+    "mrp": 677,
+    "image": "https://images.unsplash.com/photo-1508061253366-f7da158b6d46?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_167",
+    "baseId": 67,
+    "name": "Raisins 200g",
+    "displayName": "Raisins 200g",
+    "cat": "Staples",
+    "emoji": "🍇",
+    "unit": "200 g",
+    "price": 99,
+    "mrp": 125,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_168",
+    "baseId": 68,
+    "name": "Pistachios Salted 100g",
+    "displayName": "Pistachios Salted 100g",
+    "cat": "Staples",
+    "emoji": "🥜",
+    "unit": "100 g",
+    "price": 203,
+    "mrp": 252,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_169",
+    "baseId": 69,
+    "name": "Walnuts 200g",
+    "displayName": "Walnuts 200g",
+    "cat": "Staples",
+    "emoji": "🥜",
+    "unit": "200 g",
+    "price": 283,
+    "mrp": 340,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_170",
+    "baseId": 70,
+    "name": "Mixed Dry Fruits 200g",
+    "displayName": "Mixed Dry Fruits 200g",
+    "cat": "Staples",
+    "emoji": "🥜",
+    "unit": "200 g",
+    "price": 202,
+    "mrp": 247,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_171",
+    "baseId": 71,
+    "name": "Dates Kimia 500g",
+    "displayName": "Dates Kimia 500g",
+    "cat": "Staples",
+    "emoji": "🍯",
+    "unit": "500 g",
+    "price": 202,
+    "mrp": 242,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_172",
+    "baseId": 72,
+    "name": "Dates Medjool 200g",
+    "displayName": "Dates Medjool 200g",
+    "cat": "Staples",
+    "emoji": "🍯",
+    "unit": "200 g",
+    "price": 302,
+    "mrp": 348,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_173",
+    "baseId": 73,
+    "name": "Makhana Phool 100g",
+    "displayName": "Makhana Phool 100g",
+    "cat": "Staples",
+    "emoji": "🥜",
+    "unit": "100 g",
+    "price": 130,
+    "mrp": 149,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_174",
+    "baseId": 74,
+    "name": "Makhana Salted 100g",
+    "displayName": "Makhana Salted 100g",
+    "cat": "Staples",
+    "emoji": "🥜",
+    "unit": "100 g",
+    "price": 123,
+    "mrp": 142,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_175",
+    "baseId": 75,
+    "name": "Turmeric Powder 100g",
+    "displayName": "Turmeric Powder 100g",
+    "cat": "Staples",
+    "emoji": "🌿",
+    "unit": "100 g",
+    "price": 30,
+    "mrp": 35,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_176",
+    "baseId": 76,
+    "name": "Red Chilli Powder 100g",
+    "displayName": "Red Chilli Powder 100g",
+    "cat": "Staples",
+    "emoji": "🌶️",
+    "unit": "100 g",
+    "price": 35,
+    "mrp": 36,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_177",
+    "baseId": 77,
+    "name": "Coriander Powder 100g",
+    "displayName": "Coriander Powder 100g",
+    "cat": "Staples",
+    "emoji": "🌿",
+    "unit": "100 g",
+    "price": 35,
+    "mrp": 40,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_178",
+    "baseId": 78,
+    "name": "Jeera Whole 50g",
+    "displayName": "Jeera Whole 50g",
+    "cat": "Staples",
+    "emoji": "🌿",
+    "unit": "50 g",
+    "price": 31,
+    "mrp": 35,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_179",
+    "baseId": 79,
+    "name": "Jeera Whole 100g",
+    "displayName": "Jeera Whole 100g",
+    "cat": "Staples",
+    "emoji": "🌿",
+    "unit": "100 g",
+    "price": 53,
+    "mrp": 65,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_180",
+    "baseId": 80,
+    "name": "Black Pepper Whole 50g",
+    "displayName": "Black Pepper Whole 50g",
+    "cat": "Staples",
+    "emoji": "🌿",
+    "unit": "50 g",
+    "price": 64,
+    "mrp": 79,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_181",
+    "baseId": 81,
+    "name": "Garam Masala 50g",
+    "displayName": "Garam Masala 50g",
+    "cat": "Staples",
+    "emoji": "🌿",
+    "unit": "50 g",
+    "price": 42,
+    "mrp": 51,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_182",
+    "baseId": 82,
+    "name": "Chicken Masala 50g",
+    "displayName": "Chicken Masala 50g",
+    "cat": "Staples",
+    "emoji": "🌿",
+    "unit": "50 g",
+    "price": 42,
+    "mrp": 53,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_183",
+    "baseId": 83,
+    "name": "Chole Masala 50g",
+    "displayName": "Chole Masala 50g",
+    "cat": "Staples",
+    "emoji": "🌿",
+    "unit": "50 g",
+    "price": 40,
+    "mrp": 43,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_184",
+    "baseId": 84,
+    "name": "Pav Bhaji Masala 50g",
+    "displayName": "Pav Bhaji Masala 50g",
+    "cat": "Staples",
+    "emoji": "🌿",
+    "unit": "50 g",
+    "price": 42,
+    "mrp": 42,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_185",
+    "baseId": 85,
+    "name": "Sambhar Masala 50g",
+    "displayName": "Sambhar Masala 50g",
+    "cat": "Staples",
+    "emoji": "🌿",
+    "unit": "50 g",
+    "price": 41,
+    "mrp": 44,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_186",
+    "baseId": 86,
+    "name": "Biryani Masala 50g",
+    "displayName": "Biryani Masala 50g",
+    "cat": "Staples",
+    "emoji": "🌿",
+    "unit": "50 g",
+    "price": 43,
+    "mrp": 48,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_187",
+    "baseId": 87,
+    "name": "Hing 25g",
+    "displayName": "Hing 25g",
+    "cat": "Staples",
+    "emoji": "🌿",
+    "unit": "25 g",
+    "price": 40,
+    "mrp": 47,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_188",
+    "baseId": 88,
+    "name": "Kasuri Methi 25g",
+    "displayName": "Kasuri Methi 25g",
+    "cat": "Staples",
+    "emoji": "🌿",
+    "unit": "25 g",
+    "price": 26,
+    "mrp": 30,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_189",
+    "baseId": 89,
+    "name": "Mustard Oil 1L",
+    "displayName": "Mustard Oil 1L",
+    "cat": "Staples",
+    "emoji": "🛢️",
+    "unit": "1 L",
+    "price": 150,
+    "mrp": 182,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_190",
+    "baseId": 90,
+    "name": "Sunflower Oil 1L",
+    "displayName": "Sunflower Oil 1L",
+    "cat": "Staples",
+    "emoji": "🛢️",
+    "unit": "1 L",
+    "price": 135,
+    "mrp": 161,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_191",
+    "baseId": 91,
+    "name": "Olive Oil 250ml",
+    "displayName": "Olive Oil 250ml",
+    "cat": "Staples",
+    "emoji": "🛢️",
+    "unit": "250 ml",
+    "price": 303,
+    "mrp": 353,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_192",
+    "baseId": 92,
+    "name": "Sugar White 1kg",
+    "displayName": "Sugar White 1kg",
+    "cat": "Staples",
+    "emoji": "🍬",
+    "unit": "1 kg",
+    "price": 50,
+    "mrp": 55,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_193",
+    "baseId": 93,
+    "name": "Sugar White 5kg",
+    "displayName": "Sugar White 5kg",
+    "cat": "Staples",
+    "emoji": "🍬",
+    "unit": "5 kg",
+    "price": 232,
+    "mrp": 277,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_194",
+    "baseId": 94,
+    "name": "Brown Sugar 500g",
+    "displayName": "Brown Sugar 500g",
+    "cat": "Staples",
+    "emoji": "🍬",
+    "unit": "500 g",
+    "price": 77,
+    "mrp": 92,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_195",
+    "baseId": 95,
+    "name": "Jaggery Powder 500g",
+    "displayName": "Jaggery Powder 500g",
+    "cat": "Staples",
+    "emoji": "🍯",
+    "unit": "500 g",
+    "price": 65,
+    "mrp": 71,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_196",
+    "baseId": 96,
+    "name": "Rock Salt Sendha 200g",
+    "displayName": "Rock Salt Sendha 200g",
+    "cat": "Staples",
+    "emoji": "🧂",
+    "unit": "200 g",
+    "price": 26,
+    "mrp": 27,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_197",
+    "baseId": 97,
+    "name": "Tata Salt 1kg",
+    "displayName": "Tata Salt 1kg",
+    "cat": "Staples",
+    "emoji": "🧂",
+    "unit": "1 kg",
+    "price": 24,
+    "mrp": 30,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_198",
+    "baseId": 98,
+    "name": "Tata Gold Tea 250g",
+    "displayName": "Tata Gold Tea 250g",
+    "cat": "Staples",
+    "emoji": "🍵",
+    "unit": "250 g",
+    "price": 116,
+    "mrp": 144,
+    "image": "https://images.unsplash.com/photo-1571934811356-5cc061b6821f?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_199",
+    "baseId": 99,
+    "name": "Honey Dabur 250g",
+    "displayName": "Honey Dabur 250g",
+    "cat": "Staples",
+    "emoji": "🍯",
+    "unit": "250 g",
+    "price": 102,
+    "mrp": 111,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_200",
+    "baseId": 0,
+    "name": "Chia Seeds 200g",
+    "displayName": "Chia Seeds 200g",
+    "cat": "Staples",
+    "emoji": "🌾",
+    "unit": "200 g",
+    "price": 150,
+    "mrp": 173,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_201",
+    "baseId": 1,
+    "name": "Oats Rolled 500g",
+    "displayName": "Oats Rolled 500g",
+    "cat": "Staples",
+    "emoji": "🌾",
+    "unit": "500 g",
+    "price": 101,
+    "mrp": 122,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_202",
+    "baseId": 2,
+    "name": "Muesli Fruit Nut 400g",
+    "displayName": "Muesli Fruit Nut 400g",
+    "cat": "Staples",
+    "emoji": "🥣",
+    "unit": "400 g",
+    "price": 201,
+    "mrp": 235,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_203",
+    "baseId": 3,
+    "name": "Cornflakes 300g",
+    "displayName": "Cornflakes 300g",
+    "cat": "Staples",
+    "emoji": "🥣",
+    "unit": "300 g",
+    "price": 131,
+    "mrp": 154,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_204",
+    "baseId": 4,
+    "name": "Peanut Butter Crunchy 350g",
+    "displayName": "Peanut Butter Crunchy 350g",
+    "cat": "Staples",
+    "emoji": "🥜",
+    "unit": "350 g",
+    "price": 149,
+    "mrp": 184,
+    "image": "https://images.unsplash.com/photo-1589985270826-4b7bb135bc9d?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_205",
+    "baseId": 5,
+    "name": "Tomato Ketchup 500g",
+    "displayName": "Tomato Ketchup 500g",
+    "cat": "Staples",
+    "emoji": "🥫",
+    "unit": "500 g",
+    "price": 72,
+    "mrp": 79,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_206",
+    "baseId": 6,
+    "name": "Pasta Penne 500g",
+    "displayName": "Pasta Penne 500g",
+    "cat": "Staples",
+    "emoji": "🍝",
+    "unit": "500 g",
+    "price": 93,
+    "mrp": 106,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_207",
+    "baseId": 7,
+    "name": "Maggi Family Pack 12pc",
+    "displayName": "Maggi Family Pack 12pc",
+    "cat": "Staples",
+    "emoji": "🍝",
+    "unit": "12 pcs",
+    "price": 79,
+    "mrp": 97,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_208",
+    "baseId": 8,
+    "name": "Pickle Mango 300g",
+    "displayName": "Pickle Mango 300g",
+    "cat": "Staples",
+    "emoji": "🥫",
+    "unit": "300 g",
+    "price": 89,
+    "mrp": 105,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_209",
+    "baseId": 9,
+    "name": "Green Tea 25 bags",
+    "displayName": "Green Tea 25 bags",
+    "cat": "Staples",
+    "emoji": "🍵",
+    "unit": "25 bags",
+    "price": 130,
+    "mrp": 163,
+    "image": "https://images.unsplash.com/photo-1571934811356-5cc061b6821f?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_210",
+    "baseId": 10,
+    "name": "Coffee Nescafe Classic 50g",
+    "displayName": "Coffee Nescafe Classic 50g",
+    "cat": "Staples",
+    "emoji": "☕",
+    "unit": "50 g",
+    "price": 150,
+    "mrp": 187,
+    "image": "https://images.unsplash.com/photo-1461023058943-07fcbe16d735?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_211",
+    "baseId": 11,
+    "name": "Aashirvaad Atta 5kg Pack 2",
+    "displayName": "Aashirvaad Atta 5kg Pack 2",
+    "cat": "Staples",
+    "emoji": "🌾",
+    "unit": "5 kg",
+    "price": 296,
+    "mrp": 346,
+    "image": "https://images.unsplash.com/photo-1509440159596-0249088772ff?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_212",
+    "baseId": 12,
+    "name": "Aashirvaad Atta 1kg Pack 2",
+    "displayName": "Aashirvaad Atta 1kg Pack 2",
+    "cat": "Staples",
+    "emoji": "🌾",
+    "unit": "1 kg",
+    "price": 76,
+    "mrp": 91,
+    "image": "https://images.unsplash.com/photo-1509440159596-0249088772ff?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_213",
+    "baseId": 13,
+    "name": "Aashirvaad Atta 10kg Pack 2",
+    "displayName": "Aashirvaad Atta 10kg Pack 2",
+    "cat": "Staples",
+    "emoji": "🌾",
+    "unit": "10 kg",
+    "price": 562,
+    "mrp": 662,
+    "image": "https://images.unsplash.com/photo-1509440159596-0249088772ff?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_214",
+    "baseId": 14,
+    "name": "Fortune Atta 5kg Pack 2",
+    "displayName": "Fortune Atta 5kg Pack 2",
+    "cat": "Staples",
+    "emoji": "🌾",
+    "unit": "5 kg",
+    "price": 296,
+    "mrp": 372,
+    "image": "https://images.unsplash.com/photo-1509440159596-0249088772ff?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_215",
+    "baseId": 15,
+    "name": "Pillsbury Atta 5kg Pack 2",
+    "displayName": "Pillsbury Atta 5kg Pack 2",
+    "cat": "Staples",
+    "emoji": "🌾",
+    "unit": "5 kg",
+    "price": 295,
+    "mrp": 361,
+    "image": "https://images.unsplash.com/photo-1509440159596-0249088772ff?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_216",
+    "baseId": 16,
+    "name": "Maida 1kg Pack 2",
+    "displayName": "Maida 1kg Pack 2",
+    "cat": "Staples",
+    "emoji": "🌾",
+    "unit": "1 kg",
+    "price": 64,
+    "mrp": 77,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_217",
+    "baseId": 17,
+    "name": "Sooji Rava 500g Pack 2",
+    "displayName": "Sooji Rava 500g Pack 2",
+    "cat": "Staples",
+    "emoji": "🌾",
+    "unit": "500 g",
+    "price": 47,
+    "mrp": 55,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_218",
+    "baseId": 18,
+    "name": "Besan 500g Pack 2",
+    "displayName": "Besan 500g Pack 2",
+    "cat": "Staples",
+    "emoji": "🌾",
+    "unit": "500 g",
+    "price": 73,
+    "mrp": 82,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_219",
+    "baseId": 19,
+    "name": "Besan 1kg Pack 2",
+    "displayName": "Besan 1kg Pack 2",
+    "cat": "Staples",
+    "emoji": "🌾",
+    "unit": "1 kg",
+    "price": 119,
+    "mrp": 145,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_220",
+    "baseId": 20,
+    "name": "Poha Thick 500g Pack 2",
+    "displayName": "Poha Thick 500g Pack 2",
+    "cat": "Staples",
+    "emoji": "🌾",
+    "unit": "500 g",
+    "price": 51,
+    "mrp": 59,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_221",
+    "baseId": 21,
+    "name": "Poha Thin 500g Pack 2",
+    "displayName": "Poha Thin 500g Pack 2",
+    "cat": "Staples",
+    "emoji": "🌾",
+    "unit": "500 g",
+    "price": 65,
+    "mrp": 69,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_222",
+    "baseId": 22,
+    "name": "Daliya 500g Pack 2",
+    "displayName": "Daliya 500g Pack 2",
+    "cat": "Staples",
+    "emoji": "🌾",
+    "unit": "500 g",
+    "price": 51,
+    "mrp": 59,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_223",
+    "baseId": 23,
+    "name": "Basmati Rice Premium 1kg Pack 2",
+    "displayName": "Basmati Rice Premium 1kg Pack 2",
+    "cat": "Staples",
+    "emoji": "🍚",
+    "unit": "1 kg",
+    "price": 159,
+    "mrp": 190,
+    "image": "https://images.unsplash.com/photo-1586201375761-83865001e31c?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_224",
+    "baseId": 24,
+    "name": "Basmati Rice 5kg Pack 2",
+    "displayName": "Basmati Rice 5kg Pack 2",
+    "cat": "Staples",
+    "emoji": "🍚",
+    "unit": "5 kg",
+    "price": 713,
+    "mrp": 840,
+    "image": "https://images.unsplash.com/photo-1586201375761-83865001e31c?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_225",
+    "baseId": 25,
+    "name": "India Gate Basmati 1kg Pack 2",
+    "displayName": "India Gate Basmati 1kg Pack 2",
+    "cat": "Staples",
+    "emoji": "🍚",
+    "unit": "1 kg",
+    "price": 208,
+    "mrp": 255,
+    "image": "https://images.unsplash.com/photo-1586201375761-83865001e31c?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_226",
+    "baseId": 26,
+    "name": "Daawat Basmati 1kg Pack 2",
+    "displayName": "Daawat Basmati 1kg Pack 2",
+    "cat": "Staples",
+    "emoji": "🍚",
+    "unit": "1 kg",
+    "price": 195,
+    "mrp": 232,
+    "image": "https://images.unsplash.com/photo-1586201375761-83865001e31c?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_227",
+    "baseId": 27,
+    "name": "Sona Masoori Rice 5kg Pack 2",
+    "displayName": "Sona Masoori Rice 5kg Pack 2",
+    "cat": "Staples",
+    "emoji": "🍚",
+    "unit": "5 kg",
+    "price": 357,
+    "mrp": 449,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_228",
+    "baseId": 28,
+    "name": "Sona Masoori 1kg Pack 2",
+    "displayName": "Sona Masoori 1kg Pack 2",
+    "cat": "Staples",
+    "emoji": "🍚",
+    "unit": "1 kg",
+    "price": 91,
+    "mrp": 107,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_229",
+    "baseId": 29,
+    "name": "Brown Rice 1kg Pack 2",
+    "displayName": "Brown Rice 1kg Pack 2",
+    "cat": "Staples",
+    "emoji": "🍚",
+    "unit": "1 kg",
+    "price": 118,
+    "mrp": 142,
+    "image": "https://images.unsplash.com/photo-1536304929831-ee1ca9d44906?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_230",
+    "baseId": 30,
+    "name": "Parboiled Rice 5kg Pack 2",
+    "displayName": "Parboiled Rice 5kg Pack 2",
+    "cat": "Staples",
+    "emoji": "🍚",
+    "unit": "5 kg",
+    "price": 346,
+    "mrp": 413,
+    "image": "https://images.unsplash.com/photo-1536304929831-ee1ca9d44906?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_231",
+    "baseId": 31,
+    "name": "Toor Dal 1kg Pack 2",
+    "displayName": "Toor Dal 1kg Pack 2",
+    "cat": "Staples",
+    "emoji": "🫘",
+    "unit": "1 kg",
+    "price": 168,
+    "mrp": 197,
+    "image": "https://images.unsplash.com/photo-1515543904379-3d757afe72e4?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_232",
+    "baseId": 32,
+    "name": "Toor Dal 500g Pack 2",
+    "displayName": "Toor Dal 500g Pack 2",
+    "cat": "Staples",
+    "emoji": "🫘",
+    "unit": "500 g",
+    "price": 104,
+    "mrp": 120,
+    "image": "https://images.unsplash.com/photo-1515543904379-3d757afe72e4?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_233",
+    "baseId": 33,
+    "name": "Moong Dal Yellow 1kg Pack 2",
+    "displayName": "Moong Dal Yellow 1kg Pack 2",
+    "cat": "Staples",
+    "emoji": "🫘",
+    "unit": "1 kg",
+    "price": 159,
+    "mrp": 178,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_234",
+    "baseId": 34,
+    "name": "Moong Dal Yellow 500g Pack 2",
+    "displayName": "Moong Dal Yellow 500g Pack 2",
+    "cat": "Staples",
+    "emoji": "🫘",
+    "unit": "500 g",
+    "price": 95,
+    "mrp": 121,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_235",
+    "baseId": 35,
+    "name": "Lays Classic Salted 50g",
+    "displayName": "Lays Classic Salted 50g",
+    "cat": "Snacks",
+    "emoji": "🥔",
+    "unit": "50 g",
+    "price": 20,
+    "mrp": 23,
+    "image": "https://images.unsplash.com/photo-1566478989037-eec170784d0b?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_236",
+    "baseId": 36,
+    "name": "Lays Magic Masala 50g",
+    "displayName": "Lays Magic Masala 50g",
+    "cat": "Snacks",
+    "emoji": "🥔",
+    "unit": "50 g",
+    "price": 20,
+    "mrp": 22,
+    "image": "https://images.unsplash.com/photo-1566478989037-eec170784d0b?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_237",
+    "baseId": 37,
+    "name": "Lays Cream Onion 50g",
+    "displayName": "Lays Cream Onion 50g",
+    "cat": "Snacks",
+    "emoji": "🥔",
+    "unit": "50 g",
+    "price": 21,
+    "mrp": 25,
+    "image": "https://images.unsplash.com/photo-1566478989037-eec170784d0b?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_238",
+    "baseId": 38,
+    "name": "Kurkure Masala Munch 85g",
+    "displayName": "Kurkure Masala Munch 85g",
+    "cat": "Snacks",
+    "emoji": "🍿",
+    "unit": "85 g",
+    "price": 24,
+    "mrp": 25,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_239",
+    "baseId": 39,
+    "name": "Kurkure Green Chutney 85g",
+    "displayName": "Kurkure Green Chutney 85g",
+    "cat": "Snacks",
+    "emoji": "🍿",
+    "unit": "85 g",
+    "price": 23,
+    "mrp": 24,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_240",
+    "baseId": 40,
+    "name": "Bingo Mad Angles Achaari 90g",
+    "displayName": "Bingo Mad Angles Achaari 90g",
+    "cat": "Snacks",
+    "emoji": "🍿",
+    "unit": "90 g",
+    "price": 21,
+    "mrp": 22,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_241",
+    "baseId": 41,
+    "name": "Bingo Tedhe Medhe 80g",
+    "displayName": "Bingo Tedhe Medhe 80g",
+    "cat": "Snacks",
+    "emoji": "🍿",
+    "unit": "80 g",
+    "price": 23,
+    "mrp": 24,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_242",
+    "baseId": 42,
+    "name": "Doritos Cheese Nacho 82g",
+    "displayName": "Doritos Cheese Nacho 82g",
+    "cat": "Snacks",
+    "emoji": "🧀",
+    "unit": "82 g",
+    "price": 36,
+    "mrp": 43,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_243",
+    "baseId": 43,
+    "name": "Pringles Original 42g",
+    "displayName": "Pringles Original 42g",
+    "cat": "Snacks",
+    "emoji": "🥔",
+    "unit": "42 g",
+    "price": 37,
+    "mrp": 43,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_244",
+    "baseId": 44,
+    "name": "Haldirams Aloo Bhujia 200g",
+    "displayName": "Haldirams Aloo Bhujia 200g",
+    "cat": "Snacks",
+    "emoji": "🥨",
+    "unit": "200 g",
+    "price": 55,
+    "mrp": 67,
+    "image": "https://images.unsplash.com/photo-1606491956689-2ea866880c84?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_245",
+    "baseId": 45,
+    "name": "Haldirams Moong Dal 200g",
+    "displayName": "Haldirams Moong Dal 200g",
+    "cat": "Snacks",
+    "emoji": "🥨",
+    "unit": "200 g",
+    "price": 56,
+    "mrp": 68,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_246",
+    "baseId": 46,
+    "name": "Haldirams Navratan 200g",
+    "displayName": "Haldirams Navratan 200g",
+    "cat": "Snacks",
+    "emoji": "🥨",
+    "unit": "200 g",
+    "price": 55,
+    "mrp": 69,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_247",
+    "baseId": 47,
+    "name": "Haldirams Khatta Meetha 200g",
+    "displayName": "Haldirams Khatta Meetha 200g",
+    "cat": "Snacks",
+    "emoji": "🥨",
+    "unit": "200 g",
+    "price": 56,
+    "mrp": 67,
+    "image": "https://images.unsplash.com/photo-1509440159596-0249088772ff?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_248",
+    "baseId": 48,
+    "name": "Bikano Aloo Bhujia 200g",
+    "displayName": "Bikano Aloo Bhujia 200g",
+    "cat": "Snacks",
+    "emoji": "🥨",
+    "unit": "200 g",
+    "price": 54,
+    "mrp": 65,
+    "image": "https://images.unsplash.com/photo-1606491956689-2ea866880c84?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_249",
+    "baseId": 49,
+    "name": "Balaji Wafers Masala 40g",
+    "displayName": "Balaji Wafers Masala 40g",
+    "cat": "Snacks",
+    "emoji": "🥔",
+    "unit": "40 g",
+    "price": 19,
+    "mrp": 19,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_250",
+    "baseId": 50,
+    "name": "Too Yumm Karare 70g",
+    "displayName": "Too Yumm Karare 70g",
+    "cat": "Snacks",
+    "emoji": "🍿",
+    "unit": "70 g",
+    "price": 21,
+    "mrp": 25,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_251",
+    "baseId": 51,
+    "name": "Cornitos Nacho Cheese 60g",
+    "displayName": "Cornitos Nacho Cheese 60g",
+    "cat": "Snacks",
+    "emoji": "🧀",
+    "unit": "60 g",
+    "price": 37,
+    "mrp": 43,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_252",
+    "baseId": 52,
+    "name": "Act II Popcorn Salted 60g",
+    "displayName": "Act II Popcorn Salted 60g",
+    "cat": "Snacks",
+    "emoji": "🍿",
+    "unit": "60 g",
+    "price": 25,
+    "mrp": 28,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_253",
+    "baseId": 53,
+    "name": "Parle-G Original 250g",
+    "displayName": "Parle-G Original 250g",
+    "cat": "Snacks",
+    "emoji": "🍪",
+    "unit": "250 g",
+    "price": 31,
+    "mrp": 36,
+    "image": "https://images.unsplash.com/photo-1558961363-fa8fdf82db35?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_254",
+    "baseId": 54,
+    "name": "Marie Gold 250g",
+    "displayName": "Marie Gold 250g",
+    "cat": "Snacks",
+    "emoji": "🍪",
+    "unit": "250 g",
+    "price": 38,
+    "mrp": 39,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_255",
+    "baseId": 55,
+    "name": "Good Day Cashew 200g",
+    "displayName": "Good Day Cashew 200g",
+    "cat": "Snacks",
+    "emoji": "🍪",
+    "unit": "200 g",
+    "price": 38,
+    "mrp": 41,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_256",
+    "baseId": 56,
+    "name": "Good Day Butter 200g",
+    "displayName": "Good Day Butter 200g",
+    "cat": "Snacks",
+    "emoji": "🍪",
+    "unit": "200 g",
+    "price": 39,
+    "mrp": 41,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_257",
+    "baseId": 57,
+    "name": "Hide & Seek Choco 200g",
+    "displayName": "Hide & Seek Choco 200g",
+    "cat": "Snacks",
+    "emoji": "🍪",
+    "unit": "200 g",
+    "price": 42,
+    "mrp": 46,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_258",
+    "baseId": 58,
+    "name": "Bourbon Chocolate 150g",
+    "displayName": "Bourbon Chocolate 150g",
+    "cat": "Snacks",
+    "emoji": "🍪",
+    "unit": "150 g",
+    "price": 30,
+    "mrp": 35,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_259",
+    "baseId": 59,
+    "name": "Oreo Original 120g",
+    "displayName": "Oreo Original 120g",
+    "cat": "Snacks",
+    "emoji": "🍪",
+    "unit": "120 g",
+    "price": 38,
+    "mrp": 40,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_260",
+    "baseId": 60,
+    "name": "Dark Fantasy 300g",
+    "displayName": "Dark Fantasy 300g",
+    "cat": "Snacks",
+    "emoji": "🍪",
+    "unit": "300 g",
+    "price": 86,
+    "mrp": 99,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_261",
+    "baseId": 61,
+    "name": "Britannia Cake Rusk 300g",
+    "displayName": "Britannia Cake Rusk 300g",
+    "cat": "Snacks",
+    "emoji": "🍰",
+    "unit": "300 g",
+    "price": 66,
+    "mrp": 77,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_262",
+    "baseId": 62,
+    "name": "Unibic Choco Chip 150g",
+    "displayName": "Unibic Choco Chip 150g",
+    "cat": "Snacks",
+    "emoji": "🍪",
+    "unit": "150 g",
+    "price": 45,
+    "mrp": 52,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_263",
+    "baseId": 63,
+    "name": "Little Hearts 75g",
+    "displayName": "Little Hearts 75g",
+    "cat": "Snacks",
+    "emoji": "🍪",
+    "unit": "75 g",
+    "price": 20,
+    "mrp": 23,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_264",
+    "baseId": 64,
+    "name": "KrackJack 200g",
+    "displayName": "KrackJack 200g",
+    "cat": "Snacks",
+    "emoji": "🍪",
+    "unit": "200 g",
+    "price": 28,
+    "mrp": 35,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_265",
+    "baseId": 65,
+    "name": "Monaco Classic 200g",
+    "displayName": "Monaco Classic 200g",
+    "cat": "Snacks",
+    "emoji": "🍪",
+    "unit": "200 g",
+    "price": 28,
+    "mrp": 34,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_266",
+    "baseId": 66,
+    "name": "Lotte Choco Pie 12pc",
+    "displayName": "Lotte Choco Pie 12pc",
+    "cat": "Snacks",
+    "emoji": "🍰",
+    "unit": "12 pcs",
+    "price": 150,
+    "mrp": 168,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_267",
+    "baseId": 67,
+    "name": "Dairy Milk Silk 60g",
+    "displayName": "Dairy Milk Silk 60g",
+    "cat": "Snacks",
+    "emoji": "🍫",
+    "unit": "60 g",
+    "price": 82,
+    "mrp": 98,
+    "image": "https://images.unsplash.com/photo-1548907040-4d42c42c9f43?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_268",
+    "baseId": 68,
+    "name": "Dairy Milk Fruit Nut 80g",
+    "displayName": "Dairy Milk Fruit Nut 80g",
+    "cat": "Snacks",
+    "emoji": "🍫",
+    "unit": "80 g",
+    "price": 85,
+    "mrp": 103,
+    "image": "https://images.unsplash.com/photo-1548907040-4d42c42c9f43?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_269",
+    "baseId": 69,
+    "name": "KitKat 2 Finger 38g",
+    "displayName": "KitKat 2 Finger 38g",
+    "cat": "Snacks",
+    "emoji": "🍫",
+    "unit": "38 g",
+    "price": 26,
+    "mrp": 31,
+    "image": "https://images.unsplash.com/photo-1548907040-4d42c42c9f43?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_270",
+    "baseId": 70,
+    "name": "KitKat 4 Finger 42g",
+    "displayName": "KitKat 4 Finger 42g",
+    "cat": "Snacks",
+    "emoji": "🍫",
+    "unit": "42 g",
+    "price": 30,
+    "mrp": 36,
+    "image": "https://images.unsplash.com/photo-1548907040-4d42c42c9f43?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_271",
+    "baseId": 71,
+    "name": "Perk 28g",
+    "displayName": "Perk 28g",
+    "cat": "Snacks",
+    "emoji": "🍫",
+    "unit": "28 g",
+    "price": 23,
+    "mrp": 22,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_272",
+    "baseId": 72,
+    "name": "5 Star 25g",
+    "displayName": "5 Star 25g",
+    "cat": "Snacks",
+    "emoji": "🍫",
+    "unit": "25 g",
+    "price": 21,
+    "mrp": 25,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_273",
+    "baseId": 73,
+    "name": "Snickers 50g",
+    "displayName": "Snickers 50g",
+    "cat": "Snacks",
+    "emoji": "🍫",
+    "unit": "50 g",
+    "price": 46,
+    "mrp": 51,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_274",
+    "baseId": 74,
+    "name": "Mars Bar 51g",
+    "displayName": "Mars Bar 51g",
+    "cat": "Snacks",
+    "emoji": "🍫",
+    "unit": "51 g",
+    "price": 48,
+    "mrp": 53,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_275",
+    "baseId": 75,
+    "name": "Twix Bar 50g",
+    "displayName": "Twix Bar 50g",
+    "cat": "Snacks",
+    "emoji": "🍫",
+    "unit": "50 g",
+    "price": 49,
+    "mrp": 57,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_276",
+    "baseId": 76,
+    "name": "Galaxy Smooth 56g",
+    "displayName": "Galaxy Smooth 56g",
+    "cat": "Snacks",
+    "emoji": "🍫",
+    "unit": "56 g",
+    "price": 63,
+    "mrp": 73,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_277",
+    "baseId": 77,
+    "name": "Milkybar 25g",
+    "displayName": "Milkybar 25g",
+    "cat": "Snacks",
+    "emoji": "🍫",
+    "unit": "25 g",
+    "price": 18,
+    "mrp": 18,
+    "image": "https://images.unsplash.com/photo-1550583724-b2692b85b150?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_278",
+    "baseId": 78,
+    "name": "Lindt Dark 80g",
+    "displayName": "Lindt Dark 80g",
+    "cat": "Snacks",
+    "emoji": "🍫",
+    "unit": "80 g",
+    "price": 303,
+    "mrp": 358,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_279",
+    "baseId": 79,
+    "name": "Ferrero Rocher 3pc",
+    "displayName": "Ferrero Rocher 3pc",
+    "cat": "Snacks",
+    "emoji": "🍫",
+    "unit": "3 pcs",
+    "price": 130,
+    "mrp": 149,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_280",
+    "baseId": 80,
+    "name": "Center Fresh Gum 20pc",
+    "displayName": "Center Fresh Gum 20pc",
+    "cat": "Snacks",
+    "emoji": "🍬",
+    "unit": "20 pcs",
+    "price": 26,
+    "mrp": 29,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_281",
+    "baseId": 81,
+    "name": "Hajmola Digestive 120tabs",
+    "displayName": "Hajmola Digestive 120tabs",
+    "cat": "Snacks",
+    "emoji": "🍬",
+    "unit": "120 tabs",
+    "price": 49,
+    "mrp": 52,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_282",
+    "baseId": 82,
+    "name": "Chana Chor Garam 150g",
+    "displayName": "Chana Chor Garam 150g",
+    "cat": "Snacks",
+    "emoji": "🥜",
+    "unit": "150 g",
+    "price": 39,
+    "mrp": 42,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_283",
+    "baseId": 83,
+    "name": "Salted Peanuts 200g",
+    "displayName": "Salted Peanuts 200g",
+    "cat": "Snacks",
+    "emoji": "🥜",
+    "unit": "200 g",
+    "price": 57,
+    "mrp": 62,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_284",
+    "baseId": 84,
+    "name": "Masala Peanuts 200g",
+    "displayName": "Masala Peanuts 200g",
+    "cat": "Snacks",
+    "emoji": "🥜",
+    "unit": "200 g",
+    "price": 56,
+    "mrp": 69,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_285",
+    "baseId": 85,
+    "name": "Roasted Chana Salted 200g",
+    "displayName": "Roasted Chana Salted 200g",
+    "cat": "Snacks",
+    "emoji": "🥜",
+    "unit": "200 g",
+    "price": 45,
+    "mrp": 57,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_286",
+    "baseId": 86,
+    "name": "Banana Chips Salted 150g",
+    "displayName": "Banana Chips Salted 150g",
+    "cat": "Snacks",
+    "emoji": "🍌",
+    "unit": "150 g",
+    "price": 66,
+    "mrp": 75,
+    "image": "https://images.unsplash.com/photo-1571771894821-ce9b6c11b08e?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_287",
+    "baseId": 87,
+    "name": "Fox Nuts Roasted 80g",
+    "displayName": "Fox Nuts Roasted 80g",
+    "cat": "Snacks",
+    "emoji": "🍿",
+    "unit": "80 g",
+    "price": 92,
+    "mrp": 107,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_288",
+    "baseId": 88,
+    "name": "Khakhra Methi 200g",
+    "displayName": "Khakhra Methi 200g",
+    "cat": "Snacks",
+    "emoji": "🫓",
+    "unit": "200 g",
+    "price": 78,
+    "mrp": 86,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_289",
+    "baseId": 89,
+    "name": "Bhakarwadi 200g",
+    "displayName": "Bhakarwadi 200g",
+    "cat": "Snacks",
+    "emoji": "🥨",
+    "unit": "200 g",
+    "price": 89,
+    "mrp": 106,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_290",
+    "baseId": 90,
+    "name": "Soan Papdi 500g",
+    "displayName": "Soan Papdi 500g",
+    "cat": "Snacks",
+    "emoji": "🍬",
+    "unit": "500 g",
+    "price": 153,
+    "mrp": 168,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_291",
+    "baseId": 91,
+    "name": "Rasgulla Tin 500g",
+    "displayName": "Rasgulla Tin 500g",
+    "cat": "Snacks",
+    "emoji": "🍬",
+    "unit": "500 g",
+    "price": 133,
+    "mrp": 163,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_292",
+    "baseId": 92,
+    "name": "Gulab Jamun Tin 500g",
+    "displayName": "Gulab Jamun Tin 500g",
+    "cat": "Snacks",
+    "emoji": "🍬",
+    "unit": "500 g",
+    "price": 143,
+    "mrp": 177,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_293",
+    "baseId": 93,
+    "name": "Haldiram Gujarati Mix 200g",
+    "displayName": "Haldiram Gujarati Mix 200g",
+    "cat": "Snacks",
+    "emoji": "🥨",
+    "unit": "200 g",
+    "price": 58,
+    "mrp": 61,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_294",
+    "baseId": 94,
+    "name": "Haldiram Punjabi Tadka 200g",
+    "displayName": "Haldiram Punjabi Tadka 200g",
+    "cat": "Snacks",
+    "emoji": "🥨",
+    "unit": "200 g",
+    "price": 56,
+    "mrp": 61,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_295",
+    "baseId": 95,
+    "name": "Haldiram Aloo Lachha 150g",
+    "displayName": "Haldiram Aloo Lachha 150g",
+    "cat": "Snacks",
+    "emoji": "🥨",
+    "unit": "150 g",
+    "price": 46,
+    "mrp": 57,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_296",
+    "baseId": 96,
+    "name": "Haldiram Chana Dal 150g",
+    "displayName": "Haldiram Chana Dal 150g",
+    "cat": "Snacks",
+    "emoji": "🥨",
+    "unit": "150 g",
+    "price": 44,
+    "mrp": 48,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_297",
+    "baseId": 97,
+    "name": "Kettle Chips Sea Salt 113g",
+    "displayName": "Kettle Chips Sea Salt 113g",
+    "cat": "Snacks",
+    "emoji": "🥔",
+    "unit": "113 g",
+    "price": 101,
+    "mrp": 120,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_298",
+    "baseId": 98,
+    "name": "Cream Roll Choco 50g",
+    "displayName": "Cream Roll Choco 50g",
+    "cat": "Snacks",
+    "emoji": "🍰",
+    "unit": "50 g",
+    "price": 28,
+    "mrp": 31,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_299",
+    "baseId": 99,
+    "name": "Muffin Chocolate 40g",
+    "displayName": "Muffin Chocolate 40g",
+    "cat": "Snacks",
+    "emoji": "🧁",
+    "unit": "40 g",
+    "price": 22,
+    "mrp": 25,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_300",
+    "baseId": 0,
+    "name": "Britannia Gobbles Cake 50g",
+    "displayName": "Britannia Gobbles Cake 50g",
+    "cat": "Snacks",
+    "emoji": "🍰",
+    "unit": "50 g",
+    "price": 23,
+    "mrp": 25,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_301",
+    "baseId": 1,
+    "name": "Oreo Chococrunch 120g",
+    "displayName": "Oreo Chococrunch 120g",
+    "cat": "Snacks",
+    "emoji": "🍪",
+    "unit": "120 g",
+    "price": 41,
+    "mrp": 49,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_302",
+    "baseId": 2,
+    "name": "Dark Fantasy Coffee 300g",
+    "displayName": "Dark Fantasy Coffee 300g",
+    "cat": "Snacks",
+    "emoji": "🍪",
+    "unit": "300 g",
+    "price": 86,
+    "mrp": 99,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_303",
+    "baseId": 3,
+    "name": "Good Day Chunkies 100g",
+    "displayName": "Good Day Chunkies 100g",
+    "cat": "Snacks",
+    "emoji": "🍪",
+    "unit": "100 g",
+    "price": 34,
+    "mrp": 37,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_304",
+    "baseId": 4,
+    "name": "Too Yumm Fox Nuts 90g",
+    "displayName": "Too Yumm Fox Nuts 90g",
+    "cat": "Snacks",
+    "emoji": "🍿",
+    "unit": "90 g",
+    "price": 46,
+    "mrp": 51,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_305",
+    "baseId": 5,
+    "name": "Cornitos Salsa 60g",
+    "displayName": "Cornitos Salsa 60g",
+    "cat": "Snacks",
+    "emoji": "🧀",
+    "unit": "60 g",
+    "price": 39,
+    "mrp": 40,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_306",
+    "baseId": 6,
+    "name": "Peanut Chikki 100g",
+    "displayName": "Peanut Chikki 100g",
+    "cat": "Snacks",
+    "emoji": "🥜",
+    "unit": "100 g",
+    "price": 25,
+    "mrp": 29,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_307",
+    "baseId": 7,
+    "name": "Sesame Chikki 100g",
+    "displayName": "Sesame Chikki 100g",
+    "cat": "Snacks",
+    "emoji": "🥜",
+    "unit": "100 g",
+    "price": 32,
+    "mrp": 37,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_308",
+    "baseId": 8,
+    "name": "Lays Classic Salted 50g Pack 2",
+    "displayName": "Lays Classic Salted 50g Pack 2",
+    "cat": "Snacks",
+    "emoji": "🥔",
+    "unit": "50 g",
+    "price": 28,
+    "mrp": 32,
+    "image": "https://images.unsplash.com/photo-1566478989037-eec170784d0b?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_309",
+    "baseId": 9,
+    "name": "Lays Magic Masala 50g Pack 2",
+    "displayName": "Lays Magic Masala 50g Pack 2",
+    "cat": "Snacks",
+    "emoji": "🥔",
+    "unit": "50 g",
+    "price": 31,
+    "mrp": 31,
+    "image": "https://images.unsplash.com/photo-1566478989037-eec170784d0b?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_310",
+    "baseId": 10,
+    "name": "Bisleri Water 1L",
+    "displayName": "Bisleri Water 1L",
+    "cat": "Beverages",
+    "emoji": "💧",
+    "unit": "1 L",
+    "price": 20,
+    "mrp": 24,
+    "image": "https://images.unsplash.com/photo-1600271886742-f049cd451bba?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_311",
+    "baseId": 11,
+    "name": "Bisleri Water 5L",
+    "displayName": "Bisleri Water 5L",
+    "cat": "Beverages",
+    "emoji": "💧",
+    "unit": "5 L",
+    "price": 68,
+    "mrp": 79,
+    "image": "https://images.unsplash.com/photo-1600271886742-f049cd451bba?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_312",
+    "baseId": 12,
+    "name": "Kinley Water 1L",
+    "displayName": "Kinley Water 1L",
+    "cat": "Beverages",
+    "emoji": "💧",
+    "unit": "1 L",
+    "price": 22,
+    "mrp": 22,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_313",
+    "baseId": 13,
+    "name": "Aquafina Water 1L",
+    "displayName": "Aquafina Water 1L",
+    "cat": "Beverages",
+    "emoji": "💧",
+    "unit": "1 L",
+    "price": 23,
+    "mrp": 23,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_314",
+    "baseId": 14,
+    "name": "Coca Cola 750ml",
+    "displayName": "Coca Cola 750ml",
+    "cat": "Beverages",
+    "emoji": "🥤",
+    "unit": "750 ml",
+    "price": 44,
+    "mrp": 50,
+    "image": "https://images.unsplash.com/photo-1624552986669-95bc042add66?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_315",
+    "baseId": 15,
+    "name": "Coca Cola Can 300ml",
+    "displayName": "Coca Cola Can 300ml",
+    "cat": "Beverages",
+    "emoji": "🥤",
+    "unit": "300 ml",
+    "price": 41,
+    "mrp": 46,
+    "image": "https://images.unsplash.com/photo-1624552986669-95bc042add66?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_316",
+    "baseId": 16,
+    "name": "Pepsi 750ml",
+    "displayName": "Pepsi 750ml",
+    "cat": "Beverages",
+    "emoji": "🥤",
+    "unit": "750 ml",
+    "price": 44,
+    "mrp": 45,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_317",
+    "baseId": 17,
+    "name": "Thums Up 750ml",
+    "displayName": "Thums Up 750ml",
+    "cat": "Beverages",
+    "emoji": "🥤",
+    "unit": "750 ml",
+    "price": 43,
+    "mrp": 47,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_318",
+    "baseId": 18,
+    "name": "Sprite 750ml",
+    "displayName": "Sprite 750ml",
+    "cat": "Beverages",
+    "emoji": "🥤",
+    "unit": "750 ml",
+    "price": 43,
+    "mrp": 48,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_319",
+    "baseId": 19,
+    "name": "Fanta 750ml",
+    "displayName": "Fanta 750ml",
+    "cat": "Beverages",
+    "emoji": "🥤",
+    "unit": "750 ml",
+    "price": 41,
+    "mrp": 47,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_320",
+    "baseId": 20,
+    "name": "Limca 750ml",
+    "displayName": "Limca 750ml",
+    "cat": "Beverages",
+    "emoji": "🥤",
+    "unit": "750 ml",
+    "price": 40,
+    "mrp": 47,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_321",
+    "baseId": 21,
+    "name": "Mountain Dew 750ml",
+    "displayName": "Mountain Dew 750ml",
+    "cat": "Beverages",
+    "emoji": "🥤",
+    "unit": "750 ml",
+    "price": 44,
+    "mrp": 48,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_322",
+    "baseId": 22,
+    "name": "Red Bull 250ml",
+    "displayName": "Red Bull 250ml",
+    "cat": "Beverages",
+    "emoji": "⚡",
+    "unit": "250 ml",
+    "price": 128,
+    "mrp": 153,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_323",
+    "baseId": 23,
+    "name": "Monster Energy 350ml",
+    "displayName": "Monster Energy 350ml",
+    "cat": "Beverages",
+    "emoji": "⚡",
+    "unit": "350 ml",
+    "price": 145,
+    "mrp": 183,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_324",
+    "baseId": 24,
+    "name": "Paper Boat Aam Panna 250ml",
+    "displayName": "Paper Boat Aam Panna 250ml",
+    "cat": "Beverages",
+    "emoji": "🧃",
+    "unit": "250 ml",
+    "price": 36,
+    "mrp": 39,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_325",
+    "baseId": 25,
+    "name": "Paper Boat Jaljeera 250ml",
+    "displayName": "Paper Boat Jaljeera 250ml",
+    "cat": "Beverages",
+    "emoji": "🧃",
+    "unit": "250 ml",
+    "price": 36,
+    "mrp": 40,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_326",
+    "baseId": 26,
+    "name": "Real Orange Juice 1L",
+    "displayName": "Real Orange Juice 1L",
+    "cat": "Beverages",
+    "emoji": "🧃",
+    "unit": "1 L",
+    "price": 133,
+    "mrp": 146,
+    "image": "https://images.unsplash.com/photo-1544148103-055afe5f1bb9?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_327",
+    "baseId": 27,
+    "name": "Real Mixed Fruit 1L",
+    "displayName": "Real Mixed Fruit 1L",
+    "cat": "Beverages",
+    "emoji": "🧃",
+    "unit": "1 L",
+    "price": 133,
+    "mrp": 162,
+    "image": "https://images.unsplash.com/photo-1544148103-055afe5f1bb9?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_328",
+    "baseId": 28,
+    "name": "Tropicana Orange 1L",
+    "displayName": "Tropicana Orange 1L",
+    "cat": "Beverages",
+    "emoji": "🧃",
+    "unit": "1 L",
+    "price": 119,
+    "mrp": 137,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_329",
+    "baseId": 29,
+    "name": "Tropicana Mixed Fruit 1L",
+    "displayName": "Tropicana Mixed Fruit 1L",
+    "cat": "Beverages",
+    "emoji": "🧃",
+    "unit": "1 L",
+    "price": 122,
+    "mrp": 139,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_330",
+    "baseId": 30,
+    "name": "Coconut Water Tetra 200ml",
+    "displayName": "Coconut Water Tetra 200ml",
+    "cat": "Beverages",
+    "emoji": "🥥",
+    "unit": "200 ml",
+    "price": 37,
+    "mrp": 42,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_331",
+    "baseId": 31,
+    "name": "Raw Pressery Coffee 200ml",
+    "displayName": "Raw Pressery Coffee 200ml",
+    "cat": "Beverages",
+    "emoji": "☕",
+    "unit": "200 ml",
+    "price": 55,
+    "mrp": 64,
+    "image": "https://images.unsplash.com/photo-1461023058943-07fcbe16d735?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_332",
+    "baseId": 32,
+    "name": "Nescafe Cold Coffee 200ml",
+    "displayName": "Nescafe Cold Coffee 200ml",
+    "cat": "Beverages",
+    "emoji": "☕",
+    "unit": "200 ml",
+    "price": 49,
+    "mrp": 54,
+    "image": "https://images.unsplash.com/photo-1461023058943-07fcbe16d735?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_333",
+    "baseId": 33,
+    "name": "Amul Kool Kesar 200ml",
+    "displayName": "Amul Kool Kesar 200ml",
+    "cat": "Beverages",
+    "emoji": "🥛",
+    "unit": "200 ml",
+    "price": 31,
+    "mrp": 34,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_334",
+    "baseId": 34,
+    "name": "Badam Milk 200ml",
+    "displayName": "Badam Milk 200ml",
+    "cat": "Beverages",
+    "emoji": "🥛",
+    "unit": "200 ml",
+    "price": 36,
+    "mrp": 39,
+    "image": "https://images.unsplash.com/photo-1550583724-b2692b85b150?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_335",
+    "baseId": 35,
+    "name": "Mango Lassi Tetra 180ml",
+    "displayName": "Mango Lassi Tetra 180ml",
+    "cat": "Beverages",
+    "emoji": "🥛",
+    "unit": "180 ml",
+    "price": 29,
+    "mrp": 31,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_336",
+    "baseId": 36,
+    "name": "Tata Gold Tea 250g",
+    "displayName": "Tata Gold Tea 250g",
+    "cat": "Beverages",
+    "emoji": "🍵",
+    "unit": "250 g",
+    "price": 119,
+    "mrp": 143,
+    "image": "https://images.unsplash.com/photo-1571934811356-5cc061b6821f?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_337",
+    "baseId": 37,
+    "name": "Green Tea Lipton 25bags",
+    "displayName": "Green Tea Lipton 25bags",
+    "cat": "Beverages",
+    "emoji": "🍵",
+    "unit": "25 pcs",
+    "price": 169,
+    "mrp": 194,
+    "image": "https://images.unsplash.com/photo-1571934811356-5cc061b6821f?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_338",
+    "baseId": 38,
+    "name": "Nescafe Classic 50g",
+    "displayName": "Nescafe Classic 50g",
+    "cat": "Beverages",
+    "emoji": "☕",
+    "unit": "50 g",
+    "price": 149,
+    "mrp": 176,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_339",
+    "baseId": 39,
+    "name": "Bru Instant 100g",
+    "displayName": "Bru Instant 100g",
+    "cat": "Beverages",
+    "emoji": "☕",
+    "unit": "100 g",
+    "price": 201,
+    "mrp": 234,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_340",
+    "baseId": 40,
+    "name": "Bournvita 500g",
+    "displayName": "Bournvita 500g",
+    "cat": "Beverages",
+    "emoji": "🍫",
+    "unit": "500 g",
+    "price": 262,
+    "mrp": 294,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_341",
+    "baseId": 41,
+    "name": "Horlicks Classic 500g",
+    "displayName": "Horlicks Classic 500g",
+    "cat": "Beverages",
+    "emoji": "🍫",
+    "unit": "500 g",
+    "price": 286,
+    "mrp": 350,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_342",
+    "baseId": 42,
+    "name": "Boost 500g",
+    "displayName": "Boost 500g",
+    "cat": "Beverages",
+    "emoji": "🍫",
+    "unit": "500 g",
+    "price": 282,
+    "mrp": 347,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_343",
+    "baseId": 43,
+    "name": "Glucon-D Orange 400g",
+    "displayName": "Glucon-D Orange 400g",
+    "cat": "Beverages",
+    "emoji": "⚡",
+    "unit": "400 g",
+    "price": 198,
+    "mrp": 225,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_344",
+    "baseId": 44,
+    "name": "Gatorade Blue Bolt 500ml",
+    "displayName": "Gatorade Blue Bolt 500ml",
+    "cat": "Beverages",
+    "emoji": "⚡",
+    "unit": "500 ml",
+    "price": 51,
+    "mrp": 63,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_345",
+    "baseId": 45,
+    "name": "Pepsi Black Can 300ml",
+    "displayName": "Pepsi Black Can 300ml",
+    "cat": "Beverages",
+    "emoji": "🥤",
+    "unit": "300 ml",
+    "price": 40,
+    "mrp": 50,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_346",
+    "baseId": 46,
+    "name": "Coke Zero Can 300ml",
+    "displayName": "Coke Zero Can 300ml",
+    "cat": "Beverages",
+    "emoji": "🥤",
+    "unit": "300 ml",
+    "price": 44,
+    "mrp": 47,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_347",
+    "baseId": 47,
+    "name": "Smoothie Strawberry 200ml",
+    "displayName": "Smoothie Strawberry 200ml",
+    "cat": "Beverages",
+    "emoji": "🧃",
+    "unit": "200 ml",
+    "price": 68,
+    "mrp": 75,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_348",
+    "baseId": 48,
+    "name": "ORS Apple 200ml",
+    "displayName": "ORS Apple 200ml",
+    "cat": "Beverages",
+    "emoji": "💧",
+    "unit": "200 ml",
+    "price": 32,
+    "mrp": 36,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_349",
+    "baseId": 49,
+    "name": "Tang Orange 500g",
+    "displayName": "Tang Orange 500g",
+    "cat": "Beverages",
+    "emoji": "🧃",
+    "unit": "500 g",
+    "price": 129,
+    "mrp": 146,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_350",
+    "baseId": 50,
+    "name": "Rasna Mango 500g",
+    "displayName": "Rasna Mango 500g",
+    "cat": "Beverages",
+    "emoji": "🧃",
+    "unit": "500 g",
+    "price": 102,
+    "mrp": 120,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_351",
+    "baseId": 51,
+    "name": "Tea Taj Mahal 250g",
+    "displayName": "Tea Taj Mahal 250g",
+    "cat": "Beverages",
+    "emoji": "🍵",
+    "unit": "250 g",
+    "price": 136,
+    "mrp": 169,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_352",
+    "baseId": 52,
+    "name": "Honey Lemon Tea Cup 100ml",
+    "displayName": "Honey Lemon Tea Cup 100ml",
+    "cat": "Beverages",
+    "emoji": "🍵",
+    "unit": "100 ml",
+    "price": 37,
+    "mrp": 43,
+    "image": "https://images.unsplash.com/photo-1571934811356-5cc061b6821f?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_353",
+    "baseId": 53,
+    "name": "Cold Pressed Green Juice 250ml",
+    "displayName": "Cold Pressed Green Juice 250ml",
+    "cat": "Beverages",
+    "emoji": "🥤",
+    "unit": "250 ml",
+    "price": 83,
+    "mrp": 92,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_354",
+    "baseId": 54,
+    "name": "Sugarcane Juice 250ml",
+    "displayName": "Sugarcane Juice 250ml",
+    "cat": "Beverages",
+    "emoji": "🧃",
+    "unit": "250 ml",
+    "price": 42,
+    "mrp": 45,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_355",
+    "baseId": 55,
+    "name": "Dettol Soap 125g x4",
+    "displayName": "Dettol Soap 125g x4",
+    "cat": "Personal Care",
+    "emoji": "🧼",
+    "unit": "4 pcs",
+    "price": 152,
+    "mrp": 175,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_356",
+    "baseId": 56,
+    "name": "Dove Soap Cream 100g x3",
+    "displayName": "Dove Soap Cream 100g x3",
+    "cat": "Personal Care",
+    "emoji": "🧼",
+    "unit": "3 pcs",
+    "price": 195,
+    "mrp": 238,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_357",
+    "baseId": 57,
+    "name": "Lux Rose Soap 125g",
+    "displayName": "Lux Rose Soap 125g",
+    "cat": "Personal Care",
+    "emoji": "🧼",
+    "unit": "125 g",
+    "price": 40,
+    "mrp": 45,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_358",
+    "baseId": 58,
+    "name": "Lifebuoy Soap 125g",
+    "displayName": "Lifebuoy Soap 125g",
+    "cat": "Personal Care",
+    "emoji": "🧼",
+    "unit": "125 g",
+    "price": 34,
+    "mrp": 38,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_359",
+    "baseId": 59,
+    "name": "Pears Soap 125g",
+    "displayName": "Pears Soap 125g",
+    "cat": "Personal Care",
+    "emoji": "🧼",
+    "unit": "125 g",
+    "price": 69,
+    "mrp": 77,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_360",
+    "baseId": 60,
+    "name": "Head & Shoulders 340ml",
+    "displayName": "Head & Shoulders 340ml",
+    "cat": "Personal Care",
+    "emoji": "🧴",
+    "unit": "340 ml",
+    "price": 293,
+    "mrp": 351,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_361",
+    "baseId": 61,
+    "name": "Dove Shampoo 340ml",
+    "displayName": "Dove Shampoo 340ml",
+    "cat": "Personal Care",
+    "emoji": "🧴",
+    "unit": "340 ml",
+    "price": 316,
+    "mrp": 388,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_362",
+    "baseId": 62,
+    "name": "Clinic Plus 340ml",
+    "displayName": "Clinic Plus 340ml",
+    "cat": "Personal Care",
+    "emoji": "🧴",
+    "unit": "340 ml",
+    "price": 165,
+    "mrp": 209,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_363",
+    "baseId": 63,
+    "name": "Sunsilk Shampoo 340ml",
+    "displayName": "Sunsilk Shampoo 340ml",
+    "cat": "Personal Care",
+    "emoji": "🧴",
+    "unit": "340 ml",
+    "price": 203,
+    "mrp": 239,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_364",
+    "baseId": 64,
+    "name": "Colgate Toothpaste 150g",
+    "displayName": "Colgate Toothpaste 150g",
+    "cat": "Personal Care",
+    "emoji": "🪥",
+    "unit": "150 g",
+    "price": 87,
+    "mrp": 100,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_365",
+    "baseId": 65,
+    "name": "Closeup Red Hot 150g",
+    "displayName": "Closeup Red Hot 150g",
+    "cat": "Personal Care",
+    "emoji": "🪥",
+    "unit": "150 g",
+    "price": 85,
+    "mrp": 102,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_366",
+    "baseId": 66,
+    "name": "Patanjali Dant Kanti 150g",
+    "displayName": "Patanjali Dant Kanti 150g",
+    "cat": "Personal Care",
+    "emoji": "🪥",
+    "unit": "150 g",
+    "price": 69,
+    "mrp": 79,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_367",
+    "baseId": 67,
+    "name": "Sensodyne 100g",
+    "displayName": "Sensodyne 100g",
+    "cat": "Personal Care",
+    "emoji": "🪥",
+    "unit": "100 g",
+    "price": 101,
+    "mrp": 117,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_368",
+    "baseId": 68,
+    "name": "Face Wash Himalaya Neem 100ml",
+    "displayName": "Face Wash Himalaya Neem 100ml",
+    "cat": "Personal Care",
+    "emoji": "🧴",
+    "unit": "100 ml",
+    "price": 99,
+    "mrp": 117,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_369",
+    "baseId": 69,
+    "name": "Ponds Face Wash 100g",
+    "displayName": "Ponds Face Wash 100g",
+    "cat": "Personal Care",
+    "emoji": "🧴",
+    "unit": "100 g",
+    "price": 123,
+    "mrp": 149,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_370",
+    "baseId": 70,
+    "name": "Nivea Soft Cream 100ml",
+    "displayName": "Nivea Soft Cream 100ml",
+    "cat": "Personal Care",
+    "emoji": "🧴",
+    "unit": "100 ml",
+    "price": 149,
+    "mrp": 168,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_371",
+    "baseId": 71,
+    "name": "Vaseline Lotion 200ml",
+    "displayName": "Vaseline Lotion 200ml",
+    "cat": "Personal Care",
+    "emoji": "🧴",
+    "unit": "200 ml",
+    "price": 179,
+    "mrp": 203,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_372",
+    "baseId": 72,
+    "name": "Boroline Cream 40g",
+    "displayName": "Boroline Cream 40g",
+    "cat": "Personal Care",
+    "emoji": "🧴",
+    "unit": "40 g",
+    "price": 46,
+    "mrp": 47,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_373",
+    "baseId": 73,
+    "name": "Nivea Deo Men 150ml",
+    "displayName": "Nivea Deo Men 150ml",
+    "cat": "Personal Care",
+    "emoji": "🧴",
+    "unit": "150 ml",
+    "price": 200,
+    "mrp": 238,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_374",
+    "baseId": 74,
+    "name": "Fogg Deo 150ml",
+    "displayName": "Fogg Deo 150ml",
+    "cat": "Personal Care",
+    "emoji": "🧴",
+    "unit": "150 ml",
+    "price": 228,
+    "mrp": 255,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_375",
+    "baseId": 75,
+    "name": "Stayfree Pads 20pc",
+    "displayName": "Stayfree Pads 20pc",
+    "cat": "Personal Care",
+    "emoji": "🧻",
+    "unit": "20 pcs",
+    "price": 102,
+    "mrp": 126,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_376",
+    "baseId": 76,
+    "name": "Whisper Choice 20pc",
+    "displayName": "Whisper Choice 20pc",
+    "cat": "Personal Care",
+    "emoji": "🧻",
+    "unit": "20 pcs",
+    "price": 99,
+    "mrp": 115,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_377",
+    "baseId": 77,
+    "name": "Gillette Foam 196g",
+    "displayName": "Gillette Foam 196g",
+    "cat": "Personal Care",
+    "emoji": "🪒",
+    "unit": "196 g",
+    "price": 182,
+    "mrp": 201,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_378",
+    "baseId": 78,
+    "name": "Oral-B Toothbrush x2",
+    "displayName": "Oral-B Toothbrush x2",
+    "cat": "Personal Care",
+    "emoji": "🪥",
+    "unit": "2 pcs",
+    "price": 67,
+    "mrp": 75,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_379",
+    "baseId": 79,
+    "name": "Pears Face Wash 100g",
+    "displayName": "Pears Face Wash 100g",
+    "cat": "Personal Care",
+    "emoji": "🧴",
+    "unit": "100 g",
+    "price": 100,
+    "mrp": 125,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_380",
+    "baseId": 80,
+    "name": "Surf Excel 1kg",
+    "displayName": "Surf Excel 1kg",
+    "cat": "Home Care",
+    "emoji": "🧹",
+    "unit": "1 kg",
+    "price": 201,
+    "mrp": 226,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_381",
+    "baseId": 81,
+    "name": "Ariel Detergent 1kg",
+    "displayName": "Ariel Detergent 1kg",
+    "cat": "Home Care",
+    "emoji": "🧹",
+    "unit": "1 kg",
+    "price": 229,
+    "mrp": 263,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_382",
+    "baseId": 82,
+    "name": "Tide Plus 1kg",
+    "displayName": "Tide Plus 1kg",
+    "cat": "Home Care",
+    "emoji": "🧹",
+    "unit": "1 kg",
+    "price": 118,
+    "mrp": 131,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_383",
+    "baseId": 83,
+    "name": "Wheel Powder 1kg",
+    "displayName": "Wheel Powder 1kg",
+    "cat": "Home Care",
+    "emoji": "🧹",
+    "unit": "1 kg",
+    "price": 64,
+    "mrp": 77,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_384",
+    "baseId": 84,
+    "name": "Vim Liquid 500ml",
+    "displayName": "Vim Liquid 500ml",
+    "cat": "Home Care",
+    "emoji": "🧽",
+    "unit": "500 ml",
+    "price": 120,
+    "mrp": 137,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_385",
+    "baseId": 85,
+    "name": "Vim Bar 3x 100g",
+    "displayName": "Vim Bar 3x 100g",
+    "cat": "Home Care",
+    "emoji": "🧽",
+    "unit": "3 pcs",
+    "price": 32,
+    "mrp": 40,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_386",
+    "baseId": 86,
+    "name": "Colin Glass Cleaner 500ml",
+    "displayName": "Colin Glass Cleaner 500ml",
+    "cat": "Home Care",
+    "emoji": "🧹",
+    "unit": "500 ml",
+    "price": 89,
+    "mrp": 103,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_387",
+    "baseId": 87,
+    "name": "Lizol Floor Cleaner 500ml",
+    "displayName": "Lizol Floor Cleaner 500ml",
+    "cat": "Home Care",
+    "emoji": "🧹",
+    "unit": "500 ml",
+    "price": 98,
+    "mrp": 119,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_388",
+    "baseId": 88,
+    "name": "Harpic Toilet Cleaner 500ml",
+    "displayName": "Harpic Toilet Cleaner 500ml",
+    "cat": "Home Care",
+    "emoji": "🧹",
+    "unit": "500 ml",
+    "price": 88,
+    "mrp": 97,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_389",
+    "baseId": 89,
+    "name": "Good Knight Gold Flash",
+    "displayName": "Good Knight Gold Flash",
+    "cat": "Home Care",
+    "emoji": "🦟",
+    "unit": "1 pc",
+    "price": 78,
+    "mrp": 92,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_390",
+    "baseId": 90,
+    "name": "All Out Ultra 45ml",
+    "displayName": "All Out Ultra 45ml",
+    "cat": "Home Care",
+    "emoji": "🦟",
+    "unit": "45 ml",
+    "price": 73,
+    "mrp": 92,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_391",
+    "baseId": 91,
+    "name": "Hit Spray Red 200ml",
+    "displayName": "Hit Spray Red 200ml",
+    "cat": "Home Care",
+    "emoji": "🦟",
+    "unit": "200 ml",
+    "price": 118,
+    "mrp": 143,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_392",
+    "baseId": 92,
+    "name": "Odopic Dish Bar 300g",
+    "displayName": "Odopic Dish Bar 300g",
+    "cat": "Home Care",
+    "emoji": "🧽",
+    "unit": "300 g",
+    "price": 27,
+    "mrp": 28,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_393",
+    "baseId": 93,
+    "name": "Scotch Brite Scrub 3pc",
+    "displayName": "Scotch Brite Scrub 3pc",
+    "cat": "Home Care",
+    "emoji": "🧽",
+    "unit": "3 pcs",
+    "price": 48,
+    "mrp": 60,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_394",
+    "baseId": 94,
+    "name": "Garbage Bags Large 15pc",
+    "displayName": "Garbage Bags Large 15pc",
+    "cat": "Home Care",
+    "emoji": "🗑️",
+    "unit": "15 pcs",
+    "price": 99,
+    "mrp": 124,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_395",
+    "baseId": 95,
+    "name": "Kitchen Tissue Roll 2pc",
+    "displayName": "Kitchen Tissue Roll 2pc",
+    "cat": "Home Care",
+    "emoji": "🧻",
+    "unit": "2 rolls",
+    "price": 92,
+    "mrp": 103,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_396",
+    "baseId": 96,
+    "name": "Aluminium Foil 10m",
+    "displayName": "Aluminium Foil 10m",
+    "cat": "Home Care",
+    "emoji": "🪗",
+    "unit": "10 m",
+    "price": 76,
+    "mrp": 93,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_397",
+    "baseId": 97,
+    "name": "Cling Wrap 15m",
+    "displayName": "Cling Wrap 15m",
+    "cat": "Home Care",
+    "emoji": "🪗",
+    "unit": "15 m",
+    "price": 69,
+    "mrp": 79,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_398",
+    "baseId": 98,
+    "name": "Dettol Liquid 250ml",
+    "displayName": "Dettol Liquid 250ml",
+    "cat": "Home Care",
+    "emoji": "🧴",
+    "unit": "250 ml",
+    "price": 101,
+    "mrp": 122,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "p_399",
+    "baseId": 99,
+    "name": "Savlon Handwash 200ml",
+    "displayName": "Savlon Handwash 200ml",
+    "cat": "Home Care",
+    "emoji": "🧴",
+    "unit": "200 ml",
+    "price": 86,
+    "mrp": 100,
+    "image": "https://images.unsplash.com/photo-1610831098506-5f9afff5c70a?w=600&q=80&auto=format&fit=crop"
+  }
+];
+
+
+// --- ADMIN OVERRIDE: load edited catalog from localStorage if exists ---
+try {
+  const _savedCatalog = localStorage.getItem('thb_products_v2');
+  if (_savedCatalog) {
+    const _parsed = JSON.parse(_savedCatalog);
+    if (Array.isArray(_parsed) && _parsed.length > 0) {
+      PRODUCTS = _parsed;
+      console.log('Loaded', PRODUCTS.length, 'products from admin panel');
+    }
+  }
+} catch(e) { console.warn('Failed to load admin catalog', e); }
+
+
+/* ---------- STATE ---------- */
+let activeCategory = 'All';
+let searchQuery = '';
+let sortMode = 'featured';
+let visibleCount = 32;
+let selectedProductId = null;
+let selectedVariant = null;
+let cartItems = [];
+try{ cartItems = JSON.parse(localStorage.getItem('thb_cart')||'[]'); }catch(e){ cartItems=[]; }
+
+/* ---------- DOM ---------- */
+const $ = (s)=>document.querySelector(s);
+const catsEl = $('#cats');
+const aislesEl = $('#aisles');
+const gridEl = $('#productsGrid');
+const searchEl = $('#searchInput');
+const sortEl = $('#sortSelect');
+const resultLabelEl = $('#resultLabel');
+const resultMetaEl = $('#resultMeta');
+const countEl = $('#cartCount');
+const toastEl = $('#toast');
+const toastTextEl = $('#toastText');
+const loadMoreBtn = $('#loadMoreBtn');
+const productOverlayEl = $('#productOverlay');
+const cartOverlayEl = $('#cartOverlay');
+const cartListEl = $('#cartList');
+const cartItemsLabelEl = $('#cartItemsLabel');
+const cartSubtotalEl = $('#cartSubtotal');
+const cartDeliveryEl = $('#cartDelivery');
+const cartTotalEl = $('#cartTotal');
+const whatsappBtn = $('#whatsappBtn');
+
+/* ---------- HELPERS ---------- */
+function esc(s){ return String(s).replace(/[&<>"']/g, m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m])); }
+function money(n){ return `₹${n}`; }
+function showToast(msg){
+  toastTextEl.textContent = msg;
+  toastEl.classList.add('show');
+  clearTimeout(showToast._t);
+  showToast._t = setTimeout(()=>toastEl.classList.remove('show'), 2200);
+}
+function saveCart(){
+  localStorage.setItem('thb_cart', JSON.stringify(cartItems));
+  updateCartBadge();
+}
+function updateCartBadge(){
+  const totalQty = cartItems.reduce((a,b)=>a+b.qty,0);
+  countEl.textContent = totalQty;
+  countEl.style.display = totalQty? 'grid':'none';
+}
+function getFiltered(){
+  let list = PRODUCTS.filter(p=>{
+    const matchesCat = activeCategory==='All' || p.cat===activeCategory;
+    const q = searchQuery.toLowerCase();
+    const matchesSearch = !q || p.displayName.toLowerCase().includes(q) || p.cat.toLowerCase().includes(q) || p.name.toLowerCase().includes(q);
+    return matchesCat && matchesSearch;
+  });
+  if(sortMode==='low') list = [...list].sort((a,b)=>a.price-b.price);
+  if(sortMode==='high') list = [...list].sort((a,b)=>b.price-a.price);
+  return list;
+}
+function getVariantsForProduct(p){
+  // smart variants based on unit type
+  const basePrice = p.price;
+  if(p.unit.includes('kg')){
+    return [
+      {label:'250 g', unit:'250 g', price: Math.max(15, Math.round(basePrice*0.32))},
+      {label:'500 g', unit:'500 g', price: Math.max(25, Math.round(basePrice*0.58))},
+      {label:'1 kg', unit:'1 kg', price: basePrice},
+    ];
+  } else if(p.unit.includes('g')){
+    return [
+      {label:'50 g', unit:'50 g', price: Math.max(10, Math.round(basePrice*0.35))},
+      {label:'100 g', unit:'100 g', price: Math.max(18, Math.round(basePrice*0.6))},
+      {label:p.unit, unit:p.unit, price: basePrice},
+    ];
+  } else if(p.unit.includes('L') || p.unit.includes('ml')){
+    return [
+      {label:'200 ml', unit:'200 ml', price: Math.max(15, Math.round(basePrice*0.4))},
+      {label:'500 ml', unit:'500 ml', price: Math.max(25, Math.round(basePrice*0.68))},
+      {label:p.unit, unit:p.unit, price: basePrice},
+    ];
+  } else if(p.unit.includes('pieces') || p.unit.includes('piece')){
+    return [
+      {label:'2 pieces', unit:'2 pieces', price: Math.max(20, Math.round(basePrice*0.55))},
+      {label:'4 pieces', unit:'4 pieces', price: Math.max(35, Math.round(basePrice*0.9))},
+      {label:p.unit, unit:p.unit, price: basePrice},
+    ];
+  } else {
+    return [
+      {label:'Small', unit:'Small', price: Math.max(12, Math.round(basePrice*0.55))},
+      {label:'Medium', unit:p.unit, price: basePrice},
+      {label:'Large', unit:p.unit+' · Large', price: Math.round(basePrice*1.45)},
+    ];
+  }
+}
+
+/* ---------- RENDER CATEGORIES ---------- */
+function renderCats(){
+  catsEl.innerHTML = CATEGORIES.map(c=>`
+    <button class="cat ${activeCategory===c.id?'active':''}" data-cat="${esc(c.id)}">
+      <div>${c.icon}</div><span>${esc(c.label)}</span>
+    </button>`).join('');
+  aislesEl.innerHTML = CATEGORIES.slice(1).map(c=>{
+    const count = PRODUCTS.filter(p=>p.cat===c.id).length;
+    return `<button class="aisle" data-cat="${esc(c.id)}"><span class="aisleIcon">${c.icon}</span><span><b>${esc(c.label)}</b><small>${count} products</small></span></button>`;
+  }).join('');
+}
+catsEl.addEventListener('click', e=>{
+  const btn = e.target.closest('[data-cat]'); if(!btn) return;
+  activeCategory = btn.dataset.cat;
+  visibleCount = 32;
+  renderCats(); renderProducts();
+  if(window.innerWidth<700) $('#productsGrid').scrollIntoView({behavior:'smooth', block:'start'});
+});
+aislesEl.addEventListener('click', e=>{
+  const btn = e.target.closest('[data-cat]'); if(!btn) return;
+  activeCategory = btn.dataset.cat;
+  visibleCount = 32;
+  renderCats(); renderProducts();
+  document.getElementById('productsGrid').scrollIntoView({behavior:'smooth'});
+});
+
+/* ---------- RENDER PRODUCTS ---------- */
+function renderProducts(){
+  const list = getFiltered();
+  const sliced = list.slice(0, visibleCount);
+  resultLabelEl.textContent = `${list.length}+ ITEMS`;
+  resultMetaEl.textContent = searchQuery? `for "${searchQuery}"` : `${activeCategory==='All'?'All categories':activeCategory} · ${list.length} products`;
+
+  if(!list.length){
+    gridEl.innerHTML = `<div class="empty">No items found for <b>${esc(searchQuery||activeCategory)}</b>.<br>Try another search or category.</div>`;
+    loadMoreBtn.style.display='none';
+    return;
+  }
+
+  gridEl.innerHTML = sliced.map((p, idx)=>{
+    const badge = idx%3===0 ? 'BESTSELLER' : (idx%5===0 ? 'NEW' : 'FRESH PICK');
+    return `<article class="product" data-id="${esc(p.id)}">
+      <span class="tag">${badge}</span>
+      <div class="pic" data-open="${esc(p.id)}">
+        ${p.image ? `<img src="${esc(p.image)}" alt="${esc(p.name)}" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='grid'"><span style="display:none;width:100%;height:100%;place-items:center">${p.emoji}</span>` : p.emoji}
+      </div>
+      <h3 title="${esc(p.name)}">${esc(p.name)}</h3>
+      <div class="meta">${esc(p.unit)} · 10 min</div>
+      <div class="priceRow">
+        <span class="price">${money(p.price)}<span class="mrp">${money(p.mrp)}</span></span>
+        <button class="add" data-add="${esc(p.id)}">ADD +</button>
+      </div>
+    </article>`;
+  }).join('');
+
+  loadMoreBtn.style.display = list.length > visibleCount ? 'inline-flex' : 'none';
+}
+
+gridEl.addEventListener('click', e=>{
+  const openBtn = e.target.closest('[data-open]');
+  if(openBtn){ openProduct(openBtn.dataset.open); return; }
+  const addBtn = e.target.closest('[data-add]');
+  if(addBtn){ quickAdd(addBtn.dataset.add); }
+});
+
+function quickAdd(productId){
+  const p = PRODUCTS.find(x=>x.id===productId);
+  if(!p) return;
+  const variants = getVariantsForProduct(p);
+  const defaultVariant = variants[variants.length-1];
+  addToCart(p, defaultVariant, 1);
+}
+
+/* ---------- CART LOGIC ---------- */
+function addToCart(product, variant, qty=1){
+  const cartId = `${product.id}__${variant.unit}`;
+  const existing = cartItems.find(x=>x.cartId===cartId);
+  if(existing){
+    existing.qty += qty;
+  } else {
+    cartItems.push({
+      cartId,
+      productId: product.id,
+      name: product.displayName,
+      fullName: `${product.displayName} · ${variant.label}`,
+      unit: variant.unit,
+      price: variant.price,
+      emoji: product.emoji,
+      image: product.image,
+      qty,
+    });
+  }
+  saveCart();
+  renderCart();
+  showToast(`${product.displayName} (${variant.label}) added`);
+}
+
+function changeQty(cartId, delta){
+  const item = cartItems.find(x=>x.cartId===cartId);
+  if(!item) return;
+  item.qty += delta;
+  if(item.qty<=0) cartItems = cartItems.filter(x=>x.cartId!==cartId);
+  saveCart();
+  renderCart();
+}
+
+function renderCart(){
+  updateCartBadge();
+  const totalQty = cartItems.reduce((a,b)=>a+b.qty,0);
+  const subtotal = cartItems.reduce((a,b)=>a+b.price*b.qty,0);
+  const delivery = subtotal===0 ? 0 : (subtotal>=299 ? 0 : 29);
+  const total = subtotal + delivery;
+
+  cartItemsLabelEl.textContent = totalQty? `(${totalQty})` : '';
+  cartSubtotalEl.textContent = money(subtotal);
+  cartDeliveryEl.textContent = delivery===0? (subtotal===0?'₹0':'FREE') : money(delivery);
+  cartTotalEl.textContent = money(total);
+
+  if(!cartItems.length){
+    cartListEl.innerHTML = `<div class="emptyCart"><div>🧺</div><b>Your basket is empty</b><br><small>Add something delicious to get started. Delivery in 10 minutes!</small></div>`;
+  } else {
+    cartListEl.innerHTML = cartItems.map(i=>`
+      <div class="cartRow">
+        <div class="cartIcon">${i.image? `<img src="${esc(i.image)}" alt="" onerror="this.style.display='none';this.nextElementSibling.style.display='grid'"><span style="display:none;width:100%;height:100%;place-items:center">${i.emoji}</span>` : i.emoji}</div>
+        <div class="cartInfo"><b>${esc(i.fullName)}</b><small>${esc(i.unit)} · ${money(i.price)} each</small></div>
+        <div class="qty"><button data-dec="${esc(i.cartId)}" aria-label="Decrease">−</button><b>${i.qty}</b><button data-inc="${esc(i.cartId)}" aria-label="Increase">+</button></div>
+      </div>`).join('');
+  }
+
+  // WhatsApp message
+  const orderId = 'THB-'+Date.now().toString().slice(-6);
+  const lines = cartItems.map((x,idx)=>`${idx+1}. ${x.fullName} (${x.unit}) x ${x.qty} = ₹${x.price*x.qty}`).join('\n');
+  const loc = sessionStorage.getItem('deliveryLocation') || 'Ludhiana, Punjab 141001';
+  const msg = `Hello TUM HUM basket! I want to order:\n\n🧾 INVOICE\nOrder ID: ${orderId}\n--------------------\n${lines}\n--------------------\nSubtotal: ₹${subtotal}\nDelivery: ${delivery===0?'FREE':'₹'+delivery}\nTotal: ₹${total}\n\n📍 Delivery: ${loc}\n\nPlease confirm.`;
+  whatsappBtn.dataset.msg = msg;
+  whatsappBtn.style.display = cartItems.length? 'flex':'none';
+  $('#locationNote').style.display = cartItems.length? 'block':'none';
+  $('#clearCartBtn').style.display = cartItems.length? 'block':'none';
+  $('#cartBottom').style.display = 'block';
+}
+
+cartListEl.addEventListener('click', e=>{
+  const dec = e.target.closest('[data-dec]'); if(dec){ changeQty(dec.dataset.dec, -1); return; }
+  const inc = e.target.closest('[data-inc]'); if(inc){ changeQty(inc.dataset.inc, 1); }
+});
+
+$('#clearCartBtn').addEventListener('click', ()=>{
+  if(confirm('Clear your basket?')){ cartItems=[]; saveCart(); renderCart(); }
+});
+
+whatsappBtn.addEventListener('click', (e)=>{
+  e.preventDefault();
+  if(!cartItems.length) return;
+  const encoded = encodeURIComponent(whatsappBtn.dataset.msg || '');
+  window.open(`https://wa.me/918054014445?text=${encoded}`, '_blank');
+});
+
+/* ---------- PRODUCT MODAL ---------- */
+function openProduct(productId){
+  const p = PRODUCTS.find(x=>x.id===productId);
+  if(!p) return;
+  selectedProductId = productId;
+  const variants = getVariantsForProduct(p);
+  selectedVariant = variants[variants.length-1];
+
+  $('#modalPic').innerHTML = p.image ? `<img src="${esc(p.image)}" alt="${esc(p.name)}" onerror="this.style.display='none';this.nextElementSibling.style.display='grid'"><span style="display:none;font-size:120px;width:100%;height:100%;place-items:center;display:grid">${p.emoji}</span>` : `<span style="font-size:120px">${p.emoji}</span>`;
+  $('#modalCat').textContent = p.cat;
+  $('#modalName').textContent = p.displayName;
+  $('#modalDetails').textContent = `Fresh quality ${p.displayName.toLowerCase()} delivered in 10 minutes. Sourced daily, stored hygienically. MRP inclusive of taxes.`;
+
+  $('#variants').innerHTML = variants.map((v, i)=>`<button class="variant ${i===variants.length-1?'selected':''}" data-vi="${i}">${esc(v.label)} · ₹${v.price}</button>`).join('');
+  updateModalAddBtn();
+  productOverlayEl.classList.add('open');
+  document.body.style.overflow='hidden';
+}
+function updateModalAddBtn(){
+  if(!selectedVariant) return;
+  $('#modalAddBtn').textContent = `Add to cart · ₹${selectedVariant.price} · ${selectedVariant.label}`;
+}
+$('#variants').addEventListener('click', e=>{
+  const btn = e.target.closest('[data-vi]'); if(!btn) return;
+  const idx = Number(btn.dataset.vi);
+  const product = PRODUCTS.find(x=>x.id===selectedProductId);
+  const variants = getVariantsForProduct(product);
+  selectedVariant = variants[idx];
+  [...$('#variants').children].forEach((el,i)=>el.classList.toggle('selected', i===idx));
+  updateModalAddBtn();
+});
+$('#modalAddBtn').addEventListener('click', ()=>{
+  const product = PRODUCTS.find(x=>x.id===selectedProductId);
+  if(!product || !selectedVariant) return;
+  addToCart(product, selectedVariant, 1);
+  closeProduct();
+});
+function closeProduct(){
+  productOverlayEl.classList.remove('open');
+  document.body.style.overflow='';
+}
+$('#closeProductBtn').addEventListener('click', closeProduct);
+productOverlayEl.addEventListener('click', e=>{ if(e.target===productOverlayEl) closeProduct(); });
+
+/* ---------- CART OVERLAY ---------- */
+function openCart(){ renderCart(); cartOverlayEl.classList.add('open'); document.body.style.overflow='hidden'; }
+function closeCart(){ cartOverlayEl.classList.remove('open'); document.body.style.overflow=''; }
+$('#cartBtn').addEventListener('click', openCart);
+$('#closeCartBtn').addEventListener('click', closeCart);
+cartOverlayEl.addEventListener('click', e=>{ if(e.target===cartOverlayEl) closeCart(); });
+
+/* ---------- SEARCH, SORT, LOAD MORE ---------- */
+let searchDebounce;
+searchEl.addEventListener('input', ()=>{
+  clearTimeout(searchDebounce);
+  searchDebounce = setTimeout(()=>{
+    searchQuery = searchEl.value.trim();
+    if(searchQuery) activeCategory='All';
+    visibleCount=32;
+    renderCats(); renderProducts();
+  }, 180);
+});
+sortEl.addEventListener('change', ()=>{
+  sortMode = sortEl.value;
+  renderProducts();
+});
+loadMoreBtn.addEventListener('click', ()=>{
+  visibleCount += 32;
+  renderProducts();
+});
+$('#shopNowBtn').addEventListener('click', ()=>$('#productsGrid').scrollIntoView({behavior:'smooth'}));
+
+/* ---------- LOCATION ---------- */
+function updateLocationUI(text){
+  $('#locationText').textContent = text;
+}
+$('#locationBtn').addEventListener('click', ()=>{
+  if(!navigator.geolocation){ alert('Geolocation not supported'); return; }
+  updateLocationUI('Fetching location…');
+  navigator.geolocation.getCurrentPosition(pos=>{
+    const lat=pos.coords.latitude.toFixed(4), lng=pos.coords.longitude.toFixed(4);
+    const link=`https://maps.google.com/?q=${lat},${lng}`;
+    sessionStorage.setItem('deliveryLocation', link);
+    sessionStorage.setItem('deliveryLocationText', `${lat}, ${lng}`);
+    updateLocationUI(`Selected · ${lat}, ${lng} ✓`);
+    showToast('Delivery location updated');
+  }, ()=>{
+    updateLocationUI('Location denied · Ludhiana ▾');
+  }, {enableHighAccuracy:false, timeout:8000});
+});
+// restore saved
+const savedLoc = sessionStorage.getItem('deliveryLocationText');
+if(savedLoc){ updateLocationUI(`Selected · ${savedLoc} ✓`); }
+
+
+/* ---------- INIT ---------- */
+// Supabase Integration - fetch live catalog if configured
+async function loadFromSupabase(){
+  if (!isSupabaseConfigured()) {
+    console.log('Supabase not configured, using local 400 products');
+    return null;
+  }
+  try {
+    const metaEl = document.getElementById('resultMeta');
+    if (metaEl) metaEl.textContent = 'Syncing with Supabase...';
+    const supabaseClient = window.supabase.createClient(THBSUPABASE.url, THBSUPABASE.key);
+    const { data, error } = await supabaseClient.from(THBSUPABASE.table).select('*').order('created_at', {ascending:true}).limit(500);
+    if (error) throw error;
+    if (Array.isArray(data) && data.length>0) {
+      const mapped = data.map(p=>({
+        id: p.id,
+        baseId: p.baseId || 0,
+        name: p.name,
+        displayName: p.display_name || p.displayName || p.name,
+        cat: p.cat,
+        emoji: p.emoji || '📦',
+        unit: p.unit,
+        price: p.price,
+        mrp: p.mrp,
+        image: p.image || ''
+      }));
+      return mapped;
+    }
+    console.log('Supabase table empty, using local');
+    return [];
+  } catch(e){
+    console.warn('Supabase fetch failed, using local fallback', e);
+    const metaEl = document.getElementById('resultMeta');
+    if (metaEl) metaEl.textContent = 'Offline mode • local 400 products';
+    return null;
+  }
+}
+
+async function initStore(){
+  // try Supabase first
+  const sbProducts = await loadFromSupabase();
+  if (Array.isArray(sbProducts) && sbProducts.length>0) {
+    PRODUCTS = sbProducts;
+    // cache to localStorage for offline
+    try { localStorage.setItem('thb_products_cache', JSON.stringify(PRODUCTS)); } catch(e){}
+  } else if (Array.isArray(sbProducts) && sbProducts.length===0) {
+    // table empty but configured - keep local but show hint
+    console.log('Supabase empty, seeding suggested via admin panel');
+  }
+  document.getElementById('year').textContent = new Date().getFullYear();
+  renderCats();
+  renderProducts();
+  renderCart();
+  updateCartBadge();
+
+  // loader
+  setTimeout(()=>{
+    document.getElementById('loader')?.classList.add('hidden');
+    setTimeout(()=>document.getElementById('loader')?.remove(),600);
+  }, 1400);
+
+  // preload a few images only
+  PRODUCTS.slice(0,12).forEach(p=>{
+    if(p.image){ const im=new Image(); im.src=p.image; }
+  });
+  
+  const pill = document.getElementById('sbStatus');
+  if (pill) {
+    if (isSupabaseConfigured()) {
+      pill.textContent = '● Live from Supabase • '+PRODUCTS.length;
+      pill.style.background = '#e6f7eb';
+      pill.style.color = '#0f5132';
+      pill.style.borderColor = '#b7e5a7';
+    } else {
+      pill.textContent = '○ Local mode • '+PRODUCTS.length+' products • Configure Supabase in admin.html';
+      pill.style.background = '#fff';
+    }
+  }
+}
+
+document.addEventListener('DOMContentLoaded', initStore);
+
+// keyboard
+document.addEventListener('keydown', e=>{
+  if(e.key==='Escape'){ closeProduct(); closeCart(); }
+});
+</script>
+
+</body>
+</html>
